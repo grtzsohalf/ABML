@@ -71,7 +71,7 @@ def _build_vocab(annotations, threshold=1):
     return word_to_idx
 
 
-def _build_caption_vector(annotations, word_to_idx, max_length=20):
+def _build_caption_vector(annotations, word_to_idx, max_length=10):
     n_examples = len(annotations)
     captions = np.ndarray((n_examples,max_length+2)).astype(np.int32)   
 
@@ -123,37 +123,35 @@ def main():
     # batch size for extracting feature vectors from vggnet.
     batch_size = 100
     # maximum length of caption(number of word). if caption is longer than max_length, deleted.  
-    max_length = 20
+    max_length = 10
     # if word occurs less than word_count_threshold in training dataset, the word index is special unknown token.
     word_count_threshold = 1
     # vgg model path 
     vgg_model_path = './data/imagenet-vgg-verydeep-19.mat'
 
     # about 80000 images and 400000 captions for train dataset
-    train_dataset = _process_caption_data(caption_file='/home/jason6582/sfyc/NUS-WIDE/caption_data81_train.json',
+    dataset = _process_caption_data(caption_file='/home/jason6582/sfyc/NUS-WIDE/caption_data81.json',
                                           image_dir='/home/jason6582/sfyc/NUS-WIDE/flickrfeature_resized/',
                                           max_length=max_length)
-    # about 40000 images and 200000 captions
-    val_dataset = _process_caption_data(caption_file='/home/jason6582/sfyc/NUS-WIDE/caption_data81_test.json',
-                                        image_dir='/home/jason6582/sfyc/NUS-WIDE/flickrfeature_resized/',
-                                        max_length=max_length)
-    # about 4000 images and 20000 captions for val / test dataset
-    val_cutoff = int(0.1 * len(val_dataset))
-    test_cutoff = int(0.2 * len(val_dataset))
+    train_cutoff = 135000
+    val_cutoff = train_cutoff + 15000
+    train_data = dataset[:train_cutoff]
+    val_data = dataset[train_cutoff:val_cutoff]
+    test_data = dataset[val_cutoff:]
     print 'Finished processing caption data'
     train_cutoff = [0]
-    for i in range(15):
-        train_cutoff.append(int(len(train_dataset)/16)*(i+1))
-    for i in range(15):
-        save_pickle(train_dataset[train_cutoff[i]:train_cutoff[i+1]],
+    for i in range(9):
+        train_cutoff.append(int(len(train_data)/10)*(i+1))
+    for i in range(9):
+        save_pickle(train_data[train_cutoff[i]:train_cutoff[i+1]],
                 'data/train/train.annotations81_%s.pkl' % str(i))
-    save_pickle(train_dataset[train_cutoff[15]:],'data/train/train.annotations81_15.pkl')
-    save_pickle(val_dataset[:val_cutoff], 'data/val/val.annotations81.pkl')
-    save_pickle(val_dataset[val_cutoff:test_cutoff].reset_index(drop=True), 'data/test/test.annotations81.pkl')
+    save_pickle(train_data[train_cutoff[9]:], 'data/train/train.annotations81_9.pkl')
+    save_pickle(val_data, 'data/val/val.annotations81.pkl')
+    save_pickle(test_data, 'data/test/test.annotations81.pkl')
 
     split = 'train'
     word_to_idx = {}
-    for part in range(16):
+    for part in range(10):
         annotations = load_pickle('./data/%s/%s.annotations81_%s.pkl' % (split, split, str(part)))
         word_to_idx_part = _build_vocab(annotations=annotations, threshold=word_count_threshold)
         for key in word_to_idx_part:
@@ -162,7 +160,7 @@ def main():
     for i, word in enumerate(word_list):
         word_to_idx[word] = i
     save_pickle(word_to_idx, './data/%s/word_to_idx81.pkl' % (split))
-    for part in range(16):
+    for part in range(10):
         annotations = load_pickle('./data/%s/%s.annotations81_%s.pkl' % (split, split, str(part)))
         captions = _build_caption_vector(annotations=annotations, word_to_idx=word_to_idx, max_length=max_length)
         save_pickle(captions, './data/%s/%s.captions81_%s.pkl' % (split, split, str(part)))
@@ -208,15 +206,14 @@ def main():
             feature_to_captions[i].append(caption.lower() + ' .')
         save_pickle(feature_to_captions, './data/%s/%s.references81.pkl' % (split, split))
         print "Finished building %s caption dataset" %split
-
+    
     # extract conv5_3 feature vectors
     vggnet = Vgg19(vgg_model_path)
     vggnet.build()
     with tf.Session() as sess:
         tf.initialize_all_variables().run()
-        
         split = 'train'
-        for part in range(16):
+        for part in range(10):
             print "part", part, "of %s features" % split
             anno_path = './data/%s/%s.annotations81_%s.pkl' % (split, split, str(part))
             save_path = './data/%s/%s.features81_%s.hkl' % (split, split, str(part))
@@ -237,7 +234,6 @@ def main():
             # use hickle to save huge feature vectors
             hickle.dump(all_feats, save_path)
             print ("Saved %s.." % (save_path))
-        
         for split in ['val', 'test']:
             anno_path = './data/%s/%s.annotations81.pkl' % (split, split)
             save_path = './data/%s/%s.features81.hkl' % (split, split)

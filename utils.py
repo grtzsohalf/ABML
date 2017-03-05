@@ -14,6 +14,41 @@ def load_word_to_idx(data_path='./data', split='train'):
     print "Elapse time: %.2f" %(end_t - start_t)
     return word
 
+def load_data(data_path='./data', split='train'):
+    data_path = os.path.join(data_path, split)
+    start_t = time.time()
+    data = {}
+    data['features'] = hickle.load(os.path.join(data_path, '%s.features81.hkl' % (split)))
+    with open(os.path.join(data_path, '%s.file.names81.pkl' % (split)), 'rb') as f:
+        data['file_names'] = pickle.load(f)
+    with open(os.path.join(data_path, '%s.captions81.pkl' % (split)), 'rb') as f:
+        data['captions'] = pickle.load(f)
+    with open(os.path.join(data_path, '%s.image.idxs81.pkl' % (split)), 'rb') as f:
+        data['image_idxs'] = pickle.load(f)
+    '''
+    n_examples = len(data['image_idxs'])
+    rand_idxs = np.random.permutation(n_examples)
+    data['file_names'] = data['file_names'][rand_idxs]
+    data['captions'] = data['captions'][rand_idxs]
+    data['image_idxs'] = data['image_idxs'][rand_idxs]
+    data['features'] = data['features'][rand_idxs]
+    train_cutoff = [0]
+    for i in range(p-1):
+        train_cutoff.append(int(n_examples/16)*(i+1))
+    for part in range(p-1):
+        hickle.dump(data['features'][train_cutoff[part]:train_cutoff[part+1]], os.path.join(data_path, '%s.features81_%s.hkl' % (split, str(part))))
+        save_pickle(data['file_names'][train_cutoff[part]:train_cutoff[part+1]], os.path.join(data_path, '%s.file.names81_%s.pkl' % (split, str(part))))
+        save_pickle(data['captions'][train_cutoff[part]:train_cutoff[part+1]], os.path.join(data_path, '%s.captions81_%s.pkl' % (split, str(part))))
+        save_pickle(data['image_idxs'][train_cutoff[part]:train_cutoff[part+1]], os.path.join(data_path, '%s.image_idxs81_%s.pkl' % (split, str(part))))
+    hickle.dump(data['features'][train_cutoff[p-1]:], os.path.join(data_path, '%s.features81_%s.hkl' % (split, str(p-1))))
+    save_pickle(data['file_names'][train_cutoff[p-1]:], os.path.join(data_path, '%s.file.names81_%s.pkl' % (split, str(p-1))))
+    save_pickle(data['captions'][train_cutoff[p-1]:], os.path.join(data_path, '%s.captions81_%s.pkl' % (split, str(p-1))))
+    save_pickle(data['image_idxs'][train_cutoff[p-1]:], os.path.join(data_path, '%s.image_idxs81_%s.pkl' % (split, str(p-1))))
+    '''
+    end_t = time.time()
+    print "Elapse time: %.2f" %(end_t - start_t)
+    return data
+
 def load_coco_data(data_path='./data', split='train', part=''):
     data_path = os.path.join(data_path, split)
     start_t = time.time()
@@ -69,9 +104,23 @@ def decode_captions(captions, idx_to_word):
                 word = idx_to_word[captions[t]]
             else:
                 word = idx_to_word[captions[i, t]]
-            if word == '<END>':
-                words.append('END')
-                break
+            # if word == '<END>':
+            #   words.append('END')
+            #   break
+            if word != '<NULL>':
+                words.append(word)
+        decoded.append(' '.join(words))
+    return decoded
+
+def decode_py_captions(captions, idx_to_word):
+
+    N = len(captions)
+    decoded = []
+    for i in range(N):
+        words = []
+        T = len(captions[i])
+        for t in range(T):
+            word = idx_to_word[captions[i][t] + 3]
             if word != '<NULL>':
                 words.append(word)
         decoded.append(' '.join(words))
