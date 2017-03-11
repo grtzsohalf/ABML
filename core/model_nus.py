@@ -148,7 +148,7 @@ class CaptionGenerator(object):
             b_out = tf.get_variable('b_out', [self.V], initializer=self.const_initializer)
 
             if dropout:
-                h = tf.nn.dropout(h, 0.5)
+                h = tf.nn.dropout(h, 0.8)
             h_logits = tf.matmul(h, w_h) + b_h
 
             if self.ctx2out:
@@ -160,7 +160,7 @@ class CaptionGenerator(object):
             h_logits = tf.nn.tanh(h_logits)
 
             if dropout:
-                h_logits = tf.nn.dropout(h_logits, 0.5)
+                h_logits = tf.nn.dropout(h_logits, 0.8)
             out_logits = tf.matmul(h_logits, w_out) + b_out # dim: N x V
             return out_logits
 
@@ -295,14 +295,13 @@ class CaptionGenerator(object):
             _, (c, h) = lstm_cell(inputs=tf.concat(1, [x, context]), state=[c, h])
 
         logits = self._decode_lstm(x, h, context)
-        sampled_word = tf.argmax(logits, 1)
         # sampled_word_list.append(sampled_word)
 
         # alphas = tf.transpose(tf.pack(alpha_list), (1, 0, 2))     # (N, T, L)
         # betas = tf.transpose(tf.squeeze(beta_list), (1, 0))    # (N, T)
         # sampled_captions = tf.transpose(tf.pack(sampled_word_list), (1, 0))     # (N, max_len)
         # return alphas, betas, sampled_captions
-        return logits, c, h, alpha, sampled_word, x
+        return logits, c, h, alpha, x
 
     def word_sampler(self):
         features = self.features
@@ -325,11 +324,10 @@ class CaptionGenerator(object):
             _, (c, h) = lstm_cell(inputs=tf.concat(1, [x, context]), state=[c, h])
 
         logits = self._decode_lstm(x, h, context, reuse=True)
-        sampled_word = tf.argmax(logits, 1)
         # sampled_word_list.append(sampled_word)
 
         # alphas = tf.transpose(tf.pack(alpha_list), (1, 0, 2))     # (N, T, L)
         # betas = tf.transpose(tf.squeeze(beta_list), (1, 0))    # (N, T)
         # sampled_captions = tf.transpose(tf.pack(sampled_word_list), (1, 0))     # (N, max_len)
         # return alphas, betas, sampled_captions
-        return logits, c, h, alpha, sampled_word, x
+        return logits, c, h, alpha, x

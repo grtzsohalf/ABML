@@ -1,7 +1,7 @@
 from scipy import ndimage
 from collections import Counter
 from core.vggnet import Vgg19
-from core.utils import *
+from core.utils_coco import *
 
 import tensorflow as tf
 import numpy as np
@@ -11,7 +11,7 @@ import os
 import json
 import math
 import random
-os.environ['CUDA_VISIBLE_DEVICES']='0'
+os.environ['CUDA_VISIBLE_DEVICES']='1'
 
 def _process_caption_data(caption_file, image_dir, max_length):
     with open(caption_file) as f:
@@ -71,7 +71,7 @@ def _build_vocab(annotations, threshold=1):
     return word_to_idx
 
 
-def _build_caption_vector(annotations, word_to_idx, max_length=10):
+def _build_caption_vector(annotations, word_to_idx, max_length=15):
     n_examples = len(annotations)
     captions = np.ndarray((n_examples,max_length+2)).astype(np.int32)   
 
@@ -123,52 +123,63 @@ def main():
     # batch size for extracting feature vectors from vggnet.
     batch_size = 100
     # maximum length of caption(number of word). if caption is longer than max_length, deleted.  
-    max_length = 10
+    max_length = 15
     # if word occurs less than word_count_threshold in training dataset, the word index is special unknown token.
     word_count_threshold = 1
     # vgg model path 
     vgg_model_path = './data/imagenet-vgg-verydeep-19.mat'
 
     # about 80000 images and 400000 captions for train dataset
-    dataset = _process_caption_data(caption_file='/home/jason6582/sfyc/NUS-WIDE/caption_data81.json',
-                                          image_dir='/home/jason6582/sfyc/NUS-WIDE/flickrfeature_resized/',
-                                          max_length=max_length)
-    train_cutoff = 135000
-    val_cutoff = train_cutoff + 15000
-    train_data = dataset[:train_cutoff]
-    val_data = dataset[train_cutoff:val_cutoff]
-    test_data = dataset[val_cutoff:]
+    train_data = _process_caption_data(caption_file='/home/jason6582/sfyc/mscoco/annotations/train_aug.json',
+                image_dir='/home/jason6582/sfyc/attention-tensorflow/image/train2014_aug',
+                max_length=max_length)
+    test_data = _process_caption_data(caption_file='/home/jason6582/sfyc/mscoco/annotations/val_augmentation.json',
+                image_dir='/home/jason6582/sfyc/attention-tensorflow/image/val2014_resize',
+                max_length=max_length)
+
+    val_cutoff = int(len(train_data)/10)
+    val_small = train_data[:5000]
+    val_data = train_data[:val_cutoff]
+    train_data = train_data[val_cutoff:]
     print 'Finished processing caption data'
     train_cutoff = [0]
-    for i in range(9):
-        train_cutoff.append(int(len(train_data)/10)*(i+1))
-    for i in range(9):
+    part_num = 20
+    for i in range(part_num-1):
+        train_cutoff.append(int(len(train_data)/part_num)*(i+1))
+    for i in range(part_num-1):
         save_pickle(train_data[train_cutoff[i]:train_cutoff[i+1]],
-                'data/train/train.annotations81_%s.pkl' % str(i))
-    save_pickle(train_data[train_cutoff[9]:], 'data/train/train.annotations81_9.pkl')
-    save_pickle(val_data, 'data/val/val.annotations81.pkl')
-    save_pickle(test_data, 'data/test/test.annotations81.pkl')
+                'cocodata/train/train.annotations_%s.pkl' % str(i))
+    save_pickle(train_data[train_cutoff[part_num-1]:], \
+                'cocodata/train/train.annotations_%s.pkl' %(part_num-1))
+    save_pickle(val_small, 'cocodata/val_small/val_small.annotations.pkl')
+    save_pickle(val_data, 'cocodata/val/val.annotations.pkl')
+    save_pickle(test_data, 'cocodata/test/test.annotations.pkl')
     split = 'train'
-    word_to_idx = {}
-    for part in range(10):
-        annotations = load_pickle('./data/%s/%s.annotations81_%s.pkl' % (split, split, str(part)))
+    word_to_idx = {u'<NULL>': 0, u'<START>': 1, u'<END>': 2}
+    for i in range(80):
+        word_to_idx[str(i)] = i + 3
+    '''
+    for part in range(part_num):
+        annotations = load_pickle('./cocodata/%s/%s.annotations_%s.pkl' % (split, split, str(part)))
         word_to_idx_part = _build_vocab(annotations=annotations, threshold=word_count_threshold)
         for key in word_to_idx_part:
             word_to_idx[key] = 0
     word_list = sorted(word_to_idx.iterkeys())
     for i, word in enumerate(word_list):
         word_to_idx[word] = i
-    save_pickle(word_to_idx, './data/%s/word_to_idx81.pkl' % (split))
-    for part in range(10):
-        annotations = load_pickle('./data/%s/%s.annotations81_%s.pkl' % (split, split, str(part)))
+    '''
+    print "word_to_idx", word_to_idx
+    save_pickle(word_to_idx, './cocodata/%s/word_to_idx.pkl' % (split))
+    for part in range(part_num):
+        annotations = load_pickle('./cocodata/%s/%s.annotations_%s.pkl' % (split, split, str(part)))
         captions = _build_caption_vector(annotations=annotations, word_to_idx=word_to_idx, max_length=max_length)
-        save_pickle(captions, './data/%s/%s.captions81_%s.pkl' % (split, split, str(part)))
+        save_pickle(captions, './cocodata/%s/%s.captions_%s.pkl' % (split, split, str(part)))
 
         file_names, id_to_idx = _build_file_names(annotations)
-        save_pickle(file_names, './data/%s/%s.file.names81_%s.pkl' % (split, split, str(part)))
+        save_pickle(file_names, './cocodata/%s/%s.file.names_%s.pkl' % (split, split, str(part)))
 
         image_idxs = _build_image_idxs(annotations, id_to_idx)
-        save_pickle(image_idxs, './data/%s/%s.image.idxs81_%s.pkl' % (split, split, str(part)))
+        save_pickle(image_idxs, './cocodata/%s/%s.image.idxs_%s.pkl' % (split, split, str(part)))
 
         # prepare reference captions to compute bleu scores later
         image_ids = {}
@@ -180,31 +191,34 @@ def main():
                 i += 1
                 feature_to_captions[i] = []
             feature_to_captions[i].append(caption.lower() + ' .')
-        save_pickle(feature_to_captions, './data/%s/%s.references81_%s.pkl' % (split, split, str(part)))
+        save_pickle(feature_to_captions, './cocodata/%s/%s.references_%s.pkl' % (split, split, str(part)))
         print "Finished building %s caption dataset" %split
     # for split in ['val_small']:
-    for split in ['val', 'test']:
-        annotations = load_pickle('./data/%s/%s.annotations81.pkl' % (split, split))
+    for split in ['val', 'test', 'val_small']:
+        annotations = load_pickle('./cocodata/%s/%s.annotations.pkl' % (split, split))
         captions = _build_caption_vector(annotations=annotations, word_to_idx=word_to_idx, max_length=max_length)
-        save_pickle(captions, './data/%s/%s.captions81.pkl' % (split, split))
+        print 'caption', captions[:5]
+        save_pickle(captions, './cocodata/%s/%s.captions.pkl' % (split, split))
 
         file_names, id_to_idx = _build_file_names(annotations)
-        save_pickle(file_names, './data/%s/%s.file.names81.pkl' % (split, split))
+        save_pickle(file_names, './cocodata/%s/%s.file.names.pkl' % (split, split))
 
         image_idxs = _build_image_idxs(annotations, id_to_idx)
-        save_pickle(image_idxs, './data/%s/%s.image.idxs81.pkl' % (split, split))
+        save_pickle(image_idxs, './cocodata/%s/%s.image.idxs.pkl' % (split, split))
 
         # prepare reference captions to compute bleu scores later
         image_ids = {}
         feature_to_captions = {}
         i = -1
         for caption, image_id in zip(annotations['caption'], annotations['image_id']):
+            if i < 5:
+                print "Reference:", caption
             if not image_id in image_ids:
                 image_ids[image_id] = 0
                 i += 1
                 feature_to_captions[i] = []
             feature_to_captions[i].append(caption.lower() + ' .')
-        save_pickle(feature_to_captions, './data/%s/%s.references81.pkl' % (split, split))
+        save_pickle(feature_to_captions, './cocodata/%s/%s.references.pkl' % (split, split))
         print "Finished building %s caption dataset" %split
     
     # extract conv5_3 feature vectors
@@ -213,10 +227,10 @@ def main():
     with tf.Session() as sess:
         tf.initialize_all_variables().run()
         split = 'train'
-        for part in range(10):
+        for part in range(part_num):
             print "part", part, "of %s features" % split
-            anno_path = './data/%s/%s.annotations81_%s.pkl' % (split, split, str(part))
-            save_path = './data/%s/%s.features81_%s.hkl' % (split, split, str(part))
+            anno_path = './cocodata/%s/%s.annotations_%s.pkl' % (split, split, str(part))
+            save_path = './cocodata/%s/%s.features_%s.hkl' % (split, split, str(part))
             annotations = load_pickle(anno_path)
             image_path = list(annotations['file_name'].unique())
             n_examples = len(image_path)
@@ -238,9 +252,9 @@ def main():
             hickle.dump(all_feats, save_path)
             print ("Saved %s.." % (save_path))
         # for split in ['val_small']:
-        for split in ['val', 'test']:
-            anno_path = './data/%s/%s.annotations81.pkl' % (split, split)
-            save_path = './data/%s/%s.features81.hkl' % (split, split)
+        for split in ['val', 'val_small']:
+            anno_path = './cocodata/%s/%s.annotations.pkl' % (split, split)
+            save_path = './cocodata/%s/%s.features.hkl' % (split, split)
             annotations = load_pickle(anno_path)
             image_path = list(annotations['file_name'].unique())
             n_examples = len(image_path)
@@ -250,8 +264,8 @@ def main():
             for start, end in zip(range(0, n_examples, batch_size),
                                   range(batch_size, n_examples + batch_size, batch_size)):
                 image_batch_file = image_path[start:end]
-                image_batch = np.array(map(lambda x: ndimage.imread(x, mode='RGB'), image_batch_file)).astype(
-                        np.float32)
+                image_batch = np.array(map(lambda x: ndimage.imread(x, mode='RGB'),\
+                        image_batch_file)).astype(np.float32)
                 feats = sess.run(vggnet.features, feed_dict={vggnet.images: image_batch})
                 all_feats[start:end, :] = feats
                 print ("Processed %d %s features.." % (end, split))

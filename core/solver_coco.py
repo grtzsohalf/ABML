@@ -7,12 +7,12 @@ import math
 import os
 import cPickle as pickle
 from scipy import ndimage
-from utils import *
+from utils_coco import *
 from bleu import evaluate
 
 
 class CaptioningSolver(object):
-    def __init__(self, model, data_path, val_data, **kwargs):
+    def __init__(self, model, data_path, **kwargs):
         """
         Required Arguments:
             - model: Show Attend and Tell caption generating model
@@ -39,7 +39,6 @@ class CaptioningSolver(object):
         self.model = model
         self.data_path = data_path
         self.data = None
-        self.val_data = val_data
         self.n_epochs = kwargs.pop('n_epochs', 10)
         self.batch_size = kwargs.pop('batch_size', 100)
         self.update_rule = kwargs.pop('update_rule', 'adam')
@@ -51,8 +50,8 @@ class CaptioningSolver(object):
         self.model_path = kwargs.pop('model_path', './model/')
         self.pretrained_model = kwargs.pop('pretrained_model', None)
         self.test_model = kwargs.pop('test_model', './model/lstm/model-1')
-        self.V = kwargs.pop('V', 84)
-        self.n_time_step = kwargs.pop('n_time_step', 11)
+        self.V = kwargs.pop('V', 83)
+        self.n_time_step = kwargs.pop('n_time_step', 16)
 
         # set an optimizer by update rule
         if self.update_rule == 'adam':
@@ -69,15 +68,10 @@ class CaptioningSolver(object):
 
 
     def train(self):
-
-        # val dataset
-        val_features = self.val_data['features']
-        n_iters_val = int(np.ceil(float(val_features.shape[0])/self.batch_size))
-
         # build graphs for training model and sampling captions
         loss = self.model.build_model()
         tf.get_variable_scope().reuse_variables()
-        _, _, generated_captions = self.model.build_sampler(max_len=10)
+        _, _, generated_captions = self.model.build_sampler(max_len=15)
 
         # train op
         with tf.name_scope('optimizer'):
@@ -113,14 +107,14 @@ class CaptioningSolver(object):
                 saver.restore(sess, self.pretrained_model)
             prev_loss = []
             curr_loss = []
-            for i in range(10):
+            for i in range(20):
                 prev_loss.append(-1)
                 curr_loss.append(0)
             start_t = time.time()
             for e in range(self.n_epochs):
-                arr = np.arange(10)
+                arr = np.arange(20)
                 np.random.shuffle(arr)
-                for part in range(10):
+                for part in range(20):
                     p = arr[part]
                     print '##################'
                     print 'part ' + str(p+1) + ' of ' + 'epoch ' + str(e+1)
@@ -186,7 +180,7 @@ class CaptioningSolver(object):
                         # write summary for tensorboard visualization
                         if i % 10 == 0:
                             summary = sess.run(summary_op, feed_dict)
-                             summary_writer.add_summary(summary, e*n_iters_per_part + i)
+                            summary_writer.add_summary(summary, e*n_iters_per_part + i)
                         if (i+1) % self.print_every == 0:
                             # print "\nTrain loss at epoch %d & iteration %d (mini-batch): %.5f" %(e+1, i+1, l)
                             ground_truths = captions[image_idxs == image_idxs_batch[0]]
@@ -204,8 +198,8 @@ class CaptioningSolver(object):
                     curr_loss[p] = 0
                 # save model's parameters
                 if (e+1) % self.save_every == 0:
-                    saver.save(sess, os.path.join(self.model_path, 'lr0.0005_predicted'), global_step=e+1)
-                    print "lr0.0005_predicted-%s saved." %(e+1)
+                    saver.save(sess, os.path.join(self.model_path, 'mscoco_dropout0.8'), global_step=e+1)
+                    print "mscoco_dropout0.8-%s saved." %(e+1)
 
     def softmax(self, array):
         total = 0.0
@@ -247,15 +241,15 @@ class CaptioningSolver(object):
 
         config = tf.ConfigProto(allow_soft_placement=True)
         config.gpu_options.allow_growth = True
-        probabilities_start, c_start, h_start, alpha_start, samp_start, x_start = self.model.init_sampler()
-        probabilities, c, h, alpha, samp, x = self.model.word_sampler()
+        probabilities_start, c_start, h_start, alpha_start, x_start = self.model.init_sampler()
+        probabilities, c, h, alpha, x = self.model.word_sampler()
         with tf.Session(config=config) as sess:
             saver = tf.train.Saver()
             saver.restore(sess, self.test_model)
             # features_batch, image_files = sample_coco_minibatch(data, self.batch_size)
             # feed_dict = { self.model.features: features_batch }
-            MAX_LEN = 10
-            K = 5 # beam search width
+            MAX_LEN = 15
+            K = 3 # beam search width
             # all_sam_cap = np.zeros((features.shape[0], MAX_LEN), dtype = int)
             num_iter = features.shape[0]
             start_t = time.time()
@@ -274,18 +268,16 @@ class CaptioningSolver(object):
 
                     x_run = None
                     for t in range(MAX_LEN): # time step
-                        if pathProbs[0] < THRES and t != 0:
-                            break
                         dic = {}
                         for j in range(K):
                             if t == 0:
                                 path = []
                                 alphas = []
                                 feed_dict = { self.model.features: features_batch }
-                                probsNumpy, c_run, h_run, alpha_run, samp_run, x_run = \
+                                probsNumpy, c_run, h_run, alpha_run, x_run = \
                                 sess.run([probabilities_start, c_start, h_start, alpha_start, \
-                                          samp_start, x_start], feed_dict)
-                                probsNumpy = probsNumpy.reshape(84)
+                                          x_start], feed_dict)
+                                probsNumpy = probsNumpy.reshape(self.V)
                             else:
                                 path, c_run, h_run, alphas, samp_run, x_run = paths_info[j]
                                 feed_dict = { self.model.features: features_batch,
@@ -293,9 +285,9 @@ class CaptioningSolver(object):
                                                 self.model.h: h_run,
                                                 self.model.samp: samp_run,
                                                 self.model.x: x_run }
-                                probsNumpy, c_run, h_run, alpha_run, samp_run, x_run = \
-                                sess.run([probabilities, c, h, alpha, samp, x], feed_dict)
-                                probsNumpy = probsNumpy.reshape(84)
+                                probsNumpy, c_run, h_run, alpha_run, x_run = \
+                                sess.run([probabilities, c, h, alpha, x], feed_dict)
+                                probsNumpy = probsNumpy.reshape(self.V)
                             # probsNumpy = self.softmax(probsNumpy)
                             probsNumpy = self.sigmoid(probsNumpy)
                             probs = []
@@ -309,6 +301,7 @@ class CaptioningSolver(object):
                                 idx = probs[k] * pathProbs[j]
                                 p = path[:]
                                 p.append(k)
+                                samp_run = np.array([k+3])
                                 dic[idx] = (p, c_run , h_run, alphas, samp_run, x_run) # p is a path(list), and h is p's current hidden state
                         count = 0
                         newPaths_info = []
@@ -320,7 +313,7 @@ class CaptioningSolver(object):
                             newPaths_info.append(dic[key][:])
                             newPathProbs.append(key)
                         if t != 0:
-                            if newPathProbs[0]/pathProbs[0] < THRES:
+                            if newPathProbs[0] < THRES:
                                 break
                         paths_info = newPaths_info
                         pathProbs = newPathProbs
@@ -329,11 +322,11 @@ class CaptioningSolver(object):
                     alphas = paths_info[0][3]
                     alpha_list = np.transpose(alphas, (1, 0, 2))     # (N, T, L)
                     all_alphas.append(alpha_list)
-                all_decoded = decode_py_captions(all_sam_cap, self.model.idx_to_word)
-                save_pickle(all_decoded, "./data/%s/%s.candidate.captions81_%s_%s.pkl" % \
+                # all_decoded = decode_py_captions(all_sam_cap, self.model.idx_to_word)
+                save_pickle(all_sam_cap, "./cocodata/%s/%s.candidate.captions_%s_%s.pkl" % \
                             (split, split, filename, THRES))
                 print "Time cost: ", time.time()- start_t
-
+            '''
             image_file_name = 'visualization/'
             if attention_visualization:
                 # plt.rcParams['figure.figsize'] = (8.0, 6.0)
@@ -341,7 +334,7 @@ class CaptioningSolver(object):
                 # plt.rcParams['figure.cmap'] = 'gray'
                 num_samples = len(all_decoded)
                 ran_arr = np.random.randint(num_samples, size=10)
-                reference = load_pickle('./data/val/val.references81.pkl')
+                reference = load_pickle('./cocodata/val/val.references81.pkl')
                 sample_file = open('sample.txt', 'w')
                 sample_file.write('Grountruth:\n')
                 for idx in ran_arr:
@@ -371,6 +364,7 @@ class CaptioningSolver(object):
                         plt.imsave(fname, alp_img, cmap='gray')
                         # plt.axis('off')
                     # plt.show()
+            '''
             '''
             if save_sampled_captions:
                 all_sam_cap = np.ndarray((features.shape[0], 25))
