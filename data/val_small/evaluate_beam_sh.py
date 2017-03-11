@@ -6,7 +6,7 @@ candidateFile = sys.argv[1]
 resultFile = sys.argv[2]
 
 from core.utils import *
-reference = load_pickle('val.references81.pkl')
+reference = load_pickle('val_small.references81.pkl')
 candidate = load_pickle(candidateFile)
 g = open(resultFile, 'w')
 
