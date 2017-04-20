@@ -1,0 +1,3352 @@
+foo  food  1
+clo  clouds mountain sky valley  1
+bui  street  0
+wat  reflection water  1
+clo  clouds reflection sky statue  1
+oce  lake water  0
+ani  water  0
+str  street  1
+str  clouds house mountain street  1
+str  town  1
+sky  valley water  0
+ani  beach  1
+ani  toy  0
+sky  rainbow  1
+bea  ocean swimmers water  1
+zeb  zebra  1
+str  bear  0
+sky  sky  1
+bir  birds  1
+dog  grass sky  1
+bea  ocean  0
+str  mountain snow  0
+spo  beach sand sun  2
+sun  sunset  1
+pol  protest  1
+str  police  0
+str  beach  0
+sky  military  0
+sun  coral fish ocean  0
+tow  book  0
+flo  animal water  1
+sky  map  0
+pol  sports  0
+sun  sun  1
+clo  fish  1
+oce  whales  0
+sky  boats water  0
+sun  tower  0
+sky  snow  0
+sun  grass sun sunset valley  1
+flo  flowers  1
+pol  sports  0
+wat  water  1
+bea  beach  1
+sun  sunset  1
+gra  military  0
+roa  road street  1
+sky  clouds sky  2
+sun  sun sunset  1
+clo  birds  0
+str  military  0
+ref  reflection  1
+wat  reflection  0
+mou  fish  0
+tra  airport window  0
+flo  flowers  1
+str  sports  0
+toy  toy  1
+fis  toy  0
+air  reflection street  0
+clo  reflection  0
+ani  leaf  0
+sun  food  0
+cat  cat  1
+win  window  1
+sky  moon  0
+ani  animal  1
+ref  reflection  1
+ref  bridge water  1
+dog  window  0
+sky  birds sky  1
+str  dancing  0
+flo  flowers garden  1
+boo  toy  1
+clo  sky tree  1
+str  clouds sky tower  1
+wed  street wedding  2
+clo  sky sunset  1
+fis  coral fish  2
+tre  lake water  0
+str  vehicle  0
+toy  cars clouds fire reflection sky sun sunset water  0
+clo  tower  0
+tre  plane tree  1
+tre  sky tree  2
+sun  sunset  1
+sky  cars  0
+veh  street  0
+ani  cat  0
+sun  clouds reflection sun sunset water  2
+sky  sky  1
+sun  fire house  0
+clo  clouds  1
+boa  statue  0
+str  running  1
+hou  window  0
+str  sky  1
+sun  window  0
+car  cars  1
+oce  rocks swimmers water  1
+lak  bridge railroad sky tree  1
+wat  boats military plane road water  2
+sky  birds  0
+mil  dancing  0
+bui  cityscape  1
+bea  sports  0
+clo  clouds sky  2
+pla  clouds sky  0
+wed  flowers  1
+wat  cat  0
+bea  bear  1
+bea  sky  0
+foo  food  1
+cat  cat  1
+hou  beach sand  0
+wat  reflection window  1
+sky  fire  0
+ani  animal cow  2
+clo  flowers water  0
+ref  computer  0
+sky  bridge  0
+hou  house  1
+sno  clouds plane  0
+sky  airport clouds plane sky  2
+wat  lake mountain  1
+mil  sun  0
+sky  sky town  1
+moo  moon  1
+sky  house  0
+str  train  0
+roa  cars sunset  0
+spo  running sports  2
+tow  ocean  0
+clo  lake  0
+bri  boats bridge sky town water  1
+str  water  0
+flo  flowers  1
+lak  lake  1
+lea  animal water  0
+str  map  0
+flo  garden  0
+fir  road  0
+flo  plants  1
+ref  reflection sky  1
+sno  sky snow  1
+hou  tree  0
+clo  sand  0
+str  police  0
+dan  cat tattoo  1
+wat  rocks water  0
+hou  beach  0
+clo  birds clouds sky sun  1
+san  tree  0
+tem  temple  1
+spo  sports  1
+bea  beach  1
+str  animal nighttime  1
+roa  military plane sky  0
+fir  water  0
+sky  lake water  0
+sky  reflection  0
+lea  leaf  1
+flo  flowers  1
+bea  beach  1
+fir  fire sky  2
+pro  protest  1
+str  snow  0
+hou  house window  1
+bui  water  0
+bri  bridge fire moon sky  1
+clo  clouds sky sun  2
+bea  castle statue  0
+gra  flowers  1
+clo  tree  1
+ani  bear  1
+clo  buildings sky water  1
+flo  flowers  1
+com  computer  1
+clo  mountain  0
+sun  sunset  1
+spo  dancing  0
+moo  protest  0
+zeb  zebra  1
+wat  boats clouds reflection sky sunset water  2
+bui  sky sunset  0
+flo  tattoo  0
+clo  dog  0
+ref  reflection  1
+tre  clouds flowers sky sun  1
+cit  cars moon sky  0
+str  nighttime  0
+sun  sunset  1
+roa  beach ocean sunset water  0
+clo  flowers grass lake  0
+tre  ocean tree  1
+clo  road  0
+fla  sun  0
+clo  sun  0
+sun  sunset  1
+sun  cars road sunset  0
+foo  food  1
+sky  tower  1
+rai  clouds sky  1
+sky  beach clouds lake sky water  2
+cat  cat window  2
+sky  sunset train  0
+wat  bridge  0
+pol  police street  2
+ani  fish  0
+tem  water  0
+flo  flowers  1
+str  military water  0
+sun  sun  1
+air  train  0
+str  flags flowers  0
+wat  water  1
+wat  leaf  0
+boo  temple  0
+bea  clouds mountain snow water  0
+str  protest  0
+ani  cat  0
+clo  animal cow  0
+str  police  1
+sun  horses  0
+wat  railroad  0
+flo  water  0
+bri  airport  0
+str  sports  0
+gar  castle garden  1
+win  street window  1
+ani  reflection  0
+bri  railroad road  1
+flo  dog water  0
+wat  dancing wedding  0
+sky  military tiger  1
+bir  birds tree  2
+pol  military statue  0
+wat  water  1
+ani  animal cow  2
+tow  clouds sky  0
+san  animal  0
+str  snow  0
+pol  book  0
+sky  sky  1
+cit  cars road  0
+foo  beach  1
+fis  water  0
+pol  fire  0
+ref  reflection  1
+tra  reflection swimmers  0
+bri  sign  0
+sky  clouds sky sunset water  2
+sky  animal sky sun  1
+sky  clouds grass sky temple  2
+sno  road sky snow  3
+sky  buildings clouds sky  1
+fir  sky  0
+clo  flags sun  1
+dog  dog  1
+str  cat  1
+str  person street window  2
+sun  beach clouds rocks sun sunset water  2
+sun  flowers garden  0
+wat  fish  0
+hor  horses  1
+cat  animal cat  2
+flo  tree  0
+wat  beach ocean water  2
+flo  flowers  1
+mou  reflection water  0
+sun  sunset  1
+fir  beach  0
+clo  clouds sky  2
+str  buildings cars street  3
+wat  beach clouds road sky street town tree water  3
+bea  ocean rocks  1
+ref  clouds sky water  0
+cit  buildings cityscape nighttime street  3
+tem  street  0
+wat  military plane  0
+cat  cat  1
+toy  window  0
+flo  leaf  0
+clo  sky  1
+wat  clouds moon rocks sky water  2
+bea  animal clouds cow sky  1
+tre  tree  1
+roa  fire  0
+tre  bridge temple  0
+tre  birds clouds ocean sun sunset water  2
+sky  sky  1
+sun  rainbow  1
+sno  birds  1
+str  tower  0
+clo  dog  0
+wat  castle clouds frost grass sky water  1
+win  road street  0
+ani  house  0
+gar  cat  1
+sky  ocean water  0
+sky  bridge water  1
+sno  snow  1
+bir  birds  1
+oce  sky  0
+sno  snow  1
+clo  lake mountain  0
+sun  beach lake reflection sand water  1
+str  plane sky  0
+wat  reflection sand water  2
+str  sign  0
+gra  garden grass  2
+bea  street  0
+rai  railroad reflection train  2
+sno  bear  0
+str  garden sunset  0
+bir  birds  1
+sun  sky water  0
+wat  lake water  1
+flo  flowers  1
+dog  dog  1
+dog  lake water  0
+cit  bridge  0
+str  protest  1
+flo  tree  0
+bea  statue  0
+wat  flowers  0
+mil  military  1
+fir  street  1
+str  window  0
+bri  reflection water  1
+wat  lake sun water  2
+ani  animal cat food  1
+lea  tiger  0
+clo  bridge  0
+hou  clouds  0
+sun  sunset  1
+map  police  0
+bea  beach ocean rocks sand surf water  3
+bir  birds  1
+sky  sky  1
+ref  window  0
+mou  rocks surf  1
+ani  animal  1
+clo  clouds sunset  2
+clo  boats buildings water  0
+bea  beach  1
+sky  beach  0
+sky  sunset  1
+clo  grass sky sunset  1
+clo  buildings cityscape clouds grass sky  2
+tow  water  0
+win  window  1
+sun  sunset  1
+hou  water waterfall  1
+clo  boats  0
+sno  snow  1
+rai  railroad train  2
+bea  beach sand  2
+wat  bridge  0
+flo  flowers  1
+bui  train water  0
+wat  police  0
+sky  beach harbor ocean reflection sky  1
+sno  lake sunset  1
+tre  grass  0
+str  garden  0
+sky  sky tower  1
+bea  running  0
+foo  food  1
+sky  snow  0
+pla  water waterfall  0
+mil  military  1
+tow  buildings military  0
+tow  tower  1
+str  person road  1
+wat  sky  1
+boa  bridge  1
+clo  clouds sunset  1
+rai  rainbow sky vehicle  2
+pol  police  1
+bea  sports water  0
+ref  moon  1
+clo  clouds rainbow  1
+roa  airport  0
+tre  police  0
+sky  glacier snow  0
+flo  flowers garden plants  3
+ani  animal  1
+tre  sun  0
+foo  rainbow  1
+pla  military  1
+lak  clouds elk  1
+sky  clouds sky  1
+foo  wedding  1
+sun  animal  0
+roc  book  0
+wat  ocean reflection sunset water  2
+wat  reflection water  1
+sun  flags tower  0
+roa  fire  1
+foo  food  1
+bri  water  0
+sun  cars  0
+pro  soccer  0
+sky  sky  1
+flo  fish food  0
+ani  snow  1
+flo  flowers  1
+wat  fish plants  0
+roc  beach clouds rocks sky sunset  2
+ref  reflection  1
+sno  animal cat tiger  2
+bea  sky  0
+tre  grass  1
+flo  protest  1
+fla  soccer  0
+wat  bridge  0
+sky  train  0
+flo  dancing  1
+wat  water  1
+sno  clouds dog sky snow  1
+bea  beach  1
+sig  beach  0
+bea  animal bear  2
+air  clouds sky  0
+clo  clouds lake tower waterfall  1
+tre  tree  1
+wat  fish  0
+air  tiger  0
+sky  clouds tower  2
+sno  bear fish waterfall  0
+ani  bear  1
+sky  buildings tower  1
+ref  lake water  0
+wat  whales  0
+ani  animal  1
+ani  grass  0
+pol  police street  2
+tow  buildings clouds grass sky  1
+foo  sky  0
+str  train wedding  0
+toy  toy  1
+gar  food  0
+str  street  1
+wed  street  0
+wat  beach sand water  2
+flo  flowers  1
+clo  clouds ocean rainbow rocks sky sunset water  2
+hou  house  1
+air  plane  1
+boa  sun water  0
+hou  grass road tree valley  0
+sun  sky sunset  1
+sun  tree  0
+clo  sky sunset tree  2
+hou  buildings house tower  1
+lak  snow  0
+wed  temple toy  0
+hou  flowers mountain  1
+wat  boats water  1
+pro  protest  1
+bir  birds ocean water  1
+clo  boats clouds sky water  2
+tre  cow  0
+hou  beach clouds grass rocks sand sky tower  1
+str  street train  1
+sun  sunset  1
+clo  running sand sky  1
+air  plane  1
+bea  clouds snow sunset  0
+bea  beach ocean sand sky sun sunset  3
+str  food  1
+foo  food mountain  1
+fis  fish ocean water  2
+sun  ocean reflection rocks sunset waterfall  2
+wat  clouds sky  0
+sun  plane  0
+sno  snow  1
+wat  statue  0
+str  buildings cityscape  2
+tre  clouds sky tree  1
+tra  railroad train  2
+spo  soccer  0
+flo  wedding  1
+wat  lake sun sunset water  1
+moo  book  0
+ani  leaf sun  0
+tra  snow street  0
+str  sports  0
+ref  flowers water  1
+rai  street  0
+bea  bear  1
+flo  fox  0
+flo  flowers  1
+str  flowers snow  0
+bui  buildings house  1
+roa  reflection  0
+wat  water  1
+flo  flowers  1
+bui  cityscape road street tower  1
+car  clouds sky toy  1
+sun  clouds railroad snow sunset train  1
+tra  train  1
+clo  clouds  1
+san  birds tattoo  0
+pol  street  1
+per  reflection  0
+sun  nighttime  0
+str  food  0
+ref  reflection water  2
+cat  cat  1
+wat  castle  1
+sun  buildings  1
+str  zebra  0
+str  cars street  1
+wat  water  1
+str  dog  1
+str  bridge  0
+wat  ocean sky  1
+ani  animal  1
+wat  garden  0
+fis  ocean whales  0
+toy  whales  0
+pol  railroad  0
+sun  clouds sunset  1
+rai  rainbow  1
+cor  fish wedding  0
+wat  ocean water  1
+ani  animal  1
+foo  food  1
+lak  beach clouds lake sky water  2
+sno  valley  0
+wat  lake water  1
+sky  snow  0
+wat  water  1
+sun  moon sky  1
+flo  flowers  1
+spo  soccer  1
+sun  lake reflection sunset water  3
+ref  reflection  1
+sky  sunset  1
+tre  tree  1
+wed  window  0
+mou  boats sky water  1
+flo  house  0
+moo  police  0
+san  fox  0
+sun  beach sky sunset tree  2
+tre  statue  0
+per  airport plane  2
+tre  tree water  1
+dog  dog  1
+flo  food  0
+bir  animal rainbow  1
+ani  train  0
+sur  surf  1
+bea  reflection sky water  0
+air  airport  1
+sun  beach sunset  2
+sky  cars  1
+clo  ocean water  0
+ref  reflection  1
+ref  bridge reflection water  2
+wat  bridge water  2
+flo  rainbow  0
+str  bear  0
+str  rainbow  0
+sun  sunset  1
+win  window  1
+dog  cow street  1
+str  police  0
+roc  water  0
+spo  sports  1
+clo  clouds sunset  1
+ani  bear  1
+cit  plane  0
+oce  lake  0
+sky  tower  0
+wat  snow  0
+cat  animal bear  1
+tre  birds  0
+sky  nighttime  0
+dog  water  0
+wat  water  1
+roc  water  0
+ani  food  0
+wat  sunset  0
+toy  tattoo  0
+spo  person sports  1
+pol  protest  1
+pol  earthquake  0
+roc  rocks waterfall  1
+cat  cat  1
+dog  animal dog  1
+sky  reflection sand sign sky snow street sun sunset train water window  1
+str  reflection  0
+sky  sky  1
+sky  plane  1
+ref  reflection window  1
+tre  sun tree  2
+ani  mountain tiger zebra  0
+gra  street  0
+ref  buildings temple  0
+sky  flags sky  1
+wat  bridge reflection  0
+flo  leaf  0
+sky  reflection  0
+bea  beach  1
+wat  reflection street  1
+ani  animal  1
+sky  clouds sky sunset  2
+sun  clouds sun sunset  2
+mou  coral  0
+sky  moon  1
+sky  flowers sky sun  2
+bea  cow  1
+clo  beach ocean  1
+air  airport plane  2
+bir  sky  0
+elk  elk  1
+ani  horses  0
+bui  plane  0
+sky  beach ocean sky sunset  1
+sun  sun sunset  2
+roa  bridge  0
+cat  animal cat  2
+tem  sky statue sunset temple  2
+tre  running  0
+lak  lake ocean  1
+fir  protest  0
+str  train window  0
+sun  fire mountain valley  0
+wat  beach ocean reflection sand sun sunset water  2
+wat  clouds sun tree water  1
+ani  airport beach sand sun surf water  1
+sun  cityscape clouds sky  2
+car  sign  0
+clo  beach clouds sand sky water  3
+sky  sky sun sunset  1
+flo  sky  0
+toy  house rainbow toy  1
+str  window  0
+pro  protest  1
+lak  water  0
+wat  clouds reflection sky tree water  3
+str  bridge  0
+wat  grass reflection rocks water  2
+ani  frost reflection tree  0
+foo  food street  1
+fir  fire protest  1
+bea  ocean  0
+flo  water  0
+rai  rainbow  1
+str  airport  0
+wat  boats  0
+wat  earthquake  0
+win  flowers  0
+tre  beach sand water  0
+bea  cat  0
+cat  animal cat  2
+bea  beach sand  2
+tra  boats lake reflection water  0
+sky  birds clouds  2
+str  dancing  0
+tow  sign window  0
+sno  snow  1
+wat  sun  0
+sky  soccer sun sunset  0
+sno  animal snow  2
+wat  fish ocean  1
+sun  fish lake  0
+bea  grass sky  0
+wat  water  1
+wat  rainbow  0
+str  snow  0
+moo  animal birds clouds moon sky  2
+foo  food  1
+sky  clouds military moon  1
+tra  bridge  0
+ref  buildings street  1
+cas  castle  1
+tig  animal cat tiger  3
+wat  ocean water  2
+wed  street  0
+flo  flowers  1
+tre  horses  0
+sky  water  0
+ani  cat  1
+gra  grass  1
+wat  beach  0
+san  beach  1
+tra  airport  0
+str  street  1
+boa  beach ocean rainbow sports surf water  1
+sun  moon sky  1
+win  house window  2
+wat  house  0
+wat  water window  2
+clo  clouds sky  2
+roc  sunset water  1
+clo  clouds  1
+sky  clouds sky  2
+foo  food  1
+sky  castle  1
+str  protest street  1
+wat  water  1
+tre  frost tree  1
+bir  birds  1
+str  reflection  0
+sky  boats  0
+ani  animal  1
+sky  window  0
+sky  clouds flags water  1
+wat  beach sand  0
+clo  clouds sky tree  2
+hou  water  0
+sky  clouds sky tree  2
+str  clouds sky  0
+bea  animal  1
+dog  dancing wedding  0
+dog  animal  1
+win  window  1
+tre  snow tree  2
+wat  water  1
+flo  flowers plants  2
+ref  rocks  0
+wat  water  1
+str  sports vehicle  1
+sta  plane sky statue  2
+mil  tiger  0
+oce  water  1
+bui  garden  0
+spo  swimmers  0
+sky  sky tree  2
+bea  fish sky  1
+boo  street  0
+bri  reflection sand sign sky snow street sun sunset train water window  0
+fir  statue  0
+ani  dog  1
+bea  ocean  0
+ani  fox house  1
+clo  beach ocean  0
+sky  clouds sky tree  2
+wat  flowers  1
+sun  ocean sunset water  2
+wat  beach dog ocean sand water  2
+sky  airport window  0
+wat  reflection  0
+bea  bear  1
+ani  animal  1
+str  rainbow  0
+bea  ocean  1
+clo  mountain sky  0
+clo  bridge clouds sky  2
+mou  mountain  1
+bea  snow  0
+flo  flowers glacier  1
+flo  flowers  1
+hou  house  1
+mil  street water  0
+str  boats  1
+gar  animal  1
+flo  sky  0
+foo  wedding  0
+hor  animal  0
+wat  beach dog water  1
+tre  clouds sky tree  2
+sno  snow  1
+clo  cityscape  0
+win  street  1
+sky  beach clouds ocean sand sky  2
+cat  dog sunset  1
+bea  beach sand sun water  2
+wat  elk  0
+hou  computer  1
+bri  military  0
+bri  bridge  1
+clo  sky  1
+cat  animal  1
+tre  street tree  1
+sun  window  1
+str  police protest  0
+ani  leaf sand  1
+sky  cat  0
+sun  sun tree  0
+boa  fish reflection water  1
+str  window  0
+sno  whales  0
+flo  water  0
+hou  vehicle  0
+pro  protest  1
+foo  food  1
+moo  plants  0
+ani  dog  0
+sky  sign  0
+clo  clouds road sky  2
+tra  railroad  1
+clo  tower  0
+bui  police  0
+tre  statue  0
+bea  beach sand water  2
+dog  dog  1
+sky  wedding  0
+tre  mountain tree  1
+mou  clouds sky snow  1
+wat  grass  1
+sky  beach ocean  0
+str  protest  1
+str  clouds sky water  0
+sun  birds clouds sky sun  2
+wat  reflection water  1
+sky  sports  0
+sun  sunset tower tree  2
+flo  sun  0
+oce  water  1
+ref  reflection  1
+fis  coral fish  2
+str  moon sky  1
+bri  sky  0
+wat  moon  0
+sky  frost sky tree  2
+wat  harbor water  2
+flo  flowers plants  2
+air  beach  0
+wat  water  1
+lak  house  0
+bea  airport  0
+sky  clouds sky  1
+pro  water  0
+tre  tree  1
+zeb  zebra  1
+tre  tree  1
+roa  cars clouds sky  1
+flo  tree  0
+bea  water  0
+veh  snow  0
+ani  cow window  1
+spo  sports  1
+roc  beach  1
+gra  grass reflection  1
+bir  birds garden tree  2
+bea  cow  0
+oce  animal water  1
+bir  animal  1
+bir  fish  0
+gra  garden  0
+gra  sun water  0
+ref  bridge train  0
+flo  flowers  1
+str  temple  0
+sun  sunset  1
+sky  ocean sky sunset water  2
+pro  military  0
+hou  house  1
+air  military  0
+clo  clouds glacier grass lake mountain reflection rocks sky snow sun water  3
+pro  sign  0
+oce  bear  0
+sky  harbor  0
+bea  beach ocean sand water  3
+wat  beach reflection  0
+wat  ocean water  1
+bir  animal birds  2
+pol  house town  0
+tow  clouds  1
+wat  water  1
+clo  clouds sky  1
+lak  lake reflection sun  1
+mil  cars  0
+air  road street  0
+clo  castle  0
+sky  sky tree  2
+toy  food  1
+flo  garden  1
+str  vehicle  0
+sun  surf  0
+cat  cat  1
+clo  clouds sand sky tree valley  2
+air  snow  0
+air  train  0
+sky  airport plane  2
+tow  railroad  0
+str  reflection  0
+air  house reflection  0
+lak  clouds lake  2
+flo  flowers  1
+hou  nighttime reflection  0
+clo  clouds  1
+wat  map  0
+cat  birds  0
+wat  birds sun sunset water  1
+flo  flowers  1
+rai  rainbow  1
+bea  animal bear  2
+car  cars  1
+tre  tree  1
+tra  road vehicle  0
+wat  beach ocean water  1
+win  sky  1
+sky  garden sky sun  2
+ref  person tree  1
+car  cars  1
+sky  clouds sky  2
+sky  clouds vehicle  1
+mou  plants sky  1
+flo  flowers  1
+ani  animal  1
+str  street  1
+wed  cat elk  0
+dog  dog  1
+sky  flowers  0
+str  fire running  0
+tre  flowers  0
+win  reflection  0
+ani  bear toy  1
+bir  clouds sky water window  2
+cat  cat  1
+sun  clouds running sunset  1
+sno  snow  1
+sky  grass tree  0
+clo  buildings cityscape tower  0
+bui  buildings temple  1
+sig  fox glacier  0
+flo  birds garden  0
+tem  flags sky  0
+flo  sun water  0
+sky  harbor  0
+win  buildings sunset  0
+sno  map  0
+hou  valley  0
+clo  clouds sky  2
+tre  flowers  0
+flo  leaf temple  0
+wat  water  0
+sky  street  1
+sun  garden plants reflection water  0
+sky  clouds sky tower  3
+hou  castle flowers  0
+tre  tree water  1
+car  plane  0
+str  street  1
+hor  sports  0
+wat  beach house street tree  0
+sno  boats clouds  0
+dog  dog  1
+tre  lake water  0
+pol  fire  1
+fir  fire  1
+dog  dog water  1
+sno  bear glacier lake snow tree valley water  3
+sky  leaf  0
+clo  clouds road sky  1
+air  airport plane sunset  2
+dan  cat  0
+pro  protest  1
+sig  police sign  1
+ani  horses  0
+wat  tree  0
+sky  clouds rainbow sky  3
+ani  animal grass running  1
+wat  water  1
+ani  elk  0
+str  plants  0
+clo  animal cat clouds sky  2
+hor  horses  1
+flo  flowers plants  2
+pro  police  1
+sky  cars  0
+ref  fire reflection water  1
+bir  reflection water  1
+cat  cat  1
+wat  bridge tree water  1
+wat  fish ocean water  1
+str  train  0
+ani  animal valley  1
+str  reflection  0
+str  fire  0
+cat  animal cat  2
+wat  reflection  0
+wat  house  0
+tre  snow sunset tree  2
+spo  fire  0
+tig  cat tiger  2
+str  house  0
+bui  food street  1
+mil  reflection  0
+pol  bridge buildings moon road sun sunset water  0
+sun  cat plants window  0
+sky  window  0
+wat  boats  1
+gra  temple  0
+ref  window  1
+clo  clouds  1
+boo  moon tree  0
+str  snow  0
+wat  lake  0
+sun  bridge clouds reflection road sky sunset water  1
+roa  road  1
+dog  birds  0
+wat  railroad train  0
+ani  leaf  0
+sun  water  0
+wat  animal  0
+wat  running water  1
+sta  military  0
+str  bear  0
+wed  dancing  0
+flo  flowers house plants  2
+str  soccer  0
+clo  beach clouds soccer sunset  1
+sky  cityscape sky town  1
+wat  street  0
+fis  coral water  1
+clo  airport  0
+clo  sky  0
+hou  vehicle  0
+gra  toy  0
+fro  frost window  1
+sky  airport clouds sky sunset  2
+flo  food  0
+str  flags  0
+clo  clouds sky  2
+flo  food sun  0
+wat  lake sunset  0
+flo  toy  0
+bui  sky  0
+rai  train  1
+sky  water  0
+sky  animal grass moon water  1
+roa  mountain road  1
+flo  flowers  1
+str  fire  0
+sun  sand sky sun sunset  2
+bui  garden  0
+str  fire  0
+flo  flowers  1
+tre  cars leaf tree vehicle  1
+sky  water  0
+sky  sports  0
+sun  clouds sky sunset  2
+wat  mountain snow  0
+str  temple  0
+clo  clouds grass mountain  2
+flo  garden  1
+bea  ocean  0
+spo  fire police  1
+ani  birds  0
+flo  statue  0
+clo  street  0
+cat  cat  1
+ani  animal  1
+bri  street town  0
+str  street  1
+sky  house mountain sky  1
+dog  dog  1
+sky  reflection sky window  2
+cat  road street  1
+sun  toy  0
+flo  sign  0
+bea  statue  0
+sun  beach sunset  1
+wat  sports  1
+str  dog lake tiger  0
+tre  birds sky tree  1
+sky  sky water  1
+bui  window  0
+wed  reflection  0
+ref  moon reflection  1
+wat  boats  0
+sig  sign  1
+sun  nighttime sunset water  2
+bea  animal water  1
+clo  clouds sky  2
+roa  buildings cars  2
+tra  sports  0
+sky  reflection water  0
+sky  sky  1
+sno  map  0
+flo  flowers  1
+sky  fish  1
+flo  flowers  1
+ref  airport  1
+rai  sports  0
+wat  buildings clouds sky water  1
+flo  temple  0
+sun  clouds sky sunset  3
+lak  clouds water  1
+san  sand  1
+flo  wedding  1
+foo  food  1
+bui  buildings street  1
+bri  buildings lake  0
+bir  clouds rocks sky water  0
+clo  grass sky sunset  2
+foo  food  1
+cat  cat  1
+pol  protest reflection  1
+str  street  1
+str  house  0
+ani  animal  1
+car  police  0
+car  cars  1
+sun  sun sunset  1
+win  window  1
+sky  water  0
+ani  dog  0
+bri  bridge  1
+sky  lake  0
+ani  fish food  0
+dog  dog  1
+flo  flowers  1
+flo  nighttime  0
+sky  clouds moon sky  2
+wat  valley water  1
+ani  animal  1
+wat  mountain  1
+str  railroad window  0
+str  street  1
+oce  sports  0
+wat  cars  0
+pro  military protest  1
+wat  glacier  0
+sky  cityscape nighttime sunset tower  0
+foo  food  1
+clo  beach  1
+tra  sky train  1
+tre  sand tree  1
+flo  flowers  1
+bea  animal bear  2
+ref  lake reflection  1
+sky  castle clouds sky sun  2
+sun  bridge reflection sky sun sunset water  2
+pol  beach sand swimmers  0
+clo  road  0
+bea  bear toy  1
+sky  sun  0
+hor  horses  1
+wat  rocks  0
+wat  reflection street water  1
+clo  clouds sky  2
+wed  flowers  0
+oce  ocean  1
+flo  plants  1
+mou  clouds lake reflection tower water  2
+sun  sky water  1
+san  food  0
+sun  beach ocean sand sun sunset water  2
+zeb  animal zebra  2
+sky  military  0
+flo  animal  1
+clo  town valley  0
+hou  snow  0
+sun  boats clouds  1
+clo  clouds sky  2
+sno  glacier mountain snow  3
+clo  clouds sky snow  3
+ref  flowers  0
+hou  ocean sand water  0
+wat  horses police  0
+sky  snow  0
+sno  glacier ocean  2
+car  street  1
+sta  military  0
+wat  reflection  1
+sky  harbor  0
+wat  garden  0
+flo  tattoo  0
+clo  beach lake sky water  1
+clo  clouds sky sunset  2
+str  street  1
+str  tower  0
+str  fire  0
+foo  food  1
+sig  sign  1
+clo  beach water  0
+gra  leaf  0
+wat  sunset  1
+flo  flowers garden  2
+tre  plants sky tree  2
+wat  waterfall  1
+bea  ocean  1
+str  food  0
+str  cityscape  0
+tre  town  0
+sno  frost mountain sky snow  2
+tre  tree  1
+wat  road  0
+str  street  1
+sur  beach ocean reflection surf water  3
+sky  water  0
+bir  street  0
+ani  animal  1
+ani  wedding  0
+sun  clouds sun  1
+sun  beach ocean sand sky sun sunset  3
+dog  dog  1
+wat  bridge buildings water  2
+air  airport plane  2
+str  cityscape street  1
+flo  flowers plants  1
+wat  sky  0
+flo  flowers  1
+str  animal house  0
+hor  cow grass house sky water  0
+sno  snow  1
+cat  cat food  1
+flo  flowers garden plants  3
+ani  road street  0
+sky  glacier mountain snow  2
+pol  computer  0
+sky  snow  0
+moo  beach moon  1
+car  snow street tree  1
+ani  animal  1
+sun  ocean sky  1
+air  plane  1
+str  window  0
+wat  clouds ocean  0
+sno  airport  0
+tre  house toy  1
+ani  dog  0
+str  horses police  1
+wat  leaf water  2
+hou  window  1
+flo  toy  0
+fir  road  0
+bui  buildings map  1
+dog  birds dancing dog flowers garden grass house lake water  1
+fir  train  0
+hou  flowers  0
+dog  bear  0
+sno  cow horses snow  1
+str  temple  0
+wat  lake sky water  2
+bui  clouds reflection sky  0
+flo  garden  1
+oce  frost lake snow water  1
+bui  fire  0
+pla  clouds sky  0
+dog  dog  1
+clo  clouds  1
+ani  animal cat  1
+tre  tree  1
+str  snow  0
+spo  sports  1
+wat  grass  1
+clo  snow  1
+sun  ocean sky sun sunset water  3
+foo  food  1
+ani  mountain  0
+clo  clouds sky  2
+fla  map  0
+clo  sky tower  2
+toy  toy  1
+ref  train  0
+air  plane  1
+roa  fire  0
+sun  reflection water  1
+clo  sunset  0
+foo  animal tree  0
+foo  food  1
+sky  clouds plane  1
+str  reflection train  1
+mou  person  0
+car  cars vehicle  2
+sun  dancing snow  0
+ani  animal birds  1
+wat  water  1
+ani  tree water  0
+wat  reflection water  2
+clo  castle clouds grass reflection sky water  2
+clo  castle  0
+wed  wedding  1
+sky  clouds sky sunset  3
+clo  sky vehicle  0
+clo  lake reflection  0
+clo  clouds ocean water  2
+ani  elk  0
+dog  frost  0
+sky  sky  1
+sky  street  0
+wat  rainbow water  1
+sky  boats  1
+hou  window  1
+foo  cat  0
+wat  buildings clouds lake sand sky water  3
+sky  reflection valley  1
+roa  house  0
+sig  sign sky  2
+sky  sign  1
+str  temple  0
+ani  lake mountain water  0
+bea  airport  0
+pol  police  1
+air  bridge reflection  0
+sun  lake sun water  0
+ani  running water  1
+bea  sky  0
+str  reflection  0
+per  street  0
+sun  beach road sky  1
+bea  fish  0
+bea  beach mountain person street sunset water  2
+wat  statue  0
+clo  sunset  0
+wat  boats water  1
+bea  clouds  0
+wat  birds  1
+str  flowers  0
+har  beach fire sky  0
+toy  bear toy  2
+wat  train  0
+wat  boats sun  1
+wat  water  1
+roa  street town  1
+oce  castle  0
+roc  tree  0
+sun  sand  0
+dog  dog  1
+pol  protest  1
+sno  glacier mountain snow valley  3
+fir  sky  0
+wat  zebra  0
+cow  animal  1
+bea  beach  1
+clo  sky  0
+pol  protest  1
+tra  street  0
+clo  buildings street  0
+sun  reflection sun sunset  2
+str  buildings cityscape street  2
+str  street  1
+flo  flowers  1
+str  wedding  0
+sky  mountain  0
+bui  road  0
+sun  buildings sunset tower  1
+bea  beach  1
+sky  clouds rocks sky  3
+str  running  0
+bui  mountain ocean sunset  0
+sky  clouds sky sunset water  3
+tre  animal  1
+wat  sun  0
+gra  castle  0
+san  clouds rocks sky sunset water  0
+str  boats  0
+sno  beach water  0
+ani  animal cat  2
+str  cars  1
+ref  sky  0
+sky  clouds tower  2
+sig  book  0
+clo  water  0
+clo  clouds reflection sky water  2
+wat  mountain valley  0
+wat  fish water  1
+clo  clouds sky sunset  2
+roa  beach clouds sky  0
+tre  tower  0
+toy  toy  1
+wat  sun  0
+wat  sun  0
+clo  clouds grass sky  2
+boa  house  0
+sno  dog snow  2
+wat  town  0
+wat  reflection  0
+str  cityscape  0
+clo  beach clouds sand sky sun water  2
+fir  fire  1
+bir  birds  1
+bri  cityscape sunset tower  0
+bui  cars  0
+toy  garden  0
+wat  reflection sunset  2
+wat  water  1
+foo  leaf plants  0
+ani  elk  1
+gra  sun  0
+tre  grass  0
+tre  tree  1
+ani  cat  1
+bea  water  0
+boa  clouds sky  1
+cat  cat  1
+boo  house  0
+bir  dancing  0
+sky  clouds sky  2
+sno  horses  1
+clo  sunset  0
+pro  person street  1
+sun  clouds house  1
+bir  birds boats  1
+sig  ocean sign sky  1
+hou  flowers street town  0
+sig  sign  1
+clo  clouds sky  2
+hor  horses  1
+air  airport mountain  1
+wat  animal  0
+sky  window  0
+tre  person reflection water  0
+roc  water  1
+tow  nighttime  0
+car  vehicle  1
+bea  beach plane  1
+sno  railroad train  0
+win  dancing  0
+wat  sports swimmers water  2
+cat  dog  0
+tre  animal  1
+dog  dog  1
+wat  lake ocean sun  0
+toy  bear  0
+ani  snow  0
+ref  dancing fire  2
+wat  ocean  0
+toy  toy  1
+sky  sand sky  1
+hou  castle  0
+sun  sunset  1
+sky  sky  1
+mou  whales  0
+clo  beach clouds rocks sky  2
+gra  clouds sky  2
+tre  grass  1
+sno  snow  1
+clo  buildings  0
+fir  road  1
+tra  military  0
+bir  birds  1
+str  street  1
+flo  flowers  1
+clo  clouds sky  2
+cat  cat sky sun  1
+pla  sunset water  0
+sno  earthquake  0
+sky  beach earthquake sand sky  1
+car  road  0
+hou  garden  0
+flo  flowers tree  1
+wat  lake reflection valley water  2
+sun  sunset  1
+sun  beach ocean  0
+sta  flowers  0
+bea  clouds grass house road sky tree  0
+ani  cat  1
+wat  beach clouds sand  1
+clo  railroad sky tower wedding  1
+lak  military  0
+sky  fire  0
+bri  sky  0
+str  police protest  2
+cow  dog  0
+clo  beach person  0
+ani  animal  1
+wat  beach ocean sky water  1
+flo  zebra  0
+str  reflection running  0
+flo  plants  0
+sun  beach boats clouds sky water  1
+fis  plants  0
+sun  frost window  1
+wat  water waterfall  2
+str  window  0
+pol  buildings  0
+foo  food  1
+sno  dog  0
+ani  animal  1
+bir  street water  2
+str  house  0
+str  road street  2
+sky  plane sky  2
+clo  sand sky  1
+gra  grass  1
+sun  sunset  1
+clo  clouds grass  2
+boo  person  0
+bir  birds  1
+sun  sunset  1
+sky  mountain sky sunset tower  1
+ani  animal  1
+clo  boats water  0
+flo  clouds flowers grass sky sun  3
+sun  sunset  1
+str  map  0
+clo  tower  0
+gra  beach moon ocean sun sunset surf temple wedding  2
+str  water  0
+str  train  0
+flo  flowers  1
+ref  reflection  1
+fis  fish  1
+rai  bear rainbow  1
+flo  garden water  1
+dog  sun toy  0
+tre  beach  0
+wed  reflection  0
+wat  sky sun water  1
+tre  water waterfall  0
+roa  reflection water  0
+win  window  1
+wed  dancing sun  1
+tra  sky sunset  0
+moo  moon sky  2
+roa  railroad train  2
+roc  road water  0
+flo  flowers  1
+sun  beach clouds fire sky sunset  3
+bea  clouds moon town tree  0
+ani  grass  0
+mil  airport  1
+bui  street  1
+flo  flowers garden  2
+pla  military plane  2
+fla  military  0
+rai  rainbow  1
+bri  bridge  1
+tre  water  0
+wat  water  1
+mou  lake  1
+sky  garden  0
+ani  horses  0
+sky  animal  0
+str  bridge sun  0
+tow  tower  1
+lea  leaf mountain sky tree  3
+wha  ocean  1
+str  dog  0
+air  airport plane  2
+str  street  1
+wat  police  0
+win  house window  2
+sig  airport  0
+flo  flowers garden  2
+tem  earthquake fire  0
+air  protest  0
+air  airport sky sun  1
+str  railroad train  1
+str  flags  0
+sun  bridge reflection  1
+wat  leaf water  2
+toy  toy  1
+car  sports  1
+hor  beach  1
+sky  clouds sky sun tower  2
+wat  water  1
+zeb  cat  0
+fir  fire  1
+sun  ocean sky sun  2
+str  temple  0
+wat  street  0
+ani  animal  1
+fis  coral  1
+fla  sky  0
+clo  clouds sky  2
+clo  cityscape sky  0
+tra  street  1
+car  cars  1
+roa  clouds  0
+spo  protest  0
+bea  sky  0
+ani  house  0
+str  train  0
+sno  buildings  0
+sun  sunset  1
+bea  sky  0
+tra  clouds road sky  0
+win  clouds sky window  1
+ani  animal  1
+wed  police  0
+ani  animal  1
+dog  animal lake mountain  1
+foo  street  0
+cat  cat  1
+boo  book sunset  1
+com  airport plane window  1
+clo  clouds mountain  1
+sky  sun sunset water  2
+wat  sports  0
+str  animal  0
+air  airport  1
+fis  fish  1
+sun  clouds sky sunset  1
+bui  reflection tower  1
+sun  sun  1
+clo  clouds water  1
+win  reflection water window  2
+bea  beach ocean sky water  2
+ani  animal  1
+fis  coral fish ocean water  2
+sun  beach lake sky sun sunset water  2
+bea  beach sports sunset water  1
+clo  sign  1
+hou  birds clouds grass tree  0
+mou  beach tree  0
+sky  clouds  0
+clo  clouds  1
+tre  beach sand sun  1
+fis  wedding  0
+bri  train  0
+fro  fish tree  0
+wat  rocks water  2
+flo  flowers  1
+clo  clouds  1
+clo  clouds flowers mountain snow  3
+tra  street  0
+clo  beach rocks water  0
+tre  tree  1
+sun  birds elk lake  0
+sky  reflection town window  0
+sun  sun sunset  2
+pla  plane  1
+flo  clouds grass sky  0
+wat  ocean rocks water  2
+toy  snow  0
+flo  rainbow  0
+rai  rainbow  1
+roa  flowers garden water  1
+cor  bear  0
+dog  cityscape  0
+cat  animal cat  2
+str  sign  0
+mou  snow  0
+str  temple  0
+bea  beach ocean water  2
+sta  toy  0
+sky  beach moon surf water  0
+sun  beach water  1
+sno  clouds snow sun tree  2
+bri  dog temple  0
+clo  clouds reflection sky water  2
+tow  buildings  1
+sky  sunset  1
+str  sign  0
+rai  mountain sunset  1
+ani  animal valley  1
+pla  military plane  2
+str  house  0
+bea  tattoo  0
+hou  valley  0
+sun  sunset  1
+ani  garden  1
+dog  police sunset  0
+hou  house lake  1
+cit  buildings  1
+wat  beach  0
+mou  clouds  1
+clo  bridge statue sunset  1
+wat  reflection  1
+bir  animal  1
+bui  flowers  0
+ref  buildings tower  0
+boa  water  1
+air  airport mountain  2
+sky  clouds sky  2
+cat  dog  1
+wat  castle reflection  1
+sun  beach ocean sunset  1
+wat  wedding  0
+sky  sky  1
+ref  reflection water  2
+sky  animal elk  1
+clo  clouds  1
+air  plane  1
+ani  grass  0
+flo  water  0
+pol  dog  0
+wat  water  1
+sun  sand  0
+ani  fox window  0
+wat  clouds grass sky water  3
+bui  buildings cars  1
+wat  ocean whales  0
+str  zebra  0
+ref  leaf  0
+wat  water  1
+hou  house  1
+sun  clouds sky  1
+flo  sky  0
+pol  running  0
+foo  animal cat toy  1
+sun  person  0
+ref  buildings sky  0
+tre  tree  1
+spo  window  0
+lea  window  0
+wat  cat elk  0
+flo  flowers  1
+wat  water  1
+bea  beach ocean  1
+ani  tree  0
+ani  grass  0
+wat  beach clouds reflection sky sunset water  2
+flo  garden  1
+bui  cityscape  1
+clo  sky tree  0
+sta  statue  1
+san  buildings  0
+ref  clouds moon reflection  1
+ani  animal  1
+bea  reflection sunset  0
+wat  rocks water  1
+wat  clouds mountain sky snow  0
+str  fire  1
+ani  book water  0
+bea  clouds  0
+pla  airport military plane  3
+mou  sky  0
+sno  tower  0
+ani  animal  1
+sky  zebra  0
+wat  boats ocean  0
+wat  animal beach  1
+sun  train  0
+ani  sky snow  1
+air  airport mountain  1
+sky  clouds ocean sun  1
+flo  flowers plants  2
+sky  animal fish  1
+air  wedding  0
+lea  soccer  0
+rai  railroad train  2
+flo  flowers  1
+wat  clouds sky valley water  1
+flo  leaf  0
+bui  house police railroad  1
+ani  tree  0
+san  nighttime snow tree  0
+wat  ocean swimmers  1
+ani  animal  1
+win  rocks sun  0
+wat  beach sand sky sun  1
+spo  swimmers  0
+sky  plane  1
+str  reflection  0
+wat  rocks water  1
+san  temple  0
+flo  flowers  1
+wat  snow  0
+cat  animal dog  0
+ani  animal  1
+str  street  1
+wat  tree  0
+wat  lake mountain snow water  2
+bea  beach sand sun  3
+bir  birds clouds flowers grass sky  1
+sky  bridge  0
+win  reflection  1
+sky  bridge sky sun  1
+bui  buildings  1
+sun  sky  0
+lea  road  0
+bri  frost harbor  1
+str  harbor  0
+cat  cat  1
+fir  horses  0
+cat  cat  1
+str  street  1
+hor  horses  1
+sno  snow  1
+tre  grass window  1
+tre  garden statue  0
+cat  animal cat  2
+fis  flowers  0
+sno  clouds mountain sky snow  3
+ani  animal garden  2
+clo  birds reflection sunset tree  1
+clo  clouds  1
+wat  rainbow  0
+tre  grass  0
+sno  beach clouds ocean sand sky water  1
+sky  sunset  1
+tow  sky  0
+tre  snow town  0
+cat  animal cat  2
+bui  bridge  0
+wed  sky  0
+lak  boats  0
+bri  lake vehicle water  0
+foo  food  1
+str  house window  0
+dog  dog  1
+ref  reflection  1
+ani  tree  0
+tre  garden snow tree  1
+bir  animal  0
+wat  ocean  0
+sun  reflection sky  1
+sun  fire  0
+bui  buildings  1
+sky  moon sunset  0
+bea  beach ocean sunset  1
+str  street water  1
+bui  sign  0
+foo  food  1
+foo  food  1
+ref  boats harbor ocean  0
+flo  flowers  1
+sun  clouds ocean sun sunset  3
+str  fire  0
+sky  tower  0
+sun  sun sunset  1
+foo  moon  0
+wat  clouds moon water  1
+wat  flowers grass plants water  1
+wat  rainbow  0
+wat  garden leaf water  3
+sun  ocean  0
+sky  castle grass sky sun tower  1
+roa  castle  0
+sno  frost window  2
+cat  cat  1
+tem  grass  0
+clo  clouds reflection sky tree water  1
+san  plants sand sunset  1
+tre  sunset tree  2
+wat  cow lake water  2
+wat  beach clouds  0
+bea  sports  0
+tra  railroad train  2
+sun  sunset  1
+gra  clouds grass sky  1
+clo  clouds  1
+bui  buildings clouds sky street sunset tower water  1
+foo  food  1
+sun  sunset  1
+clo  birds clouds  1
+flo  plane  0
+roa  cars road snow  2
+clo  sky  1
+oce  snow  0
+tre  snow  1
+tig  animal cat tiger  3
+sky  birds  0
+tre  house tree  1
+str  toy  0
+fir  sun  0
+flo  plants  1
+sky  grass  1
+flo  flowers garden plants sun  3
+bea  beach sand  2
+sun  clouds sky sunset  1
+lak  reflection water  1
+boo  water  0
+sky  sand  0
+ref  water  1
+cow  flowers horses  0
+clo  beach  0
+oce  reflection  0
+wat  waterfall  1
+cat  animal  0
+ani  beach dog ocean sand  0
+gra  grass  1
+flo  flowers  1
+air  airport  1
+str  temple  1
+clo  clouds sky snow  2
+tre  frost  1
+pro  protest  1
+ani  statue  0
+ani  beach  0
+pla  beach clouds ocean sand sky sun sunset water  0
+hou  reflection window  1
+sig  sign  1
+fir  fire food  1
+wat  beach sunset  0
+tre  sun  0
+tra  house street  1
+fla  bear  0
+flo  flowers garden plants  3
+tra  train  1
+hou  fire house  1
+flo  flowers  1
+bea  ocean plants surf water  2
+wat  clouds ocean reflection sky sun water  2
+sky  house sky  1
+per  sign  0
+dog  dog  1
+toy  rainbow  0
+moo  sun  0
+wat  dancing  0
+car  cars  1
+sky  sky  1
+sky  train  0
+sky  sand  0
+str  buildings  0
+sun  person  0
+sun  sky snow  1
+sky  birds sky  1
+dog  dog  1
+bir  military  0
+bea  road  0
+wat  coral  0
+fis  beach coral fish ocean water  3
+tre  military  0
+clo  clouds ocean water  1
+wat  sky sun sunset  1
+flo  grass leaf  0
+lak  clouds snow  1
+sky  train  1
+wat  ocean sunset  0
+tre  leaf  0
+bea  beach ocean sand  2
+dog  dog  1
+bri  water  0
+ani  fox  1
+wat  water  1
+wat  military  0
+tra  cars  0
+sky  castle  1
+win  castle  0
+tig  tiger  1
+wat  temple  0
+hor  water  0
+fis  fish ocean  2
+ani  fox  1
+clo  ocean water  1
+bui  tiger  0
+clo  beach ocean surf  0
+flo  flowers wedding  1
+clo  plants  1
+dog  leaf  0
+ani  food  0
+cat  animal cat  2
+sky  tree  0
+bui  tower  0
+ani  dog grass  0
+sky  beach swimmers  1
+sun  beach sunset  1
+sun  sun  0
+sky  buildings clouds sky sun  2
+ani  flowers  0
+str  toy  0
+wat  water  1
+sky  sky tower  1
+hou  earthquake  0
+wat  beach clouds ocean sand sky water  3
+air  railroad sign train  0
+str  cars street  1
+sky  beach  0
+sun  house sky  1
+cat  cat snow  2
+flo  water  0
+bir  birds  1
+bui  military  0
+sky  snow  0
+clo  mountain  0
+clo  lake  0
+clo  clouds plane sky  1
+bri  water  0
+pro  sign street  1
+bea  earthquake  0
+flo  flowers food water wedding  1
+bui  buildings  1
+sky  buildings clouds sky  2
+sky  clouds sky tower  3
+dog  birds waterfall  0
+fro  frost snow  1
+rai  rainbow  1
+ani  coral fish  1
+ani  animal  1
+wat  sky snow  0
+str  cat  0
+sky  clouds flags sky  2
+clo  clouds  1
+pol  police running sports  1
+bea  sports  0
+sky  statue  0
+dog  cat  0
+bea  beach ocean sunset  1
+sun  reflection sky sunset water  1
+sno  snow  1
+sun  reflection sunset  1
+ani  birds  1
+sky  clouds road sky street tree  3
+sig  dog  0
+sno  airport plane water window  1
+wat  water  1
+bea  grass house sky tree  0
+wat  clouds lake reflection sunset  2
+sky  water  1
+mil  sand vehicle  0
+dan  castle  0
+sun  sky  0
+str  sports  0
+flo  book toy  0
+sun  beach sun  1
+sky  sun sunset temple  0
+pol  police  1
+ref  running  0
+oce  ocean  1
+sky  moon toy  0
+cat  cat  1
+cat  animal  1
+roc  fox  0
+tre  tree  1
+flo  dancing  0
+sun  military  0
+wat  water  1
+str  window  0
+sky  person  0
+toy  food  0
+san  beach sand water  3
+clo  sunset  0
+sky  fire  1
+clo  cityscape clouds snow sun sunset  2
+str  window  0
+sun  sunset  1
+sun  mountain snow  1
+bea  railroad  0
+ani  leaf  0
+toy  snow  0
+sky  clouds road  0
+bui  sky statue  0
+hou  window  0
+str  window  0
+sun  buildings reflection sun  1
+sun  sun sunset  2
+wat  dog  0
+wat  water  1
+sky  sky  1
+wat  dancing  0
+toy  bear toy  1
+boo  street  0
+fir  bear  0
+flo  leaf  1
+tre  flowers  0
+sno  military  0
+sun  grass sunset  2
+sky  police  0
+ani  grass  0
+tre  cat plants  0
+str  reflection street  1
+sky  cityscape  0
+foo  food  1
+clo  clouds sky  2
+cow  clouds sky  0
+str  police  0
+roa  castle sky  0
+flo  airport flowers  1
+win  window  1
+sun  lake water  0
+bri  clouds sunset  1
+str  temple window  1
+str  beach grass sand water  2
+clo  beach ocean sand sky  1
+san  beach sand  1
+clo  clouds sky tree  2
+flo  clouds sky  0
+sky  cityscape  0
+clo  tree  0
+hou  house  1
+wat  beach soccer sunset  1
+wat  water  1
+bea  grass  0
+sno  snow sunset  1
+sun  sunset  1
+flo  flowers plants  2
+wat  lake reflection sun sunset  1
+ani  dog  0
+tre  road snow  0
+hou  clouds sky  0
+flo  rainbow  0
+win  window  1
+hou  fire  0
+ani  cat  0
+hou  buildings  0
+flo  food  0
+bui  buildings clouds reflection  2
+ani  birds  0
+sky  animal fish ocean water  1
+flo  flowers  1
+cat  cat  1
+cat  cat  1
+str  train  0
+wat  bridge  1
+dog  birds tree  0
+sky  sky  1
+str  cow street  1
+ani  toy  1
+sky  sun  0
+sun  beach ocean sunset  1
+sky  fox temple  0
+str  bridge water  0
+oce  ocean whales  2
+flo  wedding  0
+car  reflection water  0
+flo  clouds sky sun  0
+tre  beach ocean  0
+str  reflection  0
+flo  flowers  1
+ani  mountain  0
+str  street  1
+sky  fish  0
+gra  grass  1
+toy  computer  1
+cat  cat  1
+hou  tree  1
+sun  birds sunset  1
+ref  airport  0
+wat  sky  0
+flo  flowers  1
+rai  sky  0
+cat  cat  1
+mou  water  0
+mil  ocean  0
+str  water window  1
+wat  book flowers  0
+ref  water  0
+moo  water  0
+air  airport plane  2
+tra  cityscape  0
+wat  sky  0
+wat  garden leaf water  2
+moo  sun  1
+air  airport  1
+hou  temple  0
+clo  road sky  1
+ani  valley  0
+wat  house reflection water window  2
+foo  garden  0
+str  cat  0
+bri  bridge  1
+tre  animal  0
+wat  lake  0
+clo  buildings cityscape clouds tower  2
+fir  fire  1
+wat  beach ocean  1
+mou  mountain reflection  1
+bui  nighttime  0
+sun  sunset  1
+ref  garden person tree  0
+hou  food  0
+sky  sign  0
+wat  clouds reflection sky water  2
+sig  sign  1
+sun  reflection sunset water  1
+tre  grass  0
+win  window  1
+str  reflection town water  0
+clo  clouds sky sunset tower tree  3
+cat  cat  1
+sun  sunset  1
+bir  animal birds  1
+sky  reflection sky tower  2
+sky  frost  1
+flo  flowers toy  1
+flo  flowers  1
+flo  flowers wedding  1
+clo  clouds sky tower  2
+clo  clouds snow window  1
+ani  animal  1
+bea  leaf  0
+bea  beach water  2
+sun  beach clouds ocean rocks sand sky water  2
+ani  bear  0
+ani  animal  1
+bea  beach sports  1
+clo  clouds sky  2
+bea  military protest  0
+toy  food  0
+foo  grass sign  0
+sun  sunset  1
+ani  fox  0
+wat  water  1
+ref  lake reflection sky  2
+sky  sunset  0
+wat  town  0
+wat  horses  0
+str  sports  0
+wat  protest  0
+tra  castle  0
+sky  house sky sun tree  1
+air  cars  0
+sky  sky  1
+win  window  1
+rai  train  1
+str  dog  0
+sno  birds  0
+ani  sky  0
+sky  sky tower  2
+sig  sign  1
+tre  sky  0
+sun  flowers  0
+sky  sky  1
+clo  clouds sunset  2
+roa  animal grass road  2
+sno  house  0
+gra  horses  0
+san  clouds rocks  0
+ani  bear  1
+dog  animal dog  2
+flo  flowers  1
+wat  dog military tree  0
+air  buildings sky town  0
+cow  animal  1
+sky  computer  0
+ani  ocean water  0
+bea  road sign sky street  0
+ani  animal  1
+clo  clouds sky  2
+ani  beach rocks water  1
+str  snow  0
+clo  ocean  0
+wat  animal water  2
+ani  grass  1
+sky  sunset vehicle  1
+clo  animal clouds dog  1
+sun  buildings clouds sky tower town  2
+tre  frost tree  1
+str  reflection  0
+tow  beach tower  1
+air  clouds sky train  0
+wat  fire water  1
+clo  beach boats buildings clouds leaf ocean sand sky sunset swimmers water  3
+str  military  0
+clo  ocean water  0
+wed  tattoo wedding  1
+ani  sky sun tree  1
+wat  beach  0
+wat  sand water  1
+bui  flags  0
+clo  clouds  1
+zeb  zebra  1
+win  temple window  1
+bui  buildings harbor ocean water  1
+fir  fox road vehicle  0
+ani  animal cat  2
+str  cars fire tower water  0
+bea  beach ocean water  2
+ani  animal  1
+clo  clouds tower  1
+ani  dancing  0
+clo  clouds sunset  1
+sno  frost horses  1
+flo  frost  0
+sun  window  1
+wat  lake rocks snow sun  1
+gar  window  0
+str  street  1
+bea  water  1
+flo  reflection  0
+ani  dog  0
+clo  beach clouds road sky tower  3
+bea  cow  0
+ref  reflection tower train  1
+str  buildings  0
+str  street  1
+sun  reflection sunset water  3
+str  train  0
+hou  house railroad  1
+roa  rocks  0
+sun  lake  1
+sig  sign tower water  1
+lea  leaf  1
+sun  garden house sky tree  0
+sky  moon  1
+foo  food  1
+foo  food  1
+dog  dog  1
+clo  tower  0
+wat  tree  0
+sky  fire vehicle  0
+wat  cityscape reflection sky water  3
+pol  police street  1
+str  bridge reflection water  0
+hou  train window  1
+wat  fox  0
+ani  cat  0
+fir  book  0
+bui  window  0
+flo  sun  0
+wat  lake  0
+tow  plants  0
+flo  flags  0
+sno  dog  0
+wat  clouds moon plane sunset  1
+sky  boats lake sun  1
+sun  train  0
+bea  bear  1
+wat  water  1
+bir  cat tree  0
+cat  cat water wedding  1
+fis  tiger  0
+wat  water  1
+sno  snow  1
+hor  wedding  0
+clo  clouds  1
+mou  sand  0
+str  buildings road street  2
+flo  garden snow  1
+sky  clouds sky  2
+tre  flowers garden reflection tree  3
+boa  railroad street train water  0
+foo  whales  0
+mil  sun  0
+bea  rocks  0
+sky  garden  0
+wat  beach sunset  0
+ani  dog  0
+bui  grass  1
+wat  reflection tree water  1
+sun  airport bridge reflection  0
+air  plane  1
+sun  clouds sunset  2
+bea  buildings clouds rocks water  1
+bri  buildings railroad train  0
+sun  airport clouds plane sun  1
+ani  animal bear  2
+wat  sun  0
+roc  sand  0
+toy  sign  0
+gra  flowers  0
+bea  street  0
+wat  elk  0
+sun  ocean sunset  2
+air  toy  0
+bea  beach ocean rocks  2
+sky  sky  1
+clo  bridge tower  0
+tat  cars window  0
+sky  garden water  1
+gar  sun  0
+bri  harbor street sun sunset  0
+clo  clouds flowers sky  2
+ani  beach reflection sky water  1
+ani  ocean water  2
+str  sign street  1
+bui  reflection  0
+wat  book  0
+clo  clouds sky street  2
+wat  reflection  0
+wat  ocean water  1
+tre  frost  0
+sky  clouds sky  1
+wat  nighttime  0
+boa  harbor military  1
+roa  railroad  0
+wat  water  1
+tow  ocean sunset  0
+sun  beach sky sunset water  2
+pro  book  0
+sun  beach sunset water  1
+clo  valley  0
+san  sand sunset  1
+toy  coral  0
+dog  animal  0
+sky  snow  0
+sno  tree  0
+str  street  1
+mil  water  0
+sun  beach rocks sunset  3
+sky  sunset  1
+pro  protest  1
+clo  sky  0
+flo  zebra  0
+gra  sports tower  1
+clo  clouds military plane sky valley  3
+wat  glacier water  1
+fis  fish  1
+tow  sky  1
+clo  clouds sand sky  2
+bea  beach sand  1
+roc  food  0
+bea  bear  1
+tre  road snow  1
+ani  cow  0
+sno  train  0
+ref  fire  0
+ani  horses  0
+cat  animal  1
+str  airport sign toy  0
+wat  grass rocks water waterfall  3
+clo  clouds mountain sky  3
+mou  statue  0
+bea  beach clouds rocks sand sky  2
+sno  clouds glacier lake sky snow  2
+pol  sports  0
+wed  dancing  0
+bea  police  0
+clo  clouds lake mountain sky  1
+wat  reflection water  1
+foo  plane  0
+pol  running  0
+sun  reflection  0
+ani  fox  0
+bir  birds  1
+str  window  1
+bri  tree  0
+sun  clouds sky sunset  2
+sun  beach sun sunset surf  1
+str  cars street  1
+tre  tree  1
+sky  fish whales  0
+sky  animal  1
+tig  cat tiger  2
+clo  beach clouds sky  2
+ref  buildings  0
+win  beach reflection sky sunset tree window  2
+ani  dog  1
+sky  animal  1
+wat  tower tree water  1
+clo  clouds sky vehicle  2
+sky  cars sign  0
+bea  dog  0
+mou  mountain snow  2
+bea  beach sky sunset water  1
+bea  fish  0
+wat  lake reflection  0
+sky  buildings mountain  0
+bea  animal bear  2
+ani  sunset  0
+sky  clouds sky  1
+ani  animal cat  2
+clo  frost lake water  1
+hou  house  1
+sky  statue  0
+sky  police street  0
+sun  reflection  0
+sky  clouds sunset  0
+clo  sky  1
+sky  beach ocean sand sky sun sunset  1
+wat  boats house ocean water  1
+bea  beach running sand sports  2
+sno  snow  1
+sig  book  0
+hou  house  1
+zeb  zebra  1
+clo  clouds ocean sky sun sunset water  3
+bir  birds tree  1
+bui  buildings  1
+wat  lake  0
+fox  fox  1
+ani  animal bear  2
+fir  fire  1
+clo  clouds  1
+str  dog running  1
+ref  reflection  1
+str  snow  0
+sno  glacier sky snow valley  2
+sun  sunset  1
+bri  railroad  1
+str  cityscape reflection street  1
+pol  protest  1
+str  bridge castle  0
+sno  snow  1
+boa  sunset  0
+ani  running sunset  0
+air  plane  1
+wat  water  1
+str  temple  0
+wat  buildings  0
+gar  flowers garden plants  2
+veh  street  0
+hou  airport  0
+sky  castle  0
+str  house  0
+gra  horses  0
+toy  dancing  0
+rai  rainbow  1
+flo  flowers  1
+str  cars  0
+sky  road  0
+clo  beach ocean water  0
+fis  fish  1
+bea  beach sand snow  3
+cor  window  0
+ref  reflection  1
+win  reflection window  2
+air  person reflection street tower  0
+tre  tree  1
+dog  earthquake  0
+foo  food  1
+wat  water  1
+flo  leaf tree  0
+clo  clouds  1
+sky  sunset  0
+tow  tower  1
+pol  police  1
+dog  animal dog  2
+air  clouds reflection tower  1
+tre  garden tree  1
+sky  reflection tower water  0
+lak  whales  0
+sky  valley  0
+flo  flowers  1
+roa  road  1
+flo  beach flowers grass  1
+pol  beach  0
+wat  clouds house mountain rocks tree water  1
+bui  castle  0
+sky  clouds  0
+bir  birds sky  1
+sno  snow  1
+air  beach water  0
+str  sign  0
+sun  buildings sky  1
+hou  boats water  0
+str  train  0
+ani  flowers  0
+toy  animal toy  2
+sno  lake mountain valley  1
+sky  glacier snow  1
+ref  waterfall  0
+flo  flowers  1
+str  house  0
+flo  flowers sign  1
+str  street  1
+clo  animal sky  0
+bui  road street vehicle  1
+sun  water  1
+ani  animal fox  1
+bui  police  0
+ref  clouds reflection sky window  2
+clo  grass moon sky  1
+ani  garden  1
+bea  airport  0
+hou  grass town  1
+bui  buildings sky  1
+wat  military  0
+wat  water  1
+fir  street  0
+bea  sunset  1
+bui  bridge  0
+wat  reflection water  1
+sky  police  0
+flo  flowers garden  2
+sky  dog house wedding  1
+wat  dancing  0
+clo  clouds  1
+sun  sun sunset  1
+dog  flowers food  0
+air  plane  1
+tra  bridge  1
+tre  grass house  0
+wat  boats reflection sun water  2
+str  rainbow  0
+sky  running  0
+ani  animal  1
+gra  frost  0
+lak  clouds railroad sky  0
+str  computer  0
+tre  tree  1
+sky  military  0
+sno  glacier mountain  0
+car  cars  1
+tow  sky tower  1
+toy  bear toy  2
+wat  bridge garden snow  1
+flo  flowers water  1
+com  computer  1
+toy  cow  0
+str  train  0
+ani  cat  1
+wat  harbor  0
+ani  animal  1
+boa  boats sunset water  2
+clo  beach ocean sand sky sun sunset  2
+fir  train  0
+str  water  0
+wat  sunset  0
+sky  water waterfall  1
+str  food  0
+wat  airport plane  0
+sky  sky  1
+sky  fish  0
+bui  harbor  0
+pro  protest  1
+str  reflection sky street  1
+pol  police  1
+sun  sand  1
+win  house reflection window  2
+foo  food  1
+dog  dog  1
+sky  clouds sky  1
+sky  clouds sunset  0
+wat  clouds lake  1
+sun  reflection water  0
+sky  grass sky sun sunset tree water  2
+wat  fish  1
+sno  grass water waterfall  0
+sun  beach sand sun sunset water  2
+sun  beach boats clouds harbor lake mountain ocean reflection rocks sand sunset surf water window  3
+sno  snow  1
+air  airport  1
+foo  food  1
+tre  grass tree  1
+wat  sky window  1
+tem  window  0
+str  tattoo  0
+str  airport  0
+sky  clouds sky sun sunset  3
+tre  clouds leaf moon sky tree  1
+tow  dog  0
+wat  lake reflection  0
+san  statue  0
+sky  flowers mountain  0
+ani  grass horses  0
+tre  water  0
+flo  flowers garden  2
+str  protest  0
+bea  person  0
+clo  buildings cityscape grass  0
+wat  beach boats water  1
+sun  sun sunset  2
+clo  clouds  1
+gar  plants  1
+foo  food street  1
+lak  temple  0
+wat  flowers  0
+ani  airport beach sand sun surf water  0
+bea  beach  1
+tra  bridge  0
+flo  sunset  0
+sky  reflection  0
+wat  beach ocean  0
+wat  water  1
+bea  bridge road  0
+roa  animal  0
+ref  reflection  1
+str  mountain  0
+pol  sports  0
+oce  harbor water  1
+boa  beach sand water  1
+sun  sun sunset  1
+ani  animal cow  2
+wat  tree  1
+wat  town  0
+cat  animal dog  1
+wat  bridge lake sunset water  1
+ref  fire  0
+sky  bridge surf  0
+tra  railroad  1
+roa  sky sun  0
+tre  plants  0
+bea  clouds mountain sky sunset  0
+sun  street sun sunset town  1
+wat  buildings temple  0
+bri  bridge castle  1
+flo  garden  1
+win  reflection sky street window  3
+foo  beach  0
+clo  soccer  0
+bea  wedding  0
+ani  grass sports  0
+pol  protest sign  1
+clo  clouds sky  2
+gar  leaf  0
+str  cars police  1
+ani  animal garden  2
+cas  tower  1
+ani  whales  0
+wat  military  0
+clo  clouds  1
+sky  clouds mountain road sky  2
+flo  flowers  1
+sky  moon  1
+str  reflection  0
+hor  sun  0
+str  train  0
+str  temple  0
+foo  fire  0
+lea  tree  0
+clo  buildings clouds sky street  1
+ani  animal cat  2
+flo  garden tree  1
+ani  animal  1
+tre  sand tree  1
+sun  moon  0
+pol  clouds  0
+wed  fox  0
+cat  cat  1
+ani  dog  1
+wat  birds  0
+ref  bridge  0
+bri  water  0
+air  valley  0
+str  protest  1
+clo  clouds house sky sunset  3
+sun  clouds sun  1
+fis  flags  0
+hou  vehicle  0
+clo  sky  1
+dog  dog  1
+cat  beach ocean water  0
+toy  toy  1
+wat  mountain  0
+clo  mountain  0
+str  tattoo  1
+ani  dog  0
+clo  sky sunset  1
+sky  police  0
+wed  dog  0
+tre  ocean tree  1
+bri  lake  0
+wat  glacier water waterfall  2
+ani  horses  0
+bea  ocean  0
+sno  buildings  0
+zeb  animal grass zebra  2
+ani  animal coral ocean water  3
+tre  garden  0
+dog  animal dog  2
+ani  cat  1
+clo  clouds sunset  2
+sky  plane  0
+sun  sunset  1
+foo  food  1
+ref  window  0
+boa  boats bridge harbor ocean water  3
+clo  clouds rainbow  1
+str  sports  0
+tra  train  1
+str  street  1
+cat  animal cat  2
+ani  cow grass  1
+clo  clouds sky water  2
+flo  garden  1
+flo  grass sunset  0
+ani  animal  1
+wat  moon ocean water  1
+sky  cars  0
+str  military sign  0
+sun  sunset tree  1
+tre  train  0
+flo  food  0
+wat  boats  1
+ref  bridge  0
+flo  sand  0
+wat  lake mountain  0
+clo  beach clouds sun  1
+rai  sky water  0
+dog  animal dog sky  2
+hou  boats  0
+sky  reflection sand sign sky snow street sun sunset train water window  1
+wat  sunset  0
+str  snow  0
+run  town  0
+moo  clouds moon sky  3
+moo  lake ocean plants water  0
+sun  sun  1
+mou  grass mountain valley  2
+tre  sky  0
+flo  grass water  1
+sky  ocean water  1
+wat  animal cat  1
+sun  beach moon surf water  0
+sno  frost valley  0
+ani  animal  1
+tow  window  0
+str  dog  1
+wat  train  0
+sky  beach clouds reflection sky sun sunset water  2
+air  earthquake  0
+sky  house sky  1
+sky  ocean sky sunset  2
+sun  clouds fish grass lake mountain reflection sky sun sunset valley water  3
+oce  coral  1
+lea  reflection  0
+tre  tree  1
+ani  elk mountain  1
+cat  cat  1
+sno  snow  1
+str  reflection  0
+sno  lake snow  1
+sun  clouds sky sun sunset water  2
+ani  grass  1
+rai  birds  0
+wat  wedding  0
+clo  clouds sky  1
+toy  toy  1
+sun  tree  0
+rai  railroad  1
+wat  rocks water  2
+clo  tower  0
+ani  horses  0
+wat  boats harbor ocean water  2
+str  protest  1
+tre  flowers tree  1
+clo  clouds flowers  1
+air  airport plane  2
+flo  flowers water  1
+sun  road  0
+wat  boats sky water  2
+bea  beach clouds ocean water  1
+sky  beach  0
+str  cars police  1
+boa  street  0
+wat  tree valley  0
+cat  animal cat  2
+sky  clouds sky  2
+ref  water  0
+oce  fish  0
+ref  beach ocean road surf  0
+cat  dog  0
+wat  garden leaf water  3
+sky  snow  0
+wat  water  1
+bea  reflection statue water  0
+moo  moon  1
+zeb  road street  1
+sky  street  0
+fir  fire  1
+flo  leaf  0
+hou  food  0
+car  vehicle  0
+sun  sky sun  0
+str  street  1
+ani  grass  0
+wat  ocean  1
+str  window  1
+str  toy  0
+wat  beach ocean sunset  1
+boo  house  0
+flo  garden leaf sky tree  1
+str  soccer  0
+wat  clouds grass sky  0
+roa  garden  0
+str  bridge  0
+bui  sign  0
+wat  flowers  0
+clo  reflection  0
+wat  sky water  1
+mil  food  0
+ref  boats  0
+bea  beach  1
+flo  dancing  0
+cat  cat  1
+tow  sports street tower  2
+toy  bear fox  1
+mil  military  1
+sno  animal  1
+sno  temple  0
+spo  sports  1
+com  computer  1
+boa  reflection sand water  1
+tow  police  0
+bea  beach clouds ocean sand tree  2
+sun  sun  1
+str  book  0
+wat  vehicle  0
+air  computer railroad  0
+bea  sunset  0
+san  dog  0
+wat  grass  1
+fir  fire  1
+bea  fish  0
+sky  clouds sky  1
+mil  airport mountain  0
+boa  harbor  0
+sun  beach rocks sand sky sun sunset  1
+wat  water  1
+clo  clouds horses sky sunset tree  3
+sun  clouds  0
+sun  railroad  0
+str  cars clouds grass house  0
+har  beach wedding  0
+str  street  1
+sky  water  0
+sky  reflection sky  1
+bea  beach sand  1
+wat  cars fire flowers food road sunset water  2
+sky  snow  1
+oce  birds water  1
+str  police  0
+str  fire  0
+bui  sunset  0
+air  plane  1
+bea  sports  0
+tre  tree  1
+wat  sports  1
+sig  sign  1
+moo  moon sun  1
+wat  road  0
+ref  lake  1
+sky  clouds fire sky  1
+str  road  0
+str  train  0
+air  road  0
+car  grass  0
+bui  buildings fire police street  2
+tre  tree  1
+tre  flowers  0
+cas  mountain  0
+gra  animal grass running  2
+ani  animal grass  1
+flo  house plants  1
+bui  window  0
+flo  flowers garden house  2
+ani  toy  0
+flo  flowers  1
+fis  coral  1
+pro  protest  1
+sky  tower  1
+clo  clouds grass sky  2
+clo  clouds train  1
+dan  nighttime  0
+ani  animal  1
+clo  clouds  1
+sky  clouds sky  2
+tre  sunset  1
+cit  cityscape reflection  2
+ani  fish  1
+boa  boats ocean reflection sunset water  2
+clo  lake  0
+cat  cat  1
+sun  sunset  1
+str  window  0
+str  cars street  1
+fir  temple  0
+cat  cat  1
+ani  animal cat tiger  3
+sky  clouds flags  2
+flo  protest sky  0
+wat  reflection water waterfall  2
+ani  horses  0
+str  plants street  1
+flo  flowers  1
+wat  ocean sun sunset wedding  0
+sun  sky  0
+str  bridge  0
+sun  clouds snow sunset tree  3
+ani  birds  0
+sky  buildings sky sunset  2
+air  street  0
+gra  grass  1
+gra  tower  1
+gar  road valley  0
+str  street  1
+clo  snow  0
+bea  animal water  1
+clo  flowers harbor lake water  0
+sky  animal birds flowers sky  2
+roc  lake rocks  1
+dog  sunset  0
+tre  temple  0
+str  street  1
+spo  grass  1
+tre  tree  1
+lak  tree  0
+tre  cars snow  0
+clo  buildings clouds running sky sunset  2
+ani  animal birds leaf rocks  1
+ani  sports  0
+toy  dog  0
+flo  frost  0
+wat  bridge  0
+win  window  1
+clo  grass sunset tree  0
+ref  lake mountain reflection rocks sunset tree  1
+hou  buildings house military window  2
+clo  boats clouds harbor ocean  1
+cat  bear police  0
+flo  clouds sky  1
+pro  snow  0
+wat  fish  0
+tow  sunset  0
+wat  water  1
+ani  temple  0
+roa  snow  0
+wat  bridge waterfall  0
+bea  coral  1
+ani  horses  0
+wat  ocean  1
+wat  lake mountain snow  1
+ani  cow  0
+tra  beach sand  0
+tre  road train  0
+ani  snow  1
+sun  person  1
+toy  toy  1
+flo  sky  0
+wat  fish  1
+bea  house sunset  0
+cat  animal water  0
+bea  snow window  0
+mou  lake sun valley  1
+wat  castle clouds  0
+gra  road  1
+oce  rocks sunset water  1
+hou  dog  0
+clo  cars  0
+str  military  0
+hou  buildings  0
+roa  railroad  0
+fis  fish whales  1
+str  tiger  0
+fir  fire protest  1
+clo  clouds rocks sky  2
+clo  clouds  1
+ref  sunset  0
+bir  animal birds  2
+bui  cityscape  0
+clo  valley  0
+sky  sky  1
+str  book  0
+sun  beach clouds ocean sky sunset  2
+sun  reflection  0
+hou  airport  0
+tre  flowers garden plants  2
+str  street  1
+dog  garden water  0
+ani  sports  0
+cat  animal cat  1
+mou  beach sunset  0
+str  fish  0
+ani  animal  1
+sky  animal clouds ocean sky water  2
+ref  boats clouds sky water  1
+bea  beach clouds sand sky sun  2
+clo  sunset  0
+oce  bear fox glacier whales  0
+sky  sign  0
+clo  rainbow  0
+cat  cat  1
+wat  house  0
+air  map temple  0
+sno  glacier mountain rocks snow water  2
+bui  temple  0
+ani  animal  1
+bri  mountain tree  0
+wat  moon  0
+pla  tower  0
+air  train  0
+sun  glacier lake mountain sky sun sunset water  3
+win  window  1
+clo  clouds flags road  1
+sun  lake sand sunset water  1
+tre  beach road sky street sun sunset tree  2
+sun  sun sunset  1
+sky  clouds sky  1
+fla  flags police protest street  3
+dog  dog  1
+toy  toy  1
+ani  flowers  0
+sky  sky  1
+flo  wedding  0
+sky  clouds sky  2
+flo  flowers garden  2
+sky  beach sand sun  1
+sun  clouds sky  2
+ani  animal  1
+sig  sky  0
+flo  food  0
+sun  sign sky sunset  1
+pol  cars police  2
+ani  animal cat  2
+sun  tree valley  1
+sno  snow tree  2
+sun  plane sky  0
+fir  food street  0
+hor  horses  1
+win  house  0
+clo  beach clouds ocean reflection rocks sand sky sun sunset water  3
+wed  soccer  0
+flo  flowers  1
+boa  beach lake ocean sky  1
+sun  cars lake road sky street  0
+wat  plane  0
+ani  ocean water  0
+wat  military  0
+str  cars  0
+clo  beach sun  0
+bea  water  0
+str  street  1
+wed  house  0
+ani  cat  1
+flo  garden  1
+sky  clouds moon  0
+wat  birds whales  0
+str  fire police street  2
+lea  leaf  1
+mou  waterfall  0
+sun  clouds sky  0
+san  bridge water  0
+bea  beach ocean  1
+flo  plants  1
+str  soccer  0
+toy  toy  1
+flo  flowers  1
+gar  animal  1
+wat  bear  0
+str  water  0
+sun  clouds sky sunset  3
+pol  reflection window  0
+tow  clouds tower  2
+car  cars  1
+bea  military  0
+flo  flowers plants  2
+str  road  0
+clo  sky  1
+wat  harbor  0
+fis  coral water  1
+tre  tree  1
+wat  water  1
+ref  map  0
+bea  clouds  0
+ani  animal dog town  1
+tre  window  0
+pla  flowers plants  1
+wed  house  0
+bui  sky  0
+ani  animal dog sign  1
+fis  ocean  0
+lak  sports  0
+rai  railroad  1
+sno  snow  1
+air  sky  1
+ani  fish ocean  1
+air  sky  1
+bri  water  0
+sky  protest  0
+sun  rocks sky sunset water  2
+clo  beach sand sunset tree  0
+sun  bridge tree  0
+bea  ocean whales  0
+spo  swimmers  0
+sig  sign  1
+bir  birds  1
+str  dancing  0
+sun  sunset  1
+cat  cat  1
+bui  buildings cityscape harbor nighttime ocean reflection statue sunset tower tree water  3
+clo  clouds lake snow valley  3
+gra  birds  0
+clo  clouds military plane sky valley  3
+pro  protest  1
+spo  sports  1
+sky  moon reflection sky water  2
+wat  water  1
+hou  flowers  1
+flo  wedding  0
+cat  cat  1
+dog  dog  1
+tre  mountain snow  0
+roa  road sky  1
+ref  lake rocks water  1
+ani  tree  1
+fis  mountain sports sun  0
+flo  cat  0
+flo  flowers sky  1
+flo  flowers  1
+rai  railroad  1
+str  sun  0
+sno  beach  0
+sun  clouds  1
+wed  wedding  1
+sun  clouds road sky sun sunset  3
+boo  protest  0
+sky  clouds ocean water  1
+cat  animal cat  2
+flo  flowers garden rainbow  2
+bui  airport reflection  0
+str  street  1
+fla  map  0
+tem  military train  0
+fis  animal  0
+clo  cityscape town  1
+bri  boats clouds fish lake reflection sky  0
+clo  clouds reflection sky  2
+sky  bridge clouds railroad sky  3
+ani  animal  1
+sun  clouds sky  1
+str  sun train  1
+car  buildings train  0
+hor  soccer street  1
+ani  cat  1
+lak  lake  1
+tre  tree  1
+wat  bridge lake water  1
+flo  flowers sun  1
+toy  wedding  0
+str  military police sand  0
+cat  cat  1
+wat  beach  1
+sky  sunset  0
+pol  protest  1
+bea  bear clouds sky  1
+bea  sky  0
+sky  castle  0
+wat  road  0
+dog  soccer  0
+wat  fish water  1
+ani  bear  0
+tre  military  0
+ref  reflection water  1
+fis  fish  1
+ani  mountain tiger zebra  1
+clo  clouds sky  2
+hou  cat  0
+pol  police  1
+sno  snow  1
+wat  boats clouds harbor moon ocean rocks sky surf water  3
+sky  sky town  1
+str  street zebra  1
+flo  wedding  0
+sky  clouds sky tower  2
+sun  sun sunset  1
+str  street  1
+spo  running  0
+wat  water  1
+gra  flowers grass wedding  1
+flo  flowers  1
+wat  flowers street  0
+fir  birds temple zebra  0
+tre  grass  0
+roa  road  1
+wat  rocks waterfall  2
+hou  food  0
+bea  bear  1
+wat  clouds sky  1
+cat  cat  1
+bea  military  0
+fir  dancing  1
+cat  animal cat tiger  3
+sky  sky  1
+lea  horses  0
+sun  lake  0
+sky  sky water  2
+ref  cars  0
+clo  beach  1
+str  castle town valley  1
+tre  tree  1
+ani  animal  1
+sun  moon sunset  1
+bui  military running  0
+wat  rocks tree  1
+hou  snow tree  0
+oce  snow  1
+sun  beach clouds rocks sand sky sunset  2
+sun  sunset  1
+tem  flowers  0
+bui  buildings  1
+sky  flowers sky  2
+ani  mountain  0
+sno  beach clouds sand  0
+sun  clouds sky sun sunset tree water  3
+sno  beach boats clouds sand surf water  0
+car  airport  0
+str  animal ocean  0
+sky  clouds ocean sky  1
+tre  sun  1
+tem  reflection statue  0
+str  sign street  2
+sky  tower  1
+sun  clouds grass sky  1
+bea  bear  1
+wat  cityscape clouds sky  1
+flo  garden  0
+sky  sky tree  2
+sta  clouds sky  1
+foo  tree  0
+tig  animal tiger  2
+clo  sky  1
+sig  airport mountain  0
+foo  buildings  0
+wat  water  1
+bea  beach dog running sand  1
+car  cars road street  2
+sno  frost snow  2
+pro  flags protest  2
+str  water  0
+spo  beach sports  1
+fla  flags protest  1
+zeb  animal zebra  2
+sky  sky  1
+clo  clouds sky  1
+dog  dog  1
+flo  birds book  1
+hou  bridge water  0
+flo  flowers  1
+sky  beach reflection tower  1
+str  protest  1
+ani  cat  1
+bui  street  1
+wat  buildings  1
+bea  beach earthquake  1
+ref  fire rainbow  1
+toy  map  0
+wat  snow  1
+bir  tower water  0
+wat  boats  1
+sno  house sky snow sunset tree  2
+bea  sand sky  0
+wat  street  1
+bea  beach reflection sand water  1
+ani  animal  1
+mil  coral fish ocean water  0
+str  buildings railroad sky street  2
+clo  sky  1
+air  airport  1
+clo  buildings cityscape clouds  1
+sno  clouds  0
+clo  sky  1
+ref  water  0
+sno  wedding  0
+sno  tower  0
+air  airport  1
+wat  bridge railroad  0
+wat  sand sun tower  0
+sky  water  0
+sky  clouds grass water  2
+bea  beach rocks  2
+flo  street  0
+tre  rocks  0
+cat  cat  1
+sky  clouds lake mountain sand sky water  2
+ani  cat  1
+sun  clouds road sky sun tree  2
+cas  clouds sky window  0
+ref  lake  0
+str  wedding  1
+sig  military  0
+win  wedding  1
+pro  protest  1
+sky  fire  0
+flo  reflection water  0
+ani  birds  1
+sno  sign  0
+wat  reflection snow sunset water  1
+bea  lake  0
+bea  birds sand  0
+clo  flowers grass sign sky sun  1
+str  street  1
+wat  grass water  1
+bea  beach ocean surf  1
+wat  lake water  1
+wat  frost snow tree water  2
+sky  cars  0
+bea  beach sand sign sports  3
+car  house  0
+bri  boats  0
+bir  clouds  0
+sno  mountain snow  1
+wat  military sky  0
+sun  sunset  1
+clo  clouds ocean sky water  2
+wat  waterfall  1
+wat  dog  0
+sky  airport  0
+sky  sky  1
+wed  wedding  1
+dog  grass  0
+pol  mountain  0
+ref  buildings nighttime reflection tower water  2
+sky  clouds sun  1
+sno  snow  1
+wat  tree water  1
+sky  sunset  0
+wat  sun  0

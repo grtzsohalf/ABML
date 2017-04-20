@@ -1,0 +1,9 @@
+model/*
+*.hkl
+*.pkl
+*.json
+*.mml-cuda
+*.pyc
+*.jpg
+*.png
+*.mat

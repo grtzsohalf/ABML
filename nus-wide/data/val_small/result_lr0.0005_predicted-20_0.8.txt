@@ -1,0 +1,10 @@
+Total number of true label: 11879
+Total number of predict label: 7790
+Number of correct prediction: 5966
+
+O-R: 0.502230827511
+O-P: 0.765853658537
+O-F1: 0.606639890183
+C-R: 0.201705742191
+C-P: 0.463231030091
+C-F1: 0.281038326125
