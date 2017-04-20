@@ -4,6 +4,7 @@ model/*
 *.json
 *.mml-cuda
 *.pyc
+*.swp
 *.jpg
 *.png
 *.mat
