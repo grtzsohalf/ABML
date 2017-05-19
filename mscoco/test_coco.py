@@ -1,6 +1,6 @@
-from core.solver_predicted import CaptioningSolver
-from core.model_predicted import CaptionGenerator
-from core.utils_predicted import *
+from core.solver_coco import CaptioningSolver
+from core.model_coco import CaptionGenerator
+from core.utils_coco import *
 import os
 import sys
 os.environ['CUDA_VISIBLE_DEVICES']='1'
@@ -20,9 +20,9 @@ def main():
     idx_to_word[0] = '<NULL>'
     idx_to_word[1] = '<START>'
     idx_to_word[2] = '<END>'
-    val_data = load_coco_data(data_path='./cocodata', split='val')
-    # test_data = load_coco_data(data_path='./cocodata', split='test')
-    model = CaptionGenerator(word_to_idx, idx_to_word, dim_feature=[196, 512], dim_embed=16,
+    val_data = load_coco_data(data_path='./cocodata', split='val', load_init_pred=True)
+    # test_data = load_coco_data(data_path='./cocodata', split='test', load_init_pred=True)
+    model = CaptionGenerator(word_to_idx, idx_to_word, dim_feature=[196, 1024], dim_embed=16,
                             dim_hidden=1024, n_time_step=16, prev2out=True,
                             ctx2out=True, alpha_c=1.0, selector=True, dropout=True)
     data_path = './cocodata'

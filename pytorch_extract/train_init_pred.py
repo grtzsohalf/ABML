@@ -18,29 +18,26 @@ import torch.utils.data
 import torchvision.transforms as transforms
 import torchvision.datasets as dset
 import torchvision.models as models
-os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+os.environ['CUDA_VISIBLE_DEVICES'] = '1'
 
 resnet152 = models.resnet152(pretrained=True)
-# layers = list(resnet152.children())
-# for param in resnet152.parameters():
-#     param.requires_grad = False
+for param in resnet152.parameters():
+    param.requires_grad = False
 layers = []
 layers.append(nn.Linear(2048, 80))
 layers.append(nn.Sigmoid())
 resnet152.fc = nn.Sequential(*layers)
-# resnet152.fc = nn.Linear(2048, 80)
-resnet152 = nn.DataParallel(resnet152).cuda()
 training_epoch = 50
 save_every = 1
 part_num = 20
 batch_size = 16
 
 criterion = nn.BCELoss().cuda()
-optimizer = torch.optim.SGD(resnet152.parameters(),
+optimizer = torch.optim.SGD(resnet152.fc.parameters(),
                             0.1, # Learning rate
                             momentum=0.9,
                             weight_decay=1e-4)
-
+resnet152 = nn.DataParallel(resnet152).cuda()
 # Training part
 split = 'train'
 prev_loss = []
@@ -84,7 +81,7 @@ for epoch in range(training_epoch):
             input_var = Variable(input_batch).cuda()
             groundtruth_batch = groundtruth[start:end]
             groundtruth_batch = torch.Tensor(groundtruth_batch).cuda()
-            target_var = Variable(groundtruth_batch).cuda()
+            target_var = Variable(groundtruth_batch, requires_grad=False).cuda()
 
             output = resnet152(input_var)
             loss = criterion(output, target_var)
@@ -98,7 +95,7 @@ for epoch in range(training_epoch):
         prev_loss[part] = curr_loss[part]
         curr_loss[part] = 0
     if (epoch+1) % save_every == 0:
-        filename = 'model/resnet_epoch_%s.pth.tar' % str(epoch+1)
+        filename = 'model/resnet_init_pred_%s.pth.tar' % str(epoch+1)
         print filename, 'saved.\n'
         torch.save(resnet152.state_dict(), filename)
 

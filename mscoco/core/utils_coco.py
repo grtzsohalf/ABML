@@ -24,12 +24,14 @@ def load_word2idx(data_path='./cocodata', split='train'):
     print "Elapse time: %.2f" %(end_t - start_t)
     return word
 
-def load_coco_data(data_path='./cocodata', split='train', part=''):
+def load_coco_data(data_path='./cocodata', split='train', part='', load_init_pred=False):
     data_path = os.path.join(data_path, split)
     start_t = time.time()
     data = {}
     if split == 'train':
         data['features'] = hickle.load(os.path.join(data_path, '%s.features_%s.hkl' % (split, part)))
+        if load_init_pred == True:
+            data['init_pred'] = hickle.load(os.path.join(data_path, '%s.init.pred_%s.hkl' % (split, part)))
         with open(os.path.join(data_path, '%s.file.names_%s.pkl' % (split, part)), 'rb') as f:
             data['file_names'] = pickle.load(f)
         with open(os.path.join(data_path, '%s.captions_%s.pkl' % (split, part)), 'rb') as f:
@@ -38,15 +40,10 @@ def load_coco_data(data_path='./cocodata', split='train', part=''):
             data['image_idxs'] = pickle.load(f)
         with open(os.path.join(data_path, 'word_to_idx.pkl'), 'rb') as f:
             data['word_to_idx'] = pickle.load(f)
-        '''
-        for k, v in data.iteritems():
-            if type(v) == np.ndarray:
-                print k, type(v), v.shape, v.dtype
-            else:
-                print k, type(v), len(v)
-        '''
     else:
         data['features'] = hickle.load(os.path.join(data_path, '%s.features.hkl' % split))
+        if load_init_pred == True:
+            data['init_pred'] = hickle.load(os.path.join(data_path, '%s.init.pred.hkl' % split))
         with open(os.path.join(data_path, '%s.file.names.pkl' %split), 'rb') as f:
             data['file_names'] = pickle.load(f)
         with open(os.path.join(data_path, '%s.captions.pkl' %split), 'rb') as f:

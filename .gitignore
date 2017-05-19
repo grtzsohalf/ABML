@@ -1,5 +1,8 @@
 ;
 model/*
+mscoco/model/*
+nus-wide/model/*
+pascal2007/model/*
 *.txt
 *.tar
 *.hkl
