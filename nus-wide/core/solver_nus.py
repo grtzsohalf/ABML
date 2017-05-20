@@ -49,7 +49,7 @@ class CaptioningSolver(object):
         self.log_path = kwargs.pop('log_path', './log/')
         self.model_path = kwargs.pop('model_path', './model/')
         self.pretrained_model = kwargs.pop('pretrained_model', None)
-        self.test_model = kwargs.pop('test_model', './model/lstm/model-1')
+        self.test_model = kwargs.pop('test_model', './model/model-1')
         self.V = kwargs.pop('V', 84)
         self.n_time_step = kwargs.pop('n_time_step', 11)
 
@@ -118,7 +118,7 @@ class CaptioningSolver(object):
                     print '##################'
                     print 'part ' + str(p+1) + ' of ' + 'epoch ' + str(e+1)
                     print '##################'
-                    self.data = load_coco_data(data_path=self.data_path, split='train', part=str(p))
+                    self.data = load_nus_data(data_path=self.data_path, split='train', part=str(p))
                     n_examples = self.data['captions'].shape[0]
                     n_iters_per_part = int(np.ceil(float(n_examples)/self.batch_size))
                     features = self.data['features']
@@ -197,8 +197,8 @@ class CaptioningSolver(object):
                     curr_loss[p] = 0
                 # save model's parameters
                 if (e+1) % self.save_every == 0:
-                    saver.save(sess, os.path.join(self.model_path, 'nus_aug'), global_step=e+1)
-                    print "nus_aug-%s saved." %(e+1)
+                    saver.save(sess, os.path.join(self.model_path, 'nus'), global_step=e+1)
+                    print "nus-%s saved." %(e+1)
 
     def softmax(self, array):
         total = 0.0

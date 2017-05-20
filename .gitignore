@@ -1,8 +1,11 @@
 ;
 model/*
 mscoco/model/*
+mscoco/pytorch/model/*
 nus-wide/model/*
+nus-wide/pytorch/model/*
 pascal2007/model/*
+pascal2007/pytorch/model/*
 *.txt
 *.tar
 *.hkl

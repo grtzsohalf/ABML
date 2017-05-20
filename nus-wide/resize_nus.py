@@ -3,14 +3,32 @@ import os
 
 
 def resize_image(image):
+    '''
+    width, height = image.size
+    if width > height:
+        left = (width - height) / 2
+        right = width - left
+        top = 0
+        bottom = height
+    else:
+        top = (height - width) / 2
+        bottom = height - top
+        left = 0
+        right = width
+    image = image.crop((left, top, right, bottom))
+    '''
     image = image.resize([224, 224], Image.ANTIALIAS)
     return image
 
 def main():
-    splits = ['train', 'val']
+    imageDir = '/home/jason6582/caffe/tool123/flickrfeature'
+    splits = os.listdir(imageDir)
+    print splits
     for split in splits:
-        folder = '/home/jason6582/sfyc/attention-tensorflow/image/%s2014/' %split
-        resized_folder = '/home/jason6582/sfyc/image/attention-tensorflow/%s2014_resized/' %split
+        folder = imageDir + '/%s' %split
+        print folder
+        resized_folder = '/home/jason6582/sfyc/NUS-WIDE/resized_images/%s/' %split
+        print resized_folder
         if not os.path.exists(resized_folder):
             os.makedirs(resized_folder)
         print 'Start resizing %s images.' %split
@@ -23,7 +41,5 @@ def main():
                     image.save(os.path.join(resized_folder, image_file), image.format)
             if i % 100 == 0:
                 print 'Resized images: %d/%d' %(i, num_images)
-              
-            
 if __name__ == '__main__':
     main()

@@ -17,7 +17,7 @@ import numpy as np
 
 
 class CaptionGenerator(object):
-    def __init__(self, word_to_idx, idx_to_word, dim_feature=[196, 512], dim_embed=512, dim_hidden=1024, \
+    def __init__(self, word_to_idx, idx_to_word, dim_feature=[196, 1024], dim_embed=512, dim_hidden=1024, \
                  n_time_step=16, prev2out=True, ctx2out=True, alpha_c=0.0, selector=True, \
                  dropout=True, batch_size=128):
         """

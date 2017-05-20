@@ -21,7 +21,6 @@ with open(tagListFile, 'r') as f:
 annotations = []
 availableID = []
 count = 0
-'''
 with open(tagsFile1, 'r') as f:
     for line in f:
         caption = ''
@@ -37,9 +36,6 @@ with open(tagsFile1, 'r') as f:
         else:
             availableID.append(0)
         count += 1
-    print count
-    print len(annotations)
-'''
 with open(tagsFile2, 'r') as f:
     for line in f:
         caption = ''

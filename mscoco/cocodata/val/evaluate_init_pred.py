@@ -2,18 +2,23 @@ import sys
 import numpy as np
 sys.path.append('/home/jason6582/sfyc/attention-tensorflow/mscoco')
 
-candidateFile = sys.argv[1]
-resultFile = sys.argv[2]
-
 from core.utils_coco import *
+import hickle
 reference = load_pickle('val.references.pkl')
 for key, value in reference.iteritems():
     reference[key] = [int(idx) for idx in value[0].split()[:-1]]
-# print reference
-candidate = load_pickle(candidateFile)
-# print candidate
-g = open(resultFile, 'w')
 
+init_pred = hickle.load('val.init.pred.hkl')
+thres = 0.2
+candidate = []
+for instance in init_pred:
+    pred = []
+    for i, label in enumerate(instance):
+        if label > thres:
+            pred.append(i)
+    candidate.append(pred)
+
+g = open('result_init_pred_0.2.txt', 'w')
 word_to_idx = load_word2idx(data_path='/home/jason6582/sfyc/attention-tensorflow/mscoco/cocodata', split='train')
 idx_to_word = {i:w for w, i in word_to_idx.iteritems()}
 

@@ -1,6 +1,0 @@
-Total number of true label: 5892
-Total number of predict label: 10056
-Number of correct prediction: 2420
-
-Recall: 0.41072640869
-Precision: 0.240652346858

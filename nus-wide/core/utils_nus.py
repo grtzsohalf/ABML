@@ -49,7 +49,7 @@ def load_data(data_path='./data', split='train'):
     print "Elapse time: %.2f" %(end_t - start_t)
     return data
 
-def load_coco_data(data_path='./data', split='train', part=''):
+def load_nus_data(data_path='./data', split='train', part=''):
     data_path = os.path.join(data_path, split)
     start_t = time.time()
     data = {}

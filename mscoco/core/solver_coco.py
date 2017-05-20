@@ -117,7 +117,8 @@ class CaptioningSolver(object):
                     print '##################'
                     print 'part ' + str(p+1) + ' of ' + 'epoch ' + str(e+1)
                     print '##################'
-                    self.data = load_coco_data(data_path=self.data_path, split='train', part=str(p), load_init_pred=True)
+                    self.data = load_coco_data(data_path=self.data_path, split='train', \
+                                               part=str(p), load_init_pred=True)
                     n_examples = self.data['captions'].shape[0]
                     n_iters_per_part = int(np.ceil(float(n_examples)/self.batch_size))
                     features = self.data['features']

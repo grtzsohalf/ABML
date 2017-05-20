@@ -1,6 +1,6 @@
-from core.solver import CaptioningSolver
-from core.model import CaptionGenerator
-from core.utils import *
+from core.solver_nus import CaptioningSolver
+from core.model_nus import CaptionGenerator
+from core.utils_nus import *
 import os
 os.environ['CUDA_VISIBLE_DEVICES']='0'
 
@@ -12,8 +12,8 @@ def main():
     data_path = './nusdata'
     solver = CaptioningSolver(model, data_path, n_epochs=50, batch_size=128,
                 update_rule='adam', learning_rate=0.0001, print_every=30, save_every=1,
-                pretrained_model=None, model_path='model/lstm/',
-                test_model='model/lstm/model-1', print_bleu=True, log_path='log/', V=len(word_to_idx), n_time_step=11)
+                pretrained_model=None, model_path='model/',
+                test_model='model/model-1', print_bleu=True, log_path='log/', V=len(word_to_idx), n_time_step=11)
     solver.train()
 
 if __name__ == "__main__":
