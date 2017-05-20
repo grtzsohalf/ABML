@@ -18,12 +18,13 @@ import torch.utils.data
 import torchvision.transforms as transforms
 import torchvision.datasets as dset
 import torchvision.models as models
-os.environ['CUDA_VISIBLE_DEVICES'] = '1'
+os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 
 resnet152 = models.resnet152(pretrained=True)
 for param in resnet152.parameters():
     param.requires_grad = False
 layers = []
+# layers.append(nn.Linear(2048, 2048))
 layers.append(nn.Linear(2048, 80))
 layers.append(nn.Sigmoid())
 resnet152.fc = nn.Sequential(*layers)
@@ -33,10 +34,14 @@ part_num = 20
 batch_size = 16
 
 criterion = nn.BCELoss().cuda()
+'''
 optimizer = torch.optim.SGD(resnet152.fc.parameters(),
-                            0.1, # Learning rate
+                            0.2, # Learning rate
                             momentum=0.9,
                             weight_decay=1e-4)
+'''
+optimizer = torch.optim.Adam(resnet152.fc.parameters(),
+                            0.01 # Learning rate)
 resnet152 = nn.DataParallel(resnet152).cuda()
 # Training part
 split = 'train'
@@ -95,7 +100,7 @@ for epoch in range(training_epoch):
         prev_loss[part] = curr_loss[part]
         curr_loss[part] = 0
     if (epoch+1) % save_every == 0:
-        filename = 'model/resnet_init_pred_%s.pth.tar' % str(epoch+1)
+        filename = 'model/resnet_init_pred_adam_%s.pth.tar' % str(epoch+1)
         print filename, 'saved.\n'
         torch.save(resnet152.state_dict(), filename)
 

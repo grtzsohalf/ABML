@@ -1,17 +1,18 @@
 import sys
-sys.path.append('/home/jason6582/sfyc/attention-tensorflow/data/val_small')
+sys.path.append('/home/jason6582/sfyc/attention-tensorflow/mscoco/cocodata/val')
 
 result = []
 
-model_type = 'mscoco_box'
-epoch_num = 4
+model_type = 'mscoco_init_pred'
+epoch_num = 8
 
 for e in range(epoch_num):
     epoch = []
+    e_str = e*10 + 10
     for t in range(1):
-        th = float(t) * 0 + 0.2
+        th = float(t) * 0 + 0.1
         thres = []
-        file_name = 'result_%s-%s_%s.txt' % (model_type, str(e+1), str(th))
+        file_name = 'result_%s-%s_%s.txt' % (model_type, str(e_str), str(th))
         with open(file_name, 'r') as f:
             for i in range(4):
                 f.readline()
@@ -22,9 +23,10 @@ for e in range(epoch_num):
 file_name = 'result_%s.txt' % model_type
 with open(file_name, 'w') as f:
     for e in range(epoch_num):
-        f.write('epoch = %s:\n' % str(e+1))
+        e_str = e*10 + 10
+        f.write('epoch = %s:\n' % str(e_str))
         for t in range(1):
-            th = float(t) * 0 + 0.2
+            th = float(t) * 0 + 0.1
             f.write('  thres = %s: ' % str(th))
             for i in range(7):
                 f.write(str(result[e][t][i]) + ' ')

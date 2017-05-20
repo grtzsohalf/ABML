@@ -65,6 +65,12 @@ for start, end in zip(range(0, n_examples, batch_size),
     target_var = Variable(groundtruth_batch, volatile=True).cuda()
 
     output = resnet152(input_var)
+
+    if start == 0:
+        print 'groundtruth, ', target_var.data.cpu().numpy()[:3]
+        print 'output, ', output.data.cpu().numpy()[:3]
+        print 'diff, ', output.data.cpu().numpy()[:3] - target_var.data.cpu().numpy()[:3]
+
     loss = criterion(output, target_var)
     all_loss += loss.data.cpu().numpy()[0]
 print "Loss of model = ", all_loss
