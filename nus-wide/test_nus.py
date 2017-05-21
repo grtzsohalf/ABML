@@ -17,7 +17,7 @@ def main():
     word_to_idx = load_word_to_idx(data_path='./nusdata', split='train')
     # val_data = load_coco_data(data_path='./nusdata', split='val')
     test_data = load_nus_data(data_path='./nusdata', split='test')
-    model = CaptionGenerator(word_to_idx, dim_feature=[196, 512], dim_embed=64,
+    model = CaptionGenerator(word_to_idx, dim_feature=[196, 1024], dim_embed=64,
                             dim_hidden=1024, n_time_step=11, prev2out=True,
                             ctx2out=True, alpha_c=1.0, selector=True, dropout=True)
     data_path = './nusdata'

@@ -25,7 +25,7 @@ layers.append(nn.Linear(2048, 80))
 layers.append(nn.Sigmoid())
 resnet152.fc = nn.Sequential(*layers)
 resnet152 = nn.DataParallel(resnet152).cuda()
-resnet152.load_state_dict(torch.load('model/resnet_init_pred_10.pth.tar'))
+resnet152.load_state_dict(torch.load('model/resnet_init_pred_5.pth.tar'))
 
 batch_size = 16
 
@@ -50,7 +50,6 @@ for split in ['val', 'test']:
         image_var = Variable(image_batch, volatile=True).cuda()
         feats = resnet152(image_var)
         feats = np.reshape(feats.data.cpu().numpy(), [-1, 80])
-        groundtruth_batch = groundtruth[start:end]
         all_feats[start:end, :] = feats
         print ("Processed %d %s features.." % (end, split))
         # use hickle to save huge feature vectors

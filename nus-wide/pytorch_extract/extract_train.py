@@ -20,7 +20,7 @@ resnet152 = models.resnet152(pretrained=True)
 resnet152 = nn.Sequential(*list(resnet152.children())[:-3])
 resnet152 = nn.DataParallel(resnet152).cuda()
 
-part_num = 20
+part_num = 50
 batch_size = 128
 
 split = 'train'

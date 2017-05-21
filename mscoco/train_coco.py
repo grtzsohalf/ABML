@@ -2,7 +2,7 @@ from core.solver_coco import CaptioningSolver
 from core.model_coco import CaptionGenerator
 from core.utils_coco import *
 import os
-os.environ['CUDA_VISIBLE_DEVICES']='0'
+os.environ['CUDA_VISIBLE_DEVICES']='1'
 
 def main():
     word_to_idx = load_word_to_idx(data_path='./cocodata', split='train')

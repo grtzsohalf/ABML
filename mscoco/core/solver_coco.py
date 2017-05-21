@@ -161,10 +161,12 @@ class CaptioningSolver(object):
                         features_batch = features[image_idxs_batch]
                         init_pred_batch = init_pred[image_idxs_batch]
                         self.model.set_batch_size(len(captions_batch))
+                        '''
                         if i == 0:
                             # print 'groundtruth, ', groundtruth_batch[:3]
                             print 'captions, ', captions_batch[:3]
                             print 'init_pred, ', init_pred_batch[:3]
+                        '''
 
                         # set end_time
                         '''

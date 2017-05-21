@@ -27,7 +27,7 @@ layers = []
 layers.append(nn.Linear(2048, 81))
 layers.append(nn.Sigmoid())
 resnet152.fc = nn.Sequential(*layers)
-training_epoch = 50
+training_epoch = 10
 save_every = 1
 part_num = 50
 batch_size = 16
@@ -100,7 +100,7 @@ for epoch in range(training_epoch):
         prev_loss[part] = curr_loss[part]
         curr_loss[part] = 0
     if (epoch+1) % save_every == 0:
-        filename = 'model/resnet_init_pred_3fc_lr0.001%s.pth.tar' % str(epoch+1)
+        filename = 'model/resnet_init_pred_%s.pth.tar' % str(epoch+1)
         print filename, 'saved.\n'
         torch.save(resnet152.state_dict(), filename)
 

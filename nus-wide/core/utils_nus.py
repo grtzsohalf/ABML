@@ -49,12 +49,14 @@ def load_data(data_path='./data', split='train'):
     print "Elapse time: %.2f" %(end_t - start_t)
     return data
 
-def load_nus_data(data_path='./data', split='train', part=''):
+def load_nus_data(data_path='./data', split='train', part='', load_init_pred=False):
     data_path = os.path.join(data_path, split)
     start_t = time.time()
     data = {}
     if split == 'train':
         data['features'] = hickle.load(os.path.join(data_path, '%s.features81_%s.hkl' % (split, part)))
+        if load_init_pred == True:
+            data['init_pred'] = hickle.load(os.path.join(data_path, '%s.init.pred81_%s.hkl' % (split, part)))
         with open(os.path.join(data_path, '%s.file.names81_%s.pkl' % (split, part)), 'rb') as f:
             data['file_names'] = pickle.load(f)
         with open(os.path.join(data_path, '%s.captions81_%s.pkl' % (split, part)), 'rb') as f:
@@ -72,6 +74,8 @@ def load_nus_data(data_path='./data', split='train', part=''):
         '''
     else:
         data['features'] = hickle.load(os.path.join(data_path, '%s.features81.hkl' % split))
+        if load_init_pred == True:
+            data['init_pred'] = hickle.load(os.path.join(data_path, '%s.init.pred81.hkl' % split))
         with open(os.path.join(data_path, '%s.file.names81.pkl' %split), 'rb') as f:
             data['file_names'] = pickle.load(f)
         with open(os.path.join(data_path, '%s.captions81.pkl' %split), 'rb') as f:

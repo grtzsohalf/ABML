@@ -17,16 +17,9 @@ import torch.utils.data
 import torchvision.transforms as transforms
 import torchvision.datasets as dset
 import torchvision.models as models
-os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+os.environ['CUDA_VISIBLE_DEVICES'] = '1'
 
 resnet152 = models.resnet152(pretrained=True)
-layers = []
-layers.append(nn.Linear(2048, 80))
-layers.append(nn.Sigmoid())
-resnet152.fc = nn.Sequential(*layers)
-resnet152 = nn.DataParallel(resnet152).cuda()
-resnet152.load_state_dict(torch.load('model/resnet_epoch_10.pth.tar'))
-resnet152 = list(resnet152.children())[0]
 resnet152 = nn.Sequential(*list(resnet152.children())[:-3])
 resnet152 = nn.DataParallel(resnet152).cuda()
 
@@ -35,7 +28,7 @@ batch_size = 128
 for split in ['val', 'test']:
     anno_path = '/home/jason6582/sfyc/attention-tensorflow/mscoco/cocodata/%s/%s.annotations.pkl'\
                 % (split, split)
-    save_path = '/home/jason6582/sfyc/attention-tensorflow/mscoco/cocodata/%s/tuned_feature/%s.features.hkl'\
+    save_path = '/home/jason6582/sfyc/attention-tensorflow/mscoco/cocodata/%s/%s.features.hkl'\
                 % (split, split)
     with open(anno_path, 'rb') as f:
         annotations = pickle.load(f)

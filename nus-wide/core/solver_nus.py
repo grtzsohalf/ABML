@@ -7,8 +7,7 @@ import math
 import os
 import cPickle as pickle
 from scipy import ndimage
-from utils import *
-from bleu import evaluate
+from utils_nus import *
 
 
 class CaptioningSolver(object):
@@ -118,10 +117,11 @@ class CaptioningSolver(object):
                     print '##################'
                     print 'part ' + str(p+1) + ' of ' + 'epoch ' + str(e+1)
                     print '##################'
-                    self.data = load_nus_data(data_path=self.data_path, split='train', part=str(p))
+                    self.data = load_nus_data(data_path=self.data_path, split='train', part=str(p), load_init_pred=True)
                     n_examples = self.data['captions'].shape[0]
                     n_iters_per_part = int(np.ceil(float(n_examples)/self.batch_size))
                     features = self.data['features']
+                    init_pred = self.data['init_pred']
                     captions = self.data['captions']
 
                     # groundtruth, logits_mask and end_time
@@ -158,6 +158,7 @@ class CaptioningSolver(object):
                         masks_batch = masks[:, i*self.batch_size:(i+1)*self.batch_size, :]
                         image_idxs_batch = image_idxs[i*self.batch_size:(i+1)*self.batch_size]
                         features_batch = features[image_idxs_batch]
+                        init_pred_batch = init_pred[image_idxs_batch]
                         self.model.set_batch_size(len(captions_batch))
 
                         # set end_time
@@ -170,6 +171,7 @@ class CaptioningSolver(object):
                         self.model.set_end_time(end_time)
                         '''
                         feed_dict = {self.model.features: features_batch, 
+                                     self.model.init_pred: init_pred_batch, 
                                      self.model.captions: captions_batch, 
                                      self.model.groundtruth: groundtruth_batch, 
                                      self.model.masks: masks_batch}
@@ -197,8 +199,8 @@ class CaptioningSolver(object):
                     curr_loss[p] = 0
                 # save model's parameters
                 if (e+1) % self.save_every == 0:
-                    saver.save(sess, os.path.join(self.model_path, 'nus'), global_step=e+1)
-                    print "nus-%s saved." %(e+1)
+                    saver.save(sess, os.path.join(self.model_path, 'nus_init_pred'), global_step=e+1)
+                    print "nus_init_pred-%s saved." %(e+1)
 
     def softmax(self, array):
         total = 0.0
@@ -235,6 +237,7 @@ class CaptioningSolver(object):
         '''
 
         features = data['features']
+        init_pred = data['init_pred']
 
         # build a graph to sample captions
 
@@ -261,6 +264,7 @@ class CaptioningSolver(object):
                     if i % 50 == 0:
                         print "Iteration: ", i
                     features_batch = features[i:i+1]
+                    init_pred_batch = init_pred[i:i+1]
                     pathProbs = []
                     for k in range(K):
                         pathProbs.append(1.0)
@@ -272,7 +276,8 @@ class CaptioningSolver(object):
                             if t == 0:
                                 path = []
                                 alphas = []
-                                feed_dict = { self.model.features: features_batch }
+                                feed_dict = { self.model.features: features_batch,
+                                              self.model.init_pred: init_pred_batch}
                                 probsNumpy, c_run, h_run, alpha_run, x_run = \
                                 sess.run([probabilities_start, c_start, h_start, alpha_start, \
                                           x_start], feed_dict)
@@ -280,6 +285,7 @@ class CaptioningSolver(object):
                             else:
                                 path, c_run, h_run, alphas, samp_run, x_run = paths_info[j]
                                 feed_dict = { self.model.features: features_batch,
+                                              self.model.init_pred: init_pred_batch,
                                                 self.model.c: c_run,
                                                 self.model.h: h_run,
                                                 self.model.samp: samp_run,

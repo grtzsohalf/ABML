@@ -17,7 +17,7 @@ import numpy as np
 
 
 class CaptionGenerator(object):
-    def __init__(self, word_to_idx, dim_feature=[196, 512], dim_embed=512, dim_hidden=1024, \
+    def __init__(self, word_to_idx, dim_feature=[196, 1024], dim_embed=512, dim_hidden=1024, \
                  n_time_step=11, prev2out=True, ctx2out=True, alpha_c=0.0, selector=True, \
                  dropout=True, batch_size=128):
         """
@@ -57,6 +57,7 @@ class CaptionGenerator(object):
 
         # Place holder for features and captions
         self.features = tf.placeholder(tf.float32, [None, self.L, self.D])
+        self.init_pred = tf.placeholder(tf.float32, [None, self.V - 3])
         self.captions = tf.placeholder(tf.int32, [None, self.T + 1])
         self.groundtruth = tf.placeholder(tf.float32, [None, self.V])
         self.masks = tf.placeholder(tf.float32, [self.T, None, self.V])
@@ -177,6 +178,7 @@ class CaptionGenerator(object):
 
     def build_model(self):
         features = self.features
+        init_pred = self.init_pred
         captions = self.captions
         masks = self.masks
         batch_size = tf.shape(features)[0]
@@ -205,7 +207,7 @@ class CaptionGenerator(object):
                 context, beta = self._selector(context, h, reuse=(t!=0))
 
             with tf.variable_scope('lstm', reuse=(t!=0)):
-                _, (c, h) = lstm_cell(inputs=tf.concat(1, [x, context]), state=[c, h])
+                _, (c, h) = lstm_cell(inputs=tf.concat(1, [x, context, init_pred]), state=[c, h])
 
             logits = self._decode_lstm(x, h, context, dropout=self.dropout, reuse=(t!=0))
             # logits = tf.Print(logits, [logits], message="logits = ", summarize=10)
@@ -238,6 +240,7 @@ class CaptionGenerator(object):
 
     def build_sampler(self, max_len=10):
         features = self.features
+        init_pred = self.init_pred
 
         # batch normalize feature vectors
         features = self._batch_norm(features, mode='test', name='conv_features')
@@ -265,7 +268,7 @@ class CaptionGenerator(object):
                 beta_list.append(beta)
 
             with tf.variable_scope('lstm', reuse=(t!=0)):
-                _, (c, h) = lstm_cell(inputs=tf.concat(1, [x, context]), state=[c, h])
+                _, (c, h) = lstm_cell(inputs=tf.concat(1, [x, context, init_pred]), state=[c, h])
 
             logits = self._decode_lstm(x, h, context, reuse=(t!=0))
             logits += mask
@@ -280,6 +283,7 @@ class CaptionGenerator(object):
 
     def init_sampler(self):
         features = self.features
+        init_pred = self.init_pred
         features = self._batch_norm(features, mode='test', name='conv_features')
         features_proj = self._project_features(features=features, reuse=False)
         c, h = self._get_initial_lstm(features=features)
@@ -293,7 +297,7 @@ class CaptionGenerator(object):
         #    beta_list.append(beta)
 
         with tf.variable_scope('lstm'):
-            _, (c, h) = lstm_cell(inputs=tf.concat(1, [x, context]), state=[c, h])
+            _, (c, h) = lstm_cell(inputs=tf.concat(1, [x, context, init_pred]), state=[c, h])
 
         logits = self._decode_lstm(x, h, context)
         # sampled_word_list.append(sampled_word)
@@ -306,6 +310,7 @@ class CaptionGenerator(object):
 
     def word_sampler(self):
         features = self.features
+        init_pred = self.init_pred
         features = self._batch_norm(features, mode='test', name='conv_features', reuse=True)
         features_proj = self._project_features(features=features, reuse=True)
         c = self.c
@@ -322,7 +327,7 @@ class CaptionGenerator(object):
         #    beta_list.append(beta)
 
         with tf.variable_scope('lstm', reuse=True):
-            _, (c, h) = lstm_cell(inputs=tf.concat(1, [x, context]), state=[c, h])
+            _, (c, h) = lstm_cell(inputs=tf.concat(1, [x, context, init_pred]), state=[c, h])
 
         logits = self._decode_lstm(x, h, context, reuse=True)
         # sampled_word_list.append(sampled_word)

@@ -22,7 +22,7 @@ layers.append(nn.Linear(2048, 80))
 layers.append(nn.Sigmoid())
 resnet152.fc = nn.Sequential(*layers)
 resnet152 = nn.DataParallel(resnet152).cuda()
-resnet152.load_state_dict(torch.load('model/resnet_init_pred_10.pth.tar'))
+resnet152.load_state_dict(torch.load('model/resnet_init_pred_5.pth.tar'))
 
 part_num = 20
 batch_size = 128
