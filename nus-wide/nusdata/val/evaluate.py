@@ -1,16 +1,17 @@
 import sys
 import numpy as np
-sys.path.append('/home/jason6582/sfyc/attention-tensorflow')
+sys.path.append('/home/jason6582/sfyc/attention-tensorflow/nus-wide')
 
 candidateFile = sys.argv[1]
 resultFile = sys.argv[2]
 
-from core.utils import *
+from core.utils_nus import *
 reference = load_pickle('val.references81.pkl')
 candidate = load_pickle(candidateFile)
 g = open(resultFile, 'w')
 
-word_to_idx = load_word_to_idx(data_path='/home/jason6582/sfyc/attention-tensorflow/nusdata', split='train')
+word_to_idx = load_word_to_idx(data_path='/home/jason6582/sfyc/attention-tensorflow/nus-wide/nusdata',\
+                            split='train')
 idx_to_word = {i:w for w, i in word_to_idx.iteritems()}
 refsNum = 0
 cansNum = 0
@@ -18,16 +19,13 @@ correctNum = 0
 classwise_num = np.zeros((3,81))
 # for i in range(len(candidate)):
 # for i in range(30):
-for i in range(len(candidate)):
+for i in range(10):
     refs = str(reference[i][0][:-2]).split()
     refsNum += len(refs)
     cans = str(candidate[i][:]).split()
     cansNum += len(cans)
     refsDict = {}
     correct = 0
-    print "Instance", (i+1), ":"
-    print "Predicted: ", cans
-    print "Ground truth: ", refs
     for c in cans:
         refsDict[c] = 0
         idx = word_to_idx[c]

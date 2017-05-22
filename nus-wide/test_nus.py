@@ -3,7 +3,7 @@ from core.model_nus import CaptionGenerator
 from core.utils_nus import *
 import os
 import sys
-os.environ['CUDA_VISIBLE_DEVICES']='1'
+os.environ['CUDA_VISIBLE_DEVICES']='0'
 
 modelname = sys.argv[1]
 filename = sys.argv[2]
@@ -15,8 +15,8 @@ print '#########################'
 
 def main():
     word_to_idx = load_word_to_idx(data_path='./nusdata', split='train')
-    # val_data = load_coco_data(data_path='./nusdata', split='val')
-    test_data = load_nus_data(data_path='./nusdata', split='test')
+    val_data = load_nus_data(data_path='./nusdata', split='val', load_init_pred=True)
+    # test_data = load_nus_data(data_path='./nusdata', split='test', load_init_pred=True)
     model = CaptionGenerator(word_to_idx, dim_feature=[196, 1024], dim_embed=64,
                             dim_hidden=1024, n_time_step=11, prev2out=True,
                             ctx2out=True, alpha_c=1.0, selector=True, dropout=True)
@@ -26,7 +26,7 @@ def main():
                 pretrained_model=None, model_path='model/',
                 test_model=('model/%s' %modelname), print_bleu=True, log_path='log/', 
                 V=len(word_to_idx))
-    solver.test(test_data, split='test', filename=filename, attention_visualization=False, \
+    solver.test(val_data, split='val', filename=filename, attention_visualization=False, \
                 thres=float(thres))
 
 if __name__ == "__main__":

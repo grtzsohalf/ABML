@@ -281,7 +281,7 @@ class CaptioningSolver(object):
                                 probsNumpy, c_run, h_run, alpha_run, x_run = \
                                 sess.run([probabilities_start, c_start, h_start, alpha_start, \
                                           x_start], feed_dict)
-                                probsNumpy = probsNumpy.reshape(84)
+                                probsNumpy = probsNumpy.reshape(self.V)
                             else:
                                 path, c_run, h_run, alphas, samp_run, x_run = paths_info[j]
                                 feed_dict = { self.model.features: features_batch,
@@ -292,7 +292,7 @@ class CaptioningSolver(object):
                                                 self.model.x: x_run }
                                 probsNumpy, c_run, h_run, alpha_run, x_run = \
                                 sess.run([probabilities, c, h, alpha, x], feed_dict)
-                                probsNumpy = probsNumpy.reshape(84)
+                                probsNumpy = probsNumpy.reshape(self.V)
                             # probsNumpy = self.softmax(probsNumpy)
                             probsNumpy = self.sigmoid(probsNumpy)
                             probs = []

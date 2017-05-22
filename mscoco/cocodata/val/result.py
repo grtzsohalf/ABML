@@ -4,7 +4,7 @@ sys.path.append('/home/jason6582/sfyc/attention-tensorflow/mscoco/cocodata/val')
 result = []
 
 model_type = 'mscoco_init_pred'
-epoch_num = 8
+epoch_num = 10
 
 for e in range(epoch_num):
     epoch = []
