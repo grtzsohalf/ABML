@@ -17,9 +17,9 @@ refsNum = 0
 cansNum = 0
 correctNum = 0
 classwise_num = np.zeros((3,81))
-# for i in range(len(candidate)):
 # for i in range(30):
-for i in range(10):
+# for i in range(10):
+for i in range(len(candidate)):
     refs = str(reference[i][0][:-2]).split()
     refsNum += len(refs)
     cans = str(candidate[i][:]).split()

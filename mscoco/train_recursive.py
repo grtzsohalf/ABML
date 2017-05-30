@@ -1,5 +1,5 @@
-from core.solver_only_recursive import CaptioningSolver
-from core.model_only_recursive import CaptionGenerator
+from core.solver_recursive import CaptioningSolver
+from core.model_recursive import CaptionGenerator
 from core.utils_coco import *
 import os
 os.environ['CUDA_VISIBLE_DEVICES']='0'
@@ -15,7 +15,7 @@ def main():
                             dim_hidden=1024, n_time_step=16, prev2out=True,
                             ctx2out=True, alpha_c=1.0, selector=True, dropout=True, batch_size=128)
     data_path = './cocodata'
-    solver = CaptioningSolver(model, data_path, n_epochs=50, batch_size=128,
+    solver = CaptioningSolver(model, data_path, n_epochs=100, batch_size=128,
                 update_rule='adam', learning_rate=0.0003, print_every=100, save_every=1,
                 pretrained_model=None, model_path='model/lstm/',
                 test_model='model/lstm/model-1', print_bleu=True, log_path='cocolog/',

@@ -1,5 +1,5 @@
-from core.solver_map import CaptioningSolver
-from core.model_pascal import CaptionGenerator
+from core.solver_iterative_update import CaptioningSolver
+from core.model_iterative_update import CaptionGenerator
 from core.utils_pascal import *
 import os
 import sys

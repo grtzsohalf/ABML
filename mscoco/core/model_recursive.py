@@ -60,11 +60,10 @@ class CaptionGenerator(object):
         self.init_pred = tf.placeholder(tf.float32, [None, self.V - 3])
         self.captions = tf.placeholder(tf.int32, [None, self.T + 1])
         self.groundtruth = tf.placeholder(tf.float32, [None, self.V])
-        self.masks = tf.placeholder(tf.float32, [self.T, None, self.V])
         self.c = tf.placeholder(tf.float32, [1,1024])
         self.h = tf.placeholder(tf.float32, [1,1024])
         self.samp = tf.placeholder(tf.int32, [1])
-        self.x = tf.placeholder(tf.float32, [1, len(word_to_idx)])
+        self.x = tf.placeholder(tf.float32, [1, len(word_to_idx)-3])
 
     def set_batch_size(self, batch_size):
         self.batch_size = batch_size
@@ -162,11 +161,8 @@ class CaptionGenerator(object):
         features = self.features
         init_pred = self.init_pred
         captions = self.captions
-        masks = self.masks
         batch_size = tf.shape(features)[0]
         groundtruth = tf.to_float(self.groundtruth)
-        groundtruth_mask = tf.zeros([batch_size, self.V], tf.float32)
-        groundtruth_mask += groundtruth * 100
         all_ones = tf.ones([batch_size, self.V], tf.float32)
 
         # batch normalize feature vectors
@@ -174,14 +170,14 @@ class CaptionGenerator(object):
 
         c, h = self._get_initial_lstm(features=features)
         start_ind = tf.ones([batch_size], tf.int32)
-        x = self._word_embedding(inputs=start_ind, x=tf.zeros([batch_size, self.V], tf.float32))
+        prev_pred = init_pred
         features_proj = self._project_features(features=features)
 
         loss = 0.0
         alpha_list = []
         lstm_cell = tf.nn.rnn_cell.BasicLSTMCell(num_units=self.H)
 
-        for t in range(self.T):
+        for t in range(5):
             context, alpha = self._attention_layer(features, features_proj, h, reuse=(t!=0))
             alpha_list.append(alpha)
 
@@ -189,24 +185,20 @@ class CaptionGenerator(object):
                 context, beta = self._selector(context, h, reuse=(t!=0))
 
             with tf.variable_scope('lstm', reuse=(t!=0)):
-                _, (c, h) = lstm_cell(inputs=tf.concat(1, [context, init_pred]), state=[c, h])
+                _, (c, h) = lstm_cell(inputs=tf.concat(1, [context, prev_pred]), state=[c, h])
 
-            logits = self._decode_lstm(h, context, init_pred, dropout=self.dropout, reuse=(t!=0))
-            init_pred = logits[:, 3:]
+            logits = self._decode_lstm(h, context, prev_pred, dropout=self.dropout, reuse=(t!=0))
+            prev_pred = logits[:, 3:]
             # logits = tf.Print(logits, [logits], message="logits = ", summarize=10)
-            loss += tf.reduce_sum(tf.nn.sigmoid_cross_entropy_with_logits(logits, groundtruth) * masks[t])
+            loss += tf.reduce_sum(tf.nn.sigmoid_cross_entropy_with_logits(logits, groundtruth))
 
             # predicted labels and groundtruth_mask
-            logits += (groundtruth_mask - all_ones * 100)
-            next_ind = tf.argmax(logits, 1)
             # next_ind = tf.Print(next_ind, [next_ind], message="next_ind is: ", summarize=200)
-            groundtruth_mask += tf.to_float(tf.one_hot(next_ind, self.V, on_value=-100))
 
             # modify groundtruth
             # groundtruth += tf.to_float(tf.one_hot(next_ind, self.V, on_value=-1))
 
             # next label
-            x = self._word_embedding(inputs=next_ind, x=x, reuse=True)
 
         if self.alpha_c > 0:
             alphas = tf.transpose(tf.pack(alpha_list), (1, 0, 2))     # (N, T, L)
@@ -272,8 +264,6 @@ class CaptionGenerator(object):
         features_proj = self._project_features(features=features, reuse=False)
         c, h = self._get_initial_lstm(features=features)
         lstm_cell = tf.nn.rnn_cell.BasicLSTMCell(num_units=self.H)
-        x = self._word_embedding(inputs=tf.fill([tf.shape(features)[0]], self._start), \
-                                 x=tf.zeros([self.V], tf.float32))
         context, alpha = self._attention_layer(features, features_proj, h)
         # alpha_list.append(alpha)
 
@@ -285,14 +275,14 @@ class CaptionGenerator(object):
             _, (c, h) = lstm_cell(inputs=tf.concat(1, [context, init_pred]), state=[c, h])
 
         logits = self._decode_lstm(h, context, init_pred)
-        init_pred = logits[:, 3:]
+        prev_pred = logits[:, 3:]
         # sampled_word_list.append(sampled_word)
 
         # alphas = tf.transpose(tf.pack(alpha_list), (1, 0, 2))     # (N, T, L)
         # betas = tf.transpose(tf.squeeze(beta_list), (1, 0))    # (N, T)
         # sampled_captions = tf.transpose(tf.pack(sampled_word_list), (1, 0))     # (N, max_len)
         # return alphas, betas, sampled_captions
-        return logits, c, h, alpha, x, init_pred
+        return logits, c, h, alpha, prev_pred
 
     def word_sampler(self):
         features = self.features
@@ -302,9 +292,8 @@ class CaptionGenerator(object):
         c = self.c
         h = self.h
         sampled_word = self.samp
-        x = self.x
+        prev_pred = self.x
         lstm_cell = tf.nn.rnn_cell.BasicLSTMCell(num_units=self.H)
-        x = self._word_embedding(inputs=sampled_word, x=x, reuse=True)
         context, alpha = self._attention_layer(features, features_proj, h, reuse=True)
         # alpha_list.append(alpha)
 
@@ -313,14 +302,14 @@ class CaptionGenerator(object):
         #    beta_list.append(beta)
 
         with tf.variable_scope('lstm', reuse=True):
-            _, (c, h) = lstm_cell(inputs=tf.concat(1, [context, init_pred]), state=[c, h])
+            _, (c, h) = lstm_cell(inputs=tf.concat(1, [context, prev_pred]), state=[c, h])
 
-        logits = self._decode_lstm(h, context, init_pred, reuse=True)
-        init_pred = logits[:, 3:]
+        logits = self._decode_lstm(h, context, prev_pred, reuse=True)
+        prev_pred = logits[:, 3:]
         # sampled_word_list.append(sampled_word)
 
         # alphas = tf.transpose(tf.pack(alpha_list), (1, 0, 2))     # (N, T, L)
         # betas = tf.transpose(tf.squeeze(beta_list), (1, 0))    # (N, T)
         # sampled_captions = tf.transpose(tf.pack(sampled_word_list), (1, 0))     # (N, max_len)
         # return alphas, betas, sampled_captions
-        return logits, c, h, alpha, x, init_pred
+        return logits, c, h, alpha, prev_pred

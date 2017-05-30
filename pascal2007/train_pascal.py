@@ -1,5 +1,5 @@
-from core.solver_pascal import CaptioningSolver
-from core.model_pascal import CaptionGenerator
+from core.solver_iterative_update import CaptioningSolver
+from core.model_iterative_update import CaptionGenerator
 from core.utils_pascal import *
 import os
 os.environ['CUDA_VISIBLE_DEVICES']='0'
@@ -11,7 +11,7 @@ def main():
                             ctx2out=True, alpha_c=1.0, selector=True, dropout=True, batch_size=128)
     data_path = './pascaldata'
     solver = CaptioningSolver(model, data_path, n_epochs=500, batch_size=128,
-                update_rule='adam', learning_rate=0.0005, print_every=30, save_every=5,
+                update_rule='adam', learning_rate=0.0005, print_every=30, save_every=10,
                 pretrained_model=None, model_path='model/lstm/',
                 test_model='model/lstm/model-1', print_bleu=True, log_path='pascallog/',
                 V=len(word_to_idx), n_time_step=8)
