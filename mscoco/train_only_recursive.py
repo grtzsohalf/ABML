@@ -1,5 +1,5 @@
-from core.solver_coco import CaptioningSolver
-from core.model_coco import CaptionGenerator
+from core.solver_only_recursive import CaptioningSolver
+from core.model_only_recursive import CaptionGenerator
 from core.utils_coco import *
 import os
 os.environ['CUDA_VISIBLE_DEVICES']='0'

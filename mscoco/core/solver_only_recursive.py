@@ -7,7 +7,7 @@ import math
 import os
 import cPickle as pickle
 from scipy import ndimage
-from utils_pascal import *
+from utils_coco import *
 
 
 class CaptioningSolver(object):
@@ -49,8 +49,8 @@ class CaptioningSolver(object):
         self.model_path = kwargs.pop('model_path', './model/')
         self.pretrained_model = kwargs.pop('pretrained_model', None)
         self.test_model = kwargs.pop('test_model', './model/lstm/model-1')
-        self.V = kwargs.pop('V', 23)
-        self.n_time_step = kwargs.pop('n_time_step', 8)
+        self.V = kwargs.pop('V', 83)
+        self.n_time_step = kwargs.pop('n_time_step', 16)
 
         # set an optimizer by update rule
         if self.update_rule == 'adam':
@@ -103,83 +103,91 @@ class CaptioningSolver(object):
             if self.pretrained_model is not None:
                 print "Start training with pretrained Model.."
                 saver.restore(sess, self.pretrained_model)
-            prev_loss = -1
-            curr_loss = 0
+            prev_loss = []
+            curr_loss = []
+            for i in range(20):
+                prev_loss.append(-1)
+                curr_loss.append(0)
             start_t = time.time()
             for e in range(self.n_epochs):
-                print '##################'
-                print 'epoch ' + str(e+1)
-                print '##################'
-                self.data = load_pascal_data(data_path=self.data_path, split='train', load_init_pred=True)
-                n_examples = self.data['captions'].shape[0]
-                n_iters_per_part = int(np.ceil(float(n_examples)/self.batch_size))
-                features = self.data['features']
-                init_pred = self.data['init_pred']
-                captions = self.data['captions']
+                arr = np.arange(20)
+                np.random.shuffle(arr)
+                for part in range(20):
+                    p = arr[part]
+                    print '##################'
+                    print 'part ' + str(p+1) + ' of ' + 'epoch ' + str(e+1)
+                    print '##################'
+                    self.data = load_coco_data(data_path=self.data_path, split='train', \
+                                               part=str(p), load_init_pred=True)
+                    n_examples = self.data['captions'].shape[0]
+                    n_iters_per_part = int(np.ceil(float(n_examples)/self.batch_size))
+                    features = self.data['features']
+                    init_pred = self.data['init_pred']
+                    captions = self.data['captions']
 
-                # groundtruth, logits_mask and end_time
-                groundtruth = np.zeros((n_examples, self.V), dtype=np.float32)
-                for n, caption in enumerate(captions):
-                    for index in caption:
-                        if index > 2:
-                            groundtruth[n][index] = 1.0
+                    # groundtruth, logits_mask and end_time
+                    groundtruth = np.zeros((n_examples, self.V), dtype=np.float32)
+                    for n, caption in enumerate(captions):
+                        for index in caption:
+                            if index > 2:
+                                groundtruth[n][index] = 1.0
 
-                label_num = np.sum(groundtruth, axis=1)
-                masks = np.ones((self.n_time_step, n_examples, self.V), dtype=np.float32)
-                for t in range(self.n_time_step):
-                    for i, n in enumerate(label_num):
-                        if t >= n:
-                            masks[t][i] = np.zeros(self.V, dtype=np.float32)
+                    label_num = np.sum(groundtruth, axis=1)
+                    masks = np.ones((self.n_time_step, n_examples, self.V), dtype=np.float32)
+                    for t in range(self.n_time_step):
+                        for i, n in enumerate(label_num):
+                            if t >= n:
+                                masks[t][i] = np.zeros(self.V, dtype=np.float32)
 
-                image_idxs = self.data['image_idxs']
-                print "Data size: %d" %n_examples
-                print "Iterations per part: %d" %n_iters_per_part
+                    image_idxs = self.data['image_idxs']
+                    print "Data size: %d" %n_examples
+                    print "Iterations per part: %d" %n_iters_per_part
 
-                rand_idxs = np.random.permutation(n_examples)
-                captions = captions[rand_idxs]
-                groundtruth = groundtruth[rand_idxs]
-                image_idxs = image_idxs[rand_idxs]
-                masks = masks[:, rand_idxs, :]
+                    rand_idxs = np.random.permutation(n_examples)
+                    captions = captions[rand_idxs]
+                    groundtruth = groundtruth[rand_idxs]
+                    image_idxs = image_idxs[rand_idxs]
+                    masks = masks[:, rand_idxs, :]
 
-                for i in range(n_iters_per_part):
-                    captions_batch = captions[i*self.batch_size:(i+1)*self.batch_size]
-                    groundtruth_batch = groundtruth[i*self.batch_size:(i+1)*self.batch_size]
-                    masks_batch = masks[:, i*self.batch_size:(i+1)*self.batch_size, :]
-                    image_idxs_batch = image_idxs[i*self.batch_size:(i+1)*self.batch_size]
-                    features_batch = features[image_idxs_batch]
-                    init_pred_batch = init_pred[image_idxs_batch]
-                    self.model.set_batch_size(len(captions_batch))
-                    # set end_time
-                    feed_dict = {self.model.features: features_batch, 
-                                    self.model.captions: captions_batch, 
-                                    self.model.init_pred: init_pred_batch, 
-                                    self.model.groundtruth: groundtruth_batch, 
-                                    self.model.masks: masks_batch}
-                    _, l = sess.run([train_op, loss], feed_dict)
-                    curr_loss += l
-                    # write summary for tensorboard visualization
-                    if i % 10 == 0:
-                        summary = sess.run(summary_op, feed_dict)
-                        summary_writer.add_summary(summary, e*n_iters_per_part + i)
-                    if (i+1) % self.print_every == 0:
-                        # print "\nTrain loss at epoch %d & iteration %d (mini-batch): %.5f" %(e+1, i+1, l)
-                        ground_truths = captions[image_idxs == image_idxs_batch[0]]
-                        decoded = decode_captions(ground_truths, self.model.idx_to_word)
-                        for j, gt in enumerate(decoded):
-                            print "Ground truth %d: %s" %(j+1, gt)
-                        gen_caps = sess.run(generated_captions, feed_dict)
-                        decoded = decode_captions(gen_caps, self.model.idx_to_word)
-                        print "Generated caption: %s\n" %decoded[0]
+                    for i in range(n_iters_per_part):
+                        captions_batch = captions[i*self.batch_size:(i+1)*self.batch_size]
+                        groundtruth_batch = groundtruth[i*self.batch_size:(i+1)*self.batch_size]
+                        masks_batch = masks[:, i*self.batch_size:(i+1)*self.batch_size, :]
+                        image_idxs_batch = image_idxs[i*self.batch_size:(i+1)*self.batch_size]
+                        features_batch = features[image_idxs_batch]
+                        init_pred_batch = init_pred[image_idxs_batch]
+                        self.model.set_batch_size(len(captions_batch))
+                        # set end_time
+                        feed_dict = {self.model.features: features_batch, 
+                                     self.model.captions: captions_batch, 
+                                     self.model.init_pred: init_pred_batch, 
+                                     self.model.groundtruth: groundtruth_batch, 
+                                     self.model.masks: masks_batch}
+                        _, l = sess.run([train_op, loss], feed_dict)
+                        curr_loss[p] += l
+                        # write summary for tensorboard visualization
+                        if i % 10 == 0:
+                            summary = sess.run(summary_op, feed_dict)
+                            summary_writer.add_summary(summary, e*n_iters_per_part + i)
+                        if (i+1) % self.print_every == 0:
+                            # print "\nTrain loss at epoch %d & iteration %d (mini-batch): %.5f" %(e+1, i+1, l)
+                            ground_truths = captions[image_idxs == image_idxs_batch[0]]
+                            decoded = decode_captions(ground_truths, self.model.idx_to_word)
+                            for j, gt in enumerate(decoded):
+                                print "Ground truth %d: %s" %(j+1, gt)
+                            gen_caps = sess.run(generated_captions, feed_dict)
+                            decoded = decode_captions(gen_caps, self.model.idx_to_word)
+                            print "Generated caption: %s\n" %decoded[0]
 
-                print "Previous epoch loss: " , prev_loss
-                print "Current epoch loss: " , curr_loss
-                print "Elapsed time: ", time.time() - start_t
-                prev_loss = curr_loss
-                curr_loss = 0
+                    print "Previous epoch loss (part %s): " % str(p+1), prev_loss[p]
+                    print "Current epoch loss (part %s): " % str(p+1), curr_loss[p]
+                    print "Elapsed time: ", time.time() - start_t
+                    prev_loss[p] = curr_loss[p]
+                    curr_loss[p] = 0
                 # save model's parameters
                 if (e+1) % self.save_every == 0:
-                    saver.save(sess, os.path.join(self.model_path, 'pascal_init_pred'), global_step=e+1)
-                    print "pascal_init_pred-%s saved." %(e+1)
+                    saver.save(sess, os.path.join(self.model_path, 'mscoco_only_recursive'), global_step=e+1)
+                    print "mscoco_only_recursive-%s saved." %(e+1)
 
     def softmax(self, array):
         total = 0.0
@@ -197,26 +205,19 @@ class CaptioningSolver(object):
     def evaluate(self, feature, thres, resultFile):
         feature = np.array(feature)
         feature = np.transpose(feature, (1, 0, 2))
-        loaded_reference = load_pickle('/home/jason6582/sfyc/attention-tensorflow/pascal2007/pascaldata/val/val.references.pkl')
-        reference = []
-        for key, value in loaded_reference.iteritems():
-            answer = []
-            for label in value[0]:
-                answer.append(label-3)
-            reference.append(answer)
+        reference = load_pickle('cocodata/val/val.references.pkl')
+        for key, value in reference.iteritems():
+            reference[key] = [int(idx) for idx in value[0].split()[:-1]]
         g = open(resultFile, 'w')
 
-        word_to_idx = load_word_to_idx(data_path='/home/jason6582/sfyc/attention-tensorflow/pascal2007/pascaldata',\
-                      split='train')
+        word_to_idx = load_word2idx(data_path='/home/jason6582/sfyc/attention-tensorflow/mscoco/cocodata', split='train')
         idx_to_word = {i:w for w, i in word_to_idx.iteritems()}
-        sum_feature = np.reshape(sum(feature)/3, (1, -1, 20))
-        feature = np.concatenate((feature, sum_feature))
 
         for iter_num, iteration in enumerate(feature):
             refsNum = 0
             cansNum = 0
             correctNum = 0
-            classwise_num = np.zeros((3,20))
+            classwise_num = np.zeros((3,80))
             num = 0
             for i in range(len(iteration)):
                 cans = []
@@ -230,6 +231,12 @@ class CaptioningSolver(object):
                 refsNum += len(refs)
                 refsDict = {}
                 correct = 0
+                can_str = []
+                ref_str = []
+                for c in cans:
+                    can_str.append(idx_to_word[c])
+                for r in refs:
+                    ref_str.append(idx_to_word[r])
                 for c in cans:
                     refsDict[c] = 0  # follow idx of word_to_idx (keep 0, 1, 2)
                     classwise_num[0][c] += 1.0 # idx start from 0 for convenience
@@ -281,78 +288,80 @@ class CaptioningSolver(object):
         '''
 
         features = data['features']
-        init_pred = data['init_pred']
+        init_pred_feat = data['init_pred']
         # build a graph to sample captions
         config = tf.ConfigProto(allow_soft_placement=True)
         config.gpu_options.allow_growth = True
-        probabilities_start, c_start, h_start, alpha_start, x_start = self.model.init_sampler()
-        probabilities, c, h, alpha, x = self.model.word_sampler()
+        probabilities_start, c_start, h_start, alpha_start, x_start, init_pred_start = self.model.init_sampler()
+        probabilities, c, h, alpha, x, init_pred = self.model.word_sampler()
         with tf.Session(config=config) as sess:
             saver = tf.train.Saver()
             saver.restore(sess, self.test_model)
-            MAX_LEN = 3
+            MAX_LEN = 5
             num_iter = features.shape[0]
             start_t = time.time()
             for thres_iter in range(1):
-                all_prediction = []
+                all_80_feature = []
                 all_alphas = []
                 for i in range(num_iter):
                     if i % 50 == 0:
                         print "Iteration: ", i
                     features_batch = features[i:i+1]
-                    init_pred_batch = init_pred[i:i+1]
+                    init_pred_batch = init_pred_feat[i:i+1]
+
                     x_run = None
-                    prediction = []
+                    init_pred_run = None
+                    feature_80 = []
                     for t in range(MAX_LEN): # time step
                         dic = {}
                         if t == 0:
                             path = []
                             alphas = []
-                            feed_dict = { self.model.features: features_batch, 
+                            feed_dict = { self.model.features: features_batch,
                                             self.model.init_pred: init_pred_batch}
-                            probsNumpy, c_run, h_run, alpha_run, x_run = \
+                            probsNumpy, c_run, h_run, alpha_run, x_run, init_pred_run = \
                             sess.run([probabilities_start, c_start, h_start, alpha_start, \
-                                        x_start], feed_dict)
+                                        x_start, init_pred_start], feed_dict)
                             probsNumpy = probsNumpy.reshape(self.V)
                         else:
-                            path, c_run, h_run, alphas, samp_run, x_run = paths_info[0]
+                            path, c_run, h_run, alphas, samp_run, x_run, init_pred_run= paths_info[0]
                             feed_dict = { self.model.features: features_batch,
-                                            self.model.init_pred: init_pred_batch,
                                             self.model.c: c_run,
                                             self.model.h: h_run,
                                             self.model.samp: samp_run,
-                                            self.model.x: x_run }
-                            probsNumpy, c_run, h_run, alpha_run, x_run = \
-                            sess.run([probabilities, c, h, alpha, x], feed_dict)
+                                            self.model.x: x_run,
+                                            self.model.init_pred: init_pred_run}
+                            probsNumpy, c_run, h_run, alpha_run, x_run, init_pred_run = \
+                            sess.run([probabilities, c, h, alpha, x, init_pred], feed_dict)
                             probsNumpy = probsNumpy.reshape(self.V)
                         alphas.append(alpha_run)
                         probsNumpy = self.sigmoid(probsNumpy)
                         probs = []
                         for p in probsNumpy:
                             probs.append(p)
-                        prediction.append(probs)
-                        # if len(path) != 0:
-                        #     for predicted in path:
-                        #         probs[predicted] = 0
+                        feature_80.append(probs)
+                        '''
+                        if len(path) != 0:
+                            for predicted in path:
+                                probs[predicted] = 0
+                        '''
                         for k in range(len(probs)):
                             idx = probs[k]
                             p = path[:]
                             p.append(k)
                             samp_run = np.array([k+3])
-                            dic[idx] = (p, c_run , h_run, alphas, samp_run, x_run) # p is a path(list), and h is p's current hidden state
+                            dic[idx] = (p, c_run , h_run, alphas, samp_run, x_run, init_pred_run) # p is a path(list), and h is p's current hidden state
                         newPaths_info = []
                         for key in reversed(sorted(dic.iterkeys())):
                             newPaths_info.append(dic[key][:])
                             break
                         paths_info = newPaths_info
                         # print pathProbs
-                    all_prediction.append(prediction)
+                    all_80_feature.append(feature_80)
                     alphas = paths_info[0][3]
                     alpha_list = np.transpose(alphas, (1, 0, 2))     # (N, T, L)
                     all_alphas.append(alpha_list)
-                save_file = 'result__0.3.txt'
-                self.evaluate(all_prediction, 0.3, save_file)
-                print save_file, "saved."
+                self.evaluate(all_80_feature, 0.3, 'result_only_recursive.txt')
                 print "Time cost: ", time.time()- start_t
 
             image_file_name = 'visualization/'
@@ -362,7 +371,7 @@ class CaptioningSolver(object):
                 # plt.rcParams['figure.cmap'] = 'gray'
                 num_samples = len(all_decoded)
                 ran_arr = np.random.randint(num_samples, size=10)
-                reference = load_pickle('./pascaldata/val/val.references.pkl')
+                reference = load_pickle('./cocodata/val/val.references.pkl')
                 sample_file = open('sample.txt', 'w')
                 sample_file.write('Grountruth:\n')
                 for idx in ran_arr:

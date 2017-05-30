@@ -7,8 +7,7 @@ import math
 import os
 import cPickle as pickle
 from scipy import ndimage
-from utils import *
-from bleu import evaluate
+from utils_nus import *
 
 
 class CaptioningSolver(object):
@@ -49,7 +48,7 @@ class CaptioningSolver(object):
         self.log_path = kwargs.pop('log_path', './log/')
         self.model_path = kwargs.pop('model_path', './model/')
         self.pretrained_model = kwargs.pop('pretrained_model', None)
-        self.test_model = kwargs.pop('test_model', './model/lstm/model-1')
+        self.test_model = kwargs.pop('test_model', './model/model-1')
         self.V = kwargs.pop('V', 84)
         self.n_time_step = kwargs.pop('n_time_step', 11)
 
@@ -72,7 +71,7 @@ class CaptioningSolver(object):
         # build graphs for training model and sampling captions
         loss = self.model.build_model()
         tf.get_variable_scope().reuse_variables()
-        generated_captions = self.model.build_sampler(max_len=10)
+        _, _, generated_captions = self.model.build_sampler(max_len=10)
 
         # train op
         with tf.name_scope('optimizer'):
@@ -97,9 +96,7 @@ class CaptioningSolver(object):
         #config.gpu_options.per_process_gpu_memory_fraction=0.9
         config.gpu_options.allow_growth = True
         with tf.Session(config=config) as sess:
-            # deprecated??
             tf.initialize_all_variables().run()
-            # sess.run(tf.global_variables_initializer())
             summary_writer = tf.train.SummaryWriter(self.log_path, graph=tf.get_default_graph())
             saver = tf.train.Saver(max_to_keep=100)
 
@@ -120,10 +117,11 @@ class CaptioningSolver(object):
                     print '##################'
                     print 'part ' + str(p+1) + ' of ' + 'epoch ' + str(e+1)
                     print '##################'
-                    self.data = load_coco_data(data_path=self.data_path, split='train', part=str(p))
+                    self.data = load_nus_data(data_path=self.data_path, split='train', part=str(p), load_init_pred=True)
                     n_examples = self.data['captions'].shape[0]
                     n_iters_per_part = int(np.ceil(float(n_examples)/self.batch_size))
                     features = self.data['features']
+                    init_pred = self.data['init_pred']
                     captions = self.data['captions']
 
                     # groundtruth, logits_mask and end_time
@@ -160,6 +158,7 @@ class CaptioningSolver(object):
                         masks_batch = masks[:, i*self.batch_size:(i+1)*self.batch_size, :]
                         image_idxs_batch = image_idxs[i*self.batch_size:(i+1)*self.batch_size]
                         features_batch = features[image_idxs_batch]
+                        init_pred_batch = init_pred[image_idxs_batch]
                         self.model.set_batch_size(len(captions_batch))
 
                         # set end_time
@@ -172,12 +171,12 @@ class CaptioningSolver(object):
                         self.model.set_end_time(end_time)
                         '''
                         feed_dict = {self.model.features: features_batch, 
+                                     self.model.init_pred: init_pred_batch, 
                                      self.model.captions: captions_batch, 
                                      self.model.groundtruth: groundtruth_batch, 
                                      self.model.masks: masks_batch}
                         _, l = sess.run([train_op, loss], feed_dict)
                         curr_loss[p] += l
-
                         '''
                         # write summary for tensorboard visualization
                         if i % 10 == 0:
@@ -239,13 +238,14 @@ class CaptioningSolver(object):
         '''
 
         features = data['features']
+        init_pred = data['init_pred']
 
         # build a graph to sample captions
 
         config = tf.ConfigProto(allow_soft_placement=True)
         config.gpu_options.allow_growth = True
-        probabilities_start, c_start, h_start, x_start = self.model.init_sampler()
-        probabilities, c, h, x = self.model.word_sampler()
+        probabilities_start, c_start, h_start, alpha_start, x_start = self.model.init_sampler()
+        probabilities, c, h, alpha, x = self.model.word_sampler()
         with tf.Session(config=config) as sess:
             saver = tf.train.Saver()
             saver.restore(sess, self.test_model)
@@ -265,6 +265,7 @@ class CaptioningSolver(object):
                     if i % 50 == 0:
                         print "Iteration: ", i
                     features_batch = features[i:i+1]
+                    init_pred_batch = init_pred[i:i+1]
                     pathProbs = []
                     for k in range(K):
                         pathProbs.append(1.0)
@@ -275,26 +276,28 @@ class CaptioningSolver(object):
                         for j in range(K):
                             if t == 0:
                                 path = []
-                                # alphas = []
-                                feed_dict = { self.model.features: features_batch }
-                                probsNumpy, c_run, h_run, x_run = \
-                                sess.run([probabilities_start, c_start, h_start, \
-                                          x_start], feed_dict)
-                                probsNumpy = probsNumpy.reshape(84)
-                            else:
-                                path, c_run, h_run, samp_run, x_run = paths_info[j]
+                                alphas = []
                                 feed_dict = { self.model.features: features_batch,
+                                              self.model.init_pred: init_pred_batch}
+                                probsNumpy, c_run, h_run, alpha_run, x_run = \
+                                sess.run([probabilities_start, c_start, h_start, alpha_start, \
+                                          x_start], feed_dict)
+                                probsNumpy = probsNumpy.reshape(self.V)
+                            else:
+                                path, c_run, h_run, alphas, samp_run, x_run = paths_info[j]
+                                feed_dict = { self.model.features: features_batch,
+                                              self.model.init_pred: init_pred_batch,
                                                 self.model.c: c_run,
                                                 self.model.h: h_run,
                                                 self.model.samp: samp_run,
                                                 self.model.x: x_run }
-                                probsNumpy, c_run, h_run, x_run = \
-                                sess.run([probabilities, c, h, x], feed_dict)
-                                probsNumpy = probsNumpy.reshape(84)
+                                probsNumpy, c_run, h_run, alpha_run, x_run = \
+                                sess.run([probabilities, c, h, alpha, x], feed_dict)
+                                probsNumpy = probsNumpy.reshape(self.V)
                             # probsNumpy = self.softmax(probsNumpy)
                             probsNumpy = self.sigmoid(probsNumpy)
                             probs = []
-                            # alphas.append(alpha_run)
+                            alphas.append(alpha_run)
                             for p in probsNumpy:
                                 probs.append(p)
                             if len(path) != 0:
@@ -305,7 +308,7 @@ class CaptioningSolver(object):
                                 p = path[:]
                                 p.append(k)
                                 samp_run = np.array([k+3])
-                                dic[idx] = (p, c_run , h_run, samp_run, x_run) # p is a path(list), and h is p's current hidden state
+                                dic[idx] = (p, c_run , h_run, alphas, samp_run, x_run) # p is a path(list), and h is p's current hidden state
                         count = 0
                         newPaths_info = []
                         newPathProbs = []
@@ -321,59 +324,10 @@ class CaptioningSolver(object):
                         pathProbs = newPathProbs
                         # print pathProbs
                     all_sam_cap.append(paths_info[0][0])
-                    # alphas = paths_info[0][3]
-                    # alpha_list = np.transpose(alphas, (1, 0, 2))     # (N, T, L)
-                    # all_alphas.append(alpha_list)
+                    alphas = paths_info[0][3]
+                    alpha_list = np.transpose(alphas, (1, 0, 2))     # (N, T, L)
+                    all_alphas.append(alpha_list)
                 all_decoded = decode_py_captions(all_sam_cap, self.model.idx_to_word)
                 save_pickle(all_decoded, "./nusdata/%s/%s.candidate.captions81_%s_%s.pkl" % \
                             (split, split, filename, THRES))
                 print "Time cost: ", time.time()- start_t
-            
-            image_file_name = 'visualization/'
-            if attention_visualization:
-                # plt.rcParams['figure.figsize'] = (8.0, 6.0)
-                # plt.rcParams['image.interpolation'] = 'nearest'
-                # plt.rcParams['figure.cmap'] = 'gray'
-                num_samples = len(all_decoded)
-                ran_arr = np.random.randint(num_samples, size=10)
-                reference = load_pickle('./nusdata/val/val.references81.pkl')
-                sample_file = open('sample.txt', 'w')
-                sample_file.write('Grountruth:\n')
-                for idx in ran_arr:
-                    sample_file.write(str(reference[idx][0][:-2])+'\n')
-                sample_file.write('\nSample:\n')
-                for n in range(10):
-                    k = ran_arr[n]
-                    print "Sampled Caption: %s" % all_decoded[k]
-                    sample_file.write(str(all_decoded[k]+'\n'))
-                    # Plot original image
-                    img = ndimage.imread(data['file_names'][k])
-                    # plt.subplot(4, 5, 1)
-                    # plt.imshow(img)
-                    # plt.axis('off')
-                    fname = 'origin' + str(n+1) + '.png'
-                    fname = image_file_name + fname
-                    plt.imsave(fname, img)
-                    # Plot images with attention weights
-                    words = all_decoded[k].split(" ")
-                    for t in range(len(words)):
-                        # plt.subplot(4, 5, t+2)
-                        # plt.text(0, 1, '%s(%.2f)'%(words[t], bts[n,t]) , color='black', backgroundcolor='white', fontsize=8)
-                        alp_curr = np.asarray(all_alphas[k][0][t][:]).reshape(14,14)
-                        alp_img = skimage.transform.pyramid_expand(alp_curr, upscale=16, sigma=20)
-                        fname = 'atten_' + str(n+1) + '_' + str(t) +'.png'
-                        fname = image_file_name + fname
-                        plt.imsave(fname, alp_img, cmap='gray')
-                        # plt.axis('off')
-                    # plt.show()
-            '''
-            if save_sampled_captions:
-                all_sam_cap = np.ndarray((features.shape[0], 25))
-                num_iter = int(np.ceil(float(features.shape[0]) / self.batch_size))
-                for i in range(num_iter):
-                    features_batch = features[i*self.batch_size:(i+1)*self.batch_size]
-                    feed_dict = { self.model.features: features_batch }
-                    all_sam_cap[i*self.batch_size:(i+1)*self.batch_size] = sess.run(sampled_captions, feed_dict)
-                all_decoded = decode_captions(all_sam_cap, self.model.idx_to_word)
-                save_pickle(all_decoded, "./data/%s/%s.candidate.captions81_beam.pkl" %(split,split))
-            '''

@@ -1,6 +1,6 @@
 from core.solver_noatt import CaptioningSolver
 from core.model_noatt import CaptionGenerator
-from core.utils import *
+from core.utils_nus import *
 import os
 import sys
 os.environ['CUDA_VISIBLE_DEVICES']='1'

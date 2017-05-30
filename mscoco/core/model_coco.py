@@ -146,7 +146,7 @@ class CaptionGenerator(object):
         with tf.variable_scope('logits', reuse=reuse):
             w_h = tf.get_variable('w_h', [self.H, self.V], initializer=self.weight_initializer)
             b_h = tf.get_variable('b_h', [self.V], initializer=self.const_initializer)
-            w_out = tf.get_variable('w_out', [self.V, self.V], initializer=self.weight_initializer)
+            w_out = tf.get_variable('w_out', [self.V + self.V, self.V], initializer=self.weight_initializer)
             b_out = tf.get_variable('b_out', [self.V], initializer=self.const_initializer)
 
             if dropout:
@@ -157,9 +157,10 @@ class CaptionGenerator(object):
                 w_ctx2out = tf.get_variable('w_ctx2out', [self.D, self.V], initializer=self.weight_initializer)
                 h_logits += tf.matmul(context, w_ctx2out)
 
-            if self.prev2out:
-                h_logits += x
             h_logits = tf.nn.tanh(h_logits)
+            if self.prev2out:
+                # h_logits += x
+                h_logits = tf.concat(1, [h_logits, x])
 
             if dropout:
                 h_logits = tf.nn.dropout(h_logits, 0.8)
@@ -300,12 +301,6 @@ class CaptionGenerator(object):
             _, (c, h) = lstm_cell(inputs=tf.concat(1, [x, context, init_pred]), state=[c, h])
 
         logits = self._decode_lstm(x, h, context)
-        # sampled_word_list.append(sampled_word)
-
-        # alphas = tf.transpose(tf.pack(alpha_list), (1, 0, 2))     # (N, T, L)
-        # betas = tf.transpose(tf.squeeze(beta_list), (1, 0))    # (N, T)
-        # sampled_captions = tf.transpose(tf.pack(sampled_word_list), (1, 0))     # (N, max_len)
-        # return alphas, betas, sampled_captions
         return logits, c, h, alpha, x
 
     def word_sampler(self):
@@ -324,16 +319,8 @@ class CaptionGenerator(object):
 
         if self.selector:
             context, beta = self._selector(context, h, reuse=True)
-        #    beta_list.append(beta)
 
         with tf.variable_scope('lstm', reuse=True):
             _, (c, h) = lstm_cell(inputs=tf.concat(1, [x, context, init_pred]), state=[c, h])
-
         logits = self._decode_lstm(x, h, context, reuse=True)
-        # sampled_word_list.append(sampled_word)
-
-        # alphas = tf.transpose(tf.pack(alpha_list), (1, 0, 2))     # (N, T, L)
-        # betas = tf.transpose(tf.squeeze(beta_list), (1, 0))    # (N, T)
-        # sampled_captions = tf.transpose(tf.pack(sampled_word_list), (1, 0))     # (N, max_len)
-        # return alphas, betas, sampled_captions
         return logits, c, h, alpha, x

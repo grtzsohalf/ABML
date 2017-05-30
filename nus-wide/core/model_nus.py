@@ -146,7 +146,7 @@ class CaptionGenerator(object):
         with tf.variable_scope('logits', reuse=reuse):
             w_h = tf.get_variable('w_h', [self.H, self.V], initializer=self.weight_initializer)
             b_h = tf.get_variable('b_h', [self.V], initializer=self.const_initializer)
-            w_out = tf.get_variable('w_out', [self.V, self.V], initializer=self.weight_initializer)
+            w_out = tf.get_variable('w_out', [self.V + self.V, self.V], initializer=self.weight_initializer)
             b_out = tf.get_variable('b_out', [self.V], initializer=self.const_initializer)
 
             if dropout:
@@ -157,9 +157,10 @@ class CaptionGenerator(object):
                 w_ctx2out = tf.get_variable('w_ctx2out', [self.D, self.V], initializer=self.weight_initializer)
                 h_logits += tf.matmul(context, w_ctx2out)
 
-            if self.prev2out:
-                h_logits += x
             h_logits = tf.nn.tanh(h_logits)
+            if self.prev2out:
+                # h_logits += x
+                h_logits = tf.concat(1, [h_logits, x])
 
             if dropout:
                 h_logits = tf.nn.dropout(h_logits, 0.8)
@@ -200,6 +201,7 @@ class CaptionGenerator(object):
         lstm_cell = tf.nn.rnn_cell.BasicLSTMCell(num_units=self.H)
 
         for t in range(self.T):
+
             context, alpha = self._attention_layer(features, features_proj, h, reuse=(t!=0))
             alpha_list.append(alpha)
 
@@ -289,6 +291,7 @@ class CaptionGenerator(object):
         c, h = self._get_initial_lstm(features=features)
         lstm_cell = tf.nn.rnn_cell.BasicLSTMCell(num_units=self.H)
         x = self._word_embedding(inputs=tf.fill([tf.shape(features)[0]], self._start), x=tf.zeros([self.V], tf.float32))
+
         context, alpha = self._attention_layer(features, features_proj, h)
         # alpha_list.append(alpha)
 
@@ -319,6 +322,7 @@ class CaptionGenerator(object):
         x = self.x
         lstm_cell = tf.nn.rnn_cell.BasicLSTMCell(num_units=self.H)
         x = self._word_embedding(inputs=sampled_word, x=x, reuse=True)
+
         context, alpha = self._attention_layer(features, features_proj, h, reuse=True)
         # alpha_list.append(alpha)
 

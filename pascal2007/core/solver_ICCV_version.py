@@ -8,7 +8,7 @@ import os
 import cPickle as pickle
 from scipy import ndimage
 from utils_pascal import *
-
+from math import *
 
 class CaptioningSolver(object):
     def __init__(self, model, data_path, **kwargs):
@@ -71,7 +71,7 @@ class CaptioningSolver(object):
         # build graphs for training model and sampling captions
         loss = self.model.build_model()
         tf.get_variable_scope().reuse_variables()
-        _, _, generated_captions = self.model.build_sampler(max_len=15)
+        _, _, generated_captions = self.model.build_sampler(max_len=7)
 
         # train op
         with tf.name_scope('optimizer'):
@@ -105,23 +105,22 @@ class CaptioningSolver(object):
                 saver.restore(sess, self.pretrained_model)
             prev_loss = -1
             curr_loss = 0
-            start_t = time.time()
             for e in range(self.n_epochs):
-                print '##################'
-                print 'epoch ' + str(e+1)
-                print '##################'
-                self.data = load_pascal_data(data_path=self.data_path, split='train', load_init_pred=True)
+                start_t = time.time()
+                print '****************'
+                print 'Epoch: ', e+1
+                print '****************'
+                self.data = load_coco_data(data_path=self.data_path, split='train')
                 n_examples = self.data['captions'].shape[0]
                 n_iters_per_part = int(np.ceil(float(n_examples)/self.batch_size))
                 features = self.data['features']
-                init_pred = self.data['init_pred']
                 captions = self.data['captions']
 
                 # groundtruth, logits_mask and end_time
                 groundtruth = np.zeros((n_examples, self.V), dtype=np.float32)
                 for n, caption in enumerate(captions):
                     for index in caption:
-                        if index > 2:
+                        if index > 0:
                             groundtruth[n][index] = 1.0
 
                 label_num = np.sum(groundtruth, axis=1)
@@ -142,21 +141,25 @@ class CaptioningSolver(object):
                 masks = masks[:, rand_idxs, :]
 
                 for i in range(n_iters_per_part):
+                    '''
+                    if i == n_iters_per_part - 1:
+                        continue
+                    '''
                     captions_batch = captions[i*self.batch_size:(i+1)*self.batch_size]
                     groundtruth_batch = groundtruth[i*self.batch_size:(i+1)*self.batch_size]
                     masks_batch = masks[:, i*self.batch_size:(i+1)*self.batch_size, :]
                     image_idxs_batch = image_idxs[i*self.batch_size:(i+1)*self.batch_size]
                     features_batch = features[image_idxs_batch]
-                    init_pred_batch = init_pred[image_idxs_batch]
                     self.model.set_batch_size(len(captions_batch))
+
                     # set end_time
                     feed_dict = {self.model.features: features_batch, 
                                     self.model.captions: captions_batch, 
-                                    self.model.init_pred: init_pred_batch, 
                                     self.model.groundtruth: groundtruth_batch, 
                                     self.model.masks: masks_batch}
                     _, l = sess.run([train_op, loss], feed_dict)
                     curr_loss += l
+
                     # write summary for tensorboard visualization
                     if i % 10 == 0:
                         summary = sess.run(summary_op, feed_dict)
@@ -171,15 +174,15 @@ class CaptioningSolver(object):
                         decoded = decode_captions(gen_caps, self.model.idx_to_word)
                         print "Generated caption: %s\n" %decoded[0]
 
-                print "Previous epoch loss: " , prev_loss
-                print "Current epoch loss: " , curr_loss
+                print "Previous epoch loss: ", prev_loss
+                print "Current epoch loss: ", curr_loss
                 print "Elapsed time: ", time.time() - start_t
                 prev_loss = curr_loss
                 curr_loss = 0
                 # save model's parameters
                 if (e+1) % self.save_every == 0:
-                    saver.save(sess, os.path.join(self.model_path, 'pascal_init_pred'), global_step=e+1)
-                    print "pascal_init_pred-%s saved." %(e+1)
+                    saver.save(sess, os.path.join(self.model_path, 'pascal_emb'), global_step=e+1)
+                    print "pascal_emb-%s saved." %(e+1)
 
     def softmax(self, array):
         total = 0.0
@@ -193,77 +196,6 @@ class CaptioningSolver(object):
         for i in range(len(array)):
             array[i] = 1/(1 + np.exp(-array[i]))
         return array
-
-    def evaluate(self, feature, thres, resultFile):
-        feature = np.array(feature)
-        feature = np.transpose(feature, (1, 0, 2))
-        loaded_reference = load_pickle('/home/jason6582/sfyc/attention-tensorflow/pascal2007/pascaldata/val/val.references.pkl')
-        reference = []
-        for key, value in loaded_reference.iteritems():
-            answer = []
-            for label in value[0]:
-                answer.append(label-3)
-            reference.append(answer)
-        g = open(resultFile, 'w')
-
-        word_to_idx = load_word_to_idx(data_path='/home/jason6582/sfyc/attention-tensorflow/pascal2007/pascaldata',\
-                      split='train')
-        idx_to_word = {i:w for w, i in word_to_idx.iteritems()}
-        sum_feature = np.reshape(sum(feature)/3, (1, -1, 20))
-        feature = np.concatenate((feature, sum_feature))
-
-        for iter_num, iteration in enumerate(feature):
-            refsNum = 0
-            cansNum = 0
-            correctNum = 0
-            classwise_num = np.zeros((3,20))
-            num = 0
-            for i in range(len(iteration)):
-                cans = []
-                for j, label in enumerate(iteration[i]):
-                    if label > thres:
-                        cans.append(j)
-                if len(cans) == 0:
-                    cans.append(int(np.argmax(iteration[i])))
-                cansNum += len(cans)
-                refs = reference[i]
-                refsNum += len(refs)
-                refsDict = {}
-                correct = 0
-                for c in cans:
-                    refsDict[c] = 0  # follow idx of word_to_idx (keep 0, 1, 2)
-                    classwise_num[0][c] += 1.0 # idx start from 0 for convenience
-                for r in refs:
-                    refsDict[r] = 1
-                    classwise_num[1][r] += 1.0
-                for c in cans:
-                    if refsDict[c] == 1:
-                        correct += 1
-                        classwise_num[2][c] += 1.0
-                correctNum += correct
-            recall = float(correctNum)/float(refsNum)
-            precision = float(correctNum)/float(cansNum)
-            o_f1 = 2.0/((1.0/recall) + (1.0/precision))
-            for i in range(len(classwise_num[0])):
-                if classwise_num[0][i] == 0.0:
-                    classwise_num[0][i] = 1.0
-            for i in range(len(classwise_num[1])):
-                if classwise_num[1][i] == 0.0:
-                    classwise_num[1][i] = 1.0
-            recall_arr = classwise_num[2] / classwise_num[1]
-            precision_arr = classwise_num[2] / classwise_num[0]
-            # precision_arr = np.divide(classwise_num[2], classwise_num[0])
-            c_recall = np.mean(recall_arr)
-            c_precision = np.mean(precision_arr)
-            c_f1 = 2.0/((1.0/c_recall) + (1.0/c_precision))
-            g.write('Iteration: ' + str(iter_num+1) + '\n')
-            g.write('O-R: ' + str(recall) + '\n')
-            g.write('O-P: ' + str(precision) + '\n')
-            g.write('O-F1: ' + str(o_f1) + '\n')
-            g.write('C-R: ' + str(c_recall) + '\n')
-            g.write('C-P: ' + str(c_precision) + '\n')
-            g.write('C-F1: ' + str(c_f1) + '\n')
-            g.write('Average: ' + str((c_f1+o_f1)/2) + '\n\n')
 
     def test(self, data, split='train', attention_visualization=True, save_sampled_captions=True,\
              filename='', thres=0.0):
@@ -281,7 +213,19 @@ class CaptioningSolver(object):
         '''
 
         features = data['features']
-        init_pred = data['init_pred']
+        reference = load_pickle('./pascaldata/%s/%s.references.pkl' %(split, split))
+        merge_reference = []
+        for key, value in reference.iteritems():
+            merge_list = []
+            for label in value[0]:
+                merge_list += [int(label)-3]
+            merge_reference += [merge_list]
+        reference = merge_reference
+        #print reference
+        ap_list = []
+        for i in range(20):
+            ap_list.append([])
+
         # build a graph to sample captions
         config = tf.ConfigProto(allow_soft_placement=True)
         config.gpu_options.allow_growth = True
@@ -290,71 +234,111 @@ class CaptioningSolver(object):
         with tf.Session(config=config) as sess:
             saver = tf.train.Saver()
             saver.restore(sess, self.test_model)
-            MAX_LEN = 3
+            # features_batch, image_files = sample_coco_minibatch(data, self.batch_size)
+            # feed_dict = { self.model.features: features_batch }
+            MAX_LEN = 20
+            K = 1 # beam search width
+            # all_sam_cap = np.zeros((features.shape[0], MAX_LEN), dtype = int)
             num_iter = features.shape[0]
             start_t = time.time()
             for thres_iter in range(1):
-                all_prediction = []
+                all_sam_cap = []
                 all_alphas = []
+                # THRES = 0.05*(thres_iter+1)
+                THRES = thres
                 for i in range(num_iter):
                     if i % 50 == 0:
                         print "Iteration: ", i
                     features_batch = features[i:i+1]
-                    init_pred_batch = init_pred[i:i+1]
+                    pathProbs = []
+                    for k in range(K):
+                        pathProbs.append(1.0)
+
                     x_run = None
-                    prediction = []
+                    history = {}
+                    predicted = []
                     for t in range(MAX_LEN): # time step
                         dic = {}
-                        if t == 0:
-                            path = []
-                            alphas = []
-                            feed_dict = { self.model.features: features_batch, 
-                                            self.model.init_pred: init_pred_batch}
-                            probsNumpy, c_run, h_run, alpha_run, x_run = \
-                            sess.run([probabilities_start, c_start, h_start, alpha_start, \
-                                        x_start], feed_dict)
-                            probsNumpy = probsNumpy.reshape(self.V)
-                        else:
-                            path, c_run, h_run, alphas, samp_run, x_run = paths_info[0]
-                            feed_dict = { self.model.features: features_batch,
-                                            self.model.init_pred: init_pred_batch,
-                                            self.model.c: c_run,
-                                            self.model.h: h_run,
-                                            self.model.samp: samp_run,
-                                            self.model.x: x_run }
-                            probsNumpy, c_run, h_run, alpha_run, x_run = \
-                            sess.run([probabilities, c, h, alpha, x], feed_dict)
-                            probsNumpy = probsNumpy.reshape(self.V)
-                        alphas.append(alpha_run)
-                        probsNumpy = self.sigmoid(probsNumpy)
-                        probs = []
-                        for p in probsNumpy:
-                            probs.append(p)
-                        prediction.append(probs)
-                        # if len(path) != 0:
-                        #     for predicted in path:
-                        #         probs[predicted] = 0
-                        for k in range(len(probs)):
-                            idx = probs[k]
-                            p = path[:]
-                            p.append(k)
-                            samp_run = np.array([k+3])
-                            dic[idx] = (p, c_run , h_run, alphas, samp_run, x_run) # p is a path(list), and h is p's current hidden state
+                        for j in range(K):
+                            if t == 0:
+                                path = []
+                                alphas = []
+                                feed_dict = { self.model.features: features_batch }
+                                probsNumpy, c_run, h_run, alpha_run, x_run = \
+                                sess.run([probabilities_start, c_start, h_start, alpha_start, \
+                                          x_start], feed_dict)
+                                probsNumpy = probsNumpy.reshape(self.V)
+                            else:
+                                path, c_run, h_run, alphas, samp_run, x_run = paths_info[j]
+                                feed_dict = { self.model.features: features_batch,
+                                                self.model.c: c_run,
+                                                self.model.h: h_run,
+                                                self.model.samp: samp_run,
+                                                self.model.x: x_run }
+                                probsNumpy, c_run, h_run, alpha_run, x_run = \
+                                sess.run([probabilities, c, h, alpha, x], feed_dict)
+                                probsNumpy = probsNumpy.reshape(self.V)
+                            probsNumpy = self.sigmoid(probsNumpy)
+                            if t == 0:
+                                for q in range(len(probsNumpy)):
+                                    history[q] = probsNumpy[q]
+                            else:
+                                for q in range(len(probsNumpy)):
+                                    if q not in predicted:
+                                        history[q] = probsNumpy[q] + history[q]
+                            probs = [p for p in probsNumpy]
+                            if len(path) != 0:
+                                for predicted_idx in path:
+                                    probs[predicted_idx] = 0
+                            argMax = np.argmax(np.asarray(probs))
+                            history[argMax] = history[argMax] /float(t+1)
+                            predicted.append(argMax)
+                            alphas.append(alpha_run)
+                            for k in range(len(probs)):
+                                idx = probs[k] * pathProbs[j]
+                                p = path[:]
+                                p.append(k)
+                                samp_run = np.array([k+3])
+                                dic[idx] = (p, c_run , h_run, alphas, samp_run, x_run) # p is a path(list), and h is p's current hidden state
+                        count = 0
                         newPaths_info = []
+                        newPathProbs = []
                         for key in reversed(sorted(dic.iterkeys())):
+                            count += 1
+                            if count > K:
+                                break
                             newPaths_info.append(dic[key][:])
-                            break
+                            # print newPaths_info[0]
+                            newPathProbs.append(key)
+                        if t != 0:
+                            if newPathProbs[0] < THRES:
+                                break
                         paths_info = newPaths_info
-                        # print pathProbs
-                    all_prediction.append(prediction)
+                        pathProbs = newPathProbs
+                        #all_sam_cap.append(paths_info[0][0])
+                    for y in range(20):
+                        if y not in predicted:
+                            history[y] = history[y] / float(MAX_LEN)
+                        all_sam_cap.append((y, history[y]))
                     alphas = paths_info[0][3]
                     alpha_list = np.transpose(alphas, (1, 0, 2))     # (N, T, L)
                     all_alphas.append(alpha_list)
-                save_file = 'result__0.3.txt'
-                self.evaluate(all_prediction, 0.3, save_file)
-                print save_file, "saved."
+                #print all_sam_cap
+                sam_cap = [t[0] for t in all_sam_cap]
+                sam_prob = [t[1] for t in all_sam_cap]
+                #print sam_cap
+                #print sam_prob
+                #all_decoded = decode_py_captions([s[0] for s in all_sam_cap], self.model.idx_to_word)
+                for o, sam in enumerate(sam_cap):
+                    #print 'sam', sam
+                    if sam in reference[int(floor(o/20))]:
+                        #print reference[int(floor(o/20))]
+                        ap_list[sam].append((sam_prob[o], 1))
+                    else:
+                        ap_list[sam].append((sam_prob[o], 0))
+                save_pickle(ap_list, "./pascaldata/%s/%s.candidate.captions_%s_%s.pkl" % \
+                            (split, split, filename, THRES))
                 print "Time cost: ", time.time()- start_t
-
             image_file_name = 'visualization/'
             if attention_visualization:
                 # plt.rcParams['figure.figsize'] = (8.0, 6.0)
@@ -362,13 +346,11 @@ class CaptioningSolver(object):
                 # plt.rcParams['figure.cmap'] = 'gray'
                 num_samples = len(all_decoded)
                 ran_arr = np.random.randint(num_samples, size=10)
-                reference = load_pickle('./pascaldata/val/val.references.pkl')
+                reference = load_pickle('./pascaldata/%s/%s.references.pkl' %(split, split))
                 sample_file = open('sample.txt', 'w')
                 sample_file.write('Grountruth:\n')
                 for idx in ran_arr:
-                    for key in reference[idx][0].split()[:-1]:
-                        sample_file.write(self.model.idx_to_word[int(key)+3] +' ')
-                    sample_file.write('\n')
+                    sample_file.write(str(reference[idx][0][:-2])+'\n')
                 sample_file.write('\nSample:\n')
                 for n in range(10):
                     k = ran_arr[n]
@@ -394,3 +376,14 @@ class CaptioningSolver(object):
                         plt.imsave(fname, alp_img, cmap='gray')
                         # plt.axis('off')
                     # plt.show()
+            '''
+            if save_sampled_captions:
+                all_sam_cap = np.ndarray((features.shape[0], 25))
+                num_iter = int(np.ceil(float(features.shape[0]) / self.batch_size))
+                for i in range(num_iter):
+                    features_batch = features[i*self.batch_size:(i+1)*self.batch_size]
+                    feed_dict = { self.model.features: features_batch }
+                    all_sam_cap[i*self.batch_size:(i+1)*self.batch_size] = sess.run(sampled_captions, feed_dict)
+                all_decoded = decode_captions(all_sam_cap, self.model.idx_to_word)
+                save_pickle(all_decoded, "./data/%s/%s.candidate.captions81_beam.pkl" %(split,split))
+            '''

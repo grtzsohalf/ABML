@@ -24,12 +24,10 @@ def _process_caption_data(caption_file, image_dir, max_length=7):
         idx_counter[cate['name']] = 0
         idx_to_word[cate['id']] = cate['name']
         dic[cate['name']] = 0
-    print idx_to_word
     idx = 3
     for key in sorted(dic.iterkeys()):
         word_to_idx[key] = idx
         idx += 1
-    print word_to_idx
     # id_to_filename is a dictionary such as {image_id: filename]}
     id_to_filename = {image['id']: image['file_name'] for image in caption_data['images']}
     # data is a list of dictionary which contains 'captions', 'file_name' and 'image_id' as key.
@@ -70,39 +68,11 @@ def _process_caption_data(caption_file, image_dir, max_length=7):
     caption_data.sort_values(by='image_id', inplace=True)
     caption_data = caption_data.reset_index(drop=True)
     
-    '''
-    del_idx = []
-    for i, caption in enumerate(caption_data['caption']):
-        caption = caption.replace('.','').replace(',','').replace("'","").replace('"','')
-        caption = caption.replace('&','and').replace('(','').replace(")","").replace('-',' ')
-        caption = " ".join(caption.split())  # replace multiple spaces
-        caption_data.set_value(i, 'caption', caption.lower())
-        if len(caption.split(" ")) > max_length:
-            del_idx.append(i)
-    
-    # delete captions if size is larger than max_length
-    print "The number of captions before deletion: %d" %len(caption_data)
-    caption_data = caption_data.drop(caption_data.index[del_idx])
-    caption_data = caption_data.reset_index(drop=True)
-    '''
     print "The number of captions: %d" %len(caption_data)
     return caption_data, word_to_idx
 
 
 def _build_vocab(caption_file, threshold=1):
-    '''
-    counter = Counter()
-    max_len = 0
-    for i, caption in enumerate(annotations['caption']):
-        words = caption.split(' ') # caption contrains only lower-case words
-        for w in words:
-            counter[w] +=1
-        if len(caption.split(" ")) > max_len:
-            max_len = len(caption.split(" "))
-
-    vocab = [word for word in counter if counter[word] >= threshold]
-    print ('Filtered %d words to %d words with word count threshold %d.' % (len(counter), len(vocab), threshold))
-    '''
     with open(caption_file) as f:
         caption_data = json.load(f)
     word_to_idx = {u'<NULL>': 0, u'<START>': 1, u'<END>': 2}
@@ -125,11 +95,6 @@ def _build_caption_vector(annotations, word_to_idx, max_length=7):
         cap_vec.append(word_to_idx['<START>'])
         for label in caption:
             cap_vec.append(label)
-        '''
-        for word in words:
-            if word in word_to_idx:
-                cap_vec.append(word_to_idx[word])
-        '''
         cap_vec.append(word_to_idx['<END>'])
         
         # pad short caption with the special null token '<NULL>' to make it fixed-size vector
@@ -173,22 +138,23 @@ def main():
     # if word occurs less than word_count_threshold in training dataset, the word index is special unknown token.
     word_count_threshold = 1
     # vgg model path
-    vgg_model_path = '/home/jason6582/sfyc/attention-tensorflow/imagenet-vgg-verydeep-19.mat'
+    # vgg_model_path = '/home/jason6582/sfyc/attention-tensorflow/imagenet-vgg-verydeep-19.mat'
 
     train_caption_file = '/home/jason6582/sfyc/pascal_json/pascal_train2007.json'
     val_caption_file = '/home/jason6582/sfyc/pascal_json/pascal_val2007.json'
     test_caption_file = '/home/jason6582/sfyc/pascal_json/pascal_test2007.json'
     train_dataset, word_to_idx = _process_caption_data(caption_file=train_caption_file,
-                    image_dir='/home/jason6582/sfyc/voc_train/resized_image/', max_length=7)
+                    image_dir='/home/jason6582/sfyc/voc_train/resized_images/', max_length=7)
     val_dataset, word_to_idx = _process_caption_data(caption_file=val_caption_file,
-                    image_dir='/home/jason6582/sfyc/voc_train/resized_image/', max_length=20)
+                    image_dir='/home/jason6582/sfyc/voc_train/resized_images/', max_length=7)
     test_dataset, _ = _process_caption_data(caption_file=test_caption_file,
-                    image_dir='/home/jason6582/sfyc/voc_test/resized_image/', max_length=20)
+                    image_dir='/home/jason6582/sfyc/voc_test/resized_images/', max_length=7)
 
-    # about 4000 images and 20000 captions for val / test dataset
     print 'Finished processing caption data'
     train_dataset = pd.concat([train_dataset, val_dataset[250:]]).reset_index(drop=True)
     val_dataset = val_dataset[:250]
+    print len(train_dataset)
+    print len(val_dataset)
 
     save_pickle(train_dataset, 'pascaldata/train/train.annotations.pkl')
     save_pickle(val_dataset, 'pascaldata/val/val.annotations.pkl')
@@ -224,6 +190,7 @@ def main():
         print "Finished building %s caption dataset" %split
 
     # extract conv5_3 feature vectors
+    '''
     vggnet = Vgg19(vgg_model_path)
     vggnet.build()
     with tf.Session() as sess:
@@ -247,6 +214,7 @@ def main():
                 # use hickle to save huge feature vectors
             hickle.dump(all_feats, save_path)
             print ("Saved %s.." % (save_path))
+    '''
 
 if __name__ == "__main__":
     main()

@@ -186,8 +186,8 @@ class CaptioningSolver(object):
                     curr_loss[p] = 0
                 # save model's parameters
                 if (e+1) % self.save_every == 0:
-                    saver.save(sess, os.path.join(self.model_path, 'mscoco_init_pred_concat'), global_step=e+1)
-                    print "mscoco_init_pred_concat-%s saved." %(e+1)
+                    saver.save(sess, os.path.join(self.model_path, 'mscoco_init_pred'), global_step=e+1)
+                    print "mscoco_init_pred-%s saved." %(e+1)
 
     def softmax(self, array):
         total = 0.0
@@ -218,13 +218,12 @@ class CaptioningSolver(object):
         '''
 
         features = data['features']
-        init_pred = data['init_pred']
-
+        init_pred_feat = data['init_pred']
         # build a graph to sample captions
         config = tf.ConfigProto(allow_soft_placement=True)
         config.gpu_options.allow_growth = True
-        probabilities_start, c_start, h_start, alpha_start, x_start = self.model.init_sampler()
-        probabilities, c, h, alpha, x = self.model.word_sampler()
+        probabilities_start, c_start, h_start, alpha_start, x_start, init_pred_start = self.model.init_sampler()
+        probabilities, c, h, alpha, x, init_pred = self.model.word_sampler()
         with tf.Session(config=config) as sess:
             saver = tf.train.Saver()
             saver.restore(sess, self.test_model)
@@ -244,12 +243,13 @@ class CaptioningSolver(object):
                     if i % 50 == 0:
                         print "Iteration: ", i
                     features_batch = features[i:i+1]
-                    init_pred_batch = init_pred[i:i+1]
+                    init_pred_batch = init_pred_feat[i:i+1]
                     pathProbs = []
                     for k in range(K):
                         pathProbs.append(1.0)
 
                     x_run = None
+                    init_pred_run = None
                     for t in range(MAX_LEN): # time step
                         dic = {}
                         for j in range(K):
@@ -258,20 +258,20 @@ class CaptioningSolver(object):
                                 alphas = []
                                 feed_dict = { self.model.features: features_batch, 
                                               self.model.init_pred: init_pred_batch}
-                                probsNumpy, c_run, h_run, alpha_run, x_run = \
+                                probsNumpy, c_run, h_run, alpha_run, x_run, init_pred_run = \
                                 sess.run([probabilities_start, c_start, h_start, alpha_start, \
-                                          x_start], feed_dict)
+                                          x_start, init_pred_start], feed_dict)
                                 probsNumpy = probsNumpy.reshape(self.V)
                             else:
-                                path, c_run, h_run, alphas, samp_run, x_run = paths_info[j]
+                                path, c_run, h_run, alphas, samp_run, x_run, init_pred_run = paths_info[j]
                                 feed_dict = { self.model.features: features_batch,
-                                              self.model.init_pred: init_pred_batch,
                                                 self.model.c: c_run,
                                                 self.model.h: h_run,
                                                 self.model.samp: samp_run,
-                                                self.model.x: x_run }
-                                probsNumpy, c_run, h_run, alpha_run, x_run = \
-                                sess.run([probabilities, c, h, alpha, x], feed_dict)
+                                                self.model.x: x_run,
+                                                self.model.init_pred: init_pred_run}
+                                probsNumpy, c_run, h_run, alpha_run, x_run, init_pred_run = \
+                                sess.run([probabilities, c, h, alpha, x, init_pred], feed_dict)
                                 probsNumpy = probsNumpy.reshape(self.V)
                             # probsNumpy = self.softmax(probsNumpy)
                             probsNumpy = self.sigmoid(probsNumpy)
@@ -287,7 +287,7 @@ class CaptioningSolver(object):
                                 p = path[:]
                                 p.append(k)
                                 samp_run = np.array([k+3])
-                                dic[idx] = (p, c_run , h_run, alphas, samp_run, x_run) # p is a path(list), and h is p's current hidden state
+                                dic[idx] = (p, c_run , h_run, alphas, samp_run, x_run, init_pred_run) # p is a path(list), and h is p's current hidden state
                         count = 0
                         newPaths_info = []
                         newPathProbs = []

@@ -2,11 +2,11 @@ from core.solver_pascal import CaptioningSolver
 from core.model_pascal import CaptionGenerator
 from core.utils_pascal import *
 import os
-os.environ['CUDA_VISIBLE_DEVICES']='1'
+os.environ['CUDA_VISIBLE_DEVICES']='0'
 
 def main():
     word_to_idx = load_word_to_idx(data_path='./pascaldata', split='train')
-    model = CaptionGenerator(word_to_idx, dim_feature=[196, 512], dim_embed=64,
+    model = CaptionGenerator(word_to_idx, dim_feature=[196, 1024], dim_embed=64,
                             dim_hidden=1024, n_time_step=8, prev2out=True,
                             ctx2out=True, alpha_c=1.0, selector=True, dropout=True, batch_size=128)
     data_path = './pascaldata'

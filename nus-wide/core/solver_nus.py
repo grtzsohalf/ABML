@@ -182,6 +182,7 @@ class CaptioningSolver(object):
                         if i % 10 == 0:
                             summary = sess.run(summary_op, feed_dict)
                             summary_writer.add_summary(summary, e*n_iters_per_part + i)
+
                         if (i+1) % self.print_every == 0:
                             # print "\nTrain loss at epoch %d & iteration %d (mini-batch): %.5f" %(e+1, i+1, l)
                             ground_truths = captions[image_idxs == image_idxs_batch[0]]

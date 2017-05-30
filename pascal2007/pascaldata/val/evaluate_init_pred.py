@@ -1,16 +1,19 @@
 import sys
 import numpy as np
-sys.path.append('/home/jason6582/sfyc/attention-tensorflow/mscoco')
+sys.path.append('/home/jason6582/sfyc/attention-tensorflow/pascal2007')
 
-from core.utils_coco import *
+from core.utils_pascal import *
 import hickle
-reference = load_pickle('val.references.pkl')
-for key, value in reference.iteritems():
-    reference[key] = [int(idx) for idx in value[0].split()[:-1]]
-print reference
+loaded_reference = load_pickle('val.references.pkl')
+reference = []
+for key, value in loaded_reference.iteritems():
+    answer = []
+    for label in value[0]:
+        answer.append(label-3)
+    reference.append(answer)
 
 init_pred = hickle.load('val.init.pred.hkl')
-thres = 0.3
+thres = 0.4
 candidate = []
 for instance in init_pred:
     pred = []
@@ -21,14 +24,15 @@ for instance in init_pred:
         pred.append(np.argmax(instance))
     candidate.append(pred)
 
-g = open('result_init_max_0.3.txt', 'w')
-word_to_idx = load_word2idx(data_path='/home/jason6582/sfyc/attention-tensorflow/mscoco/cocodata', split='train')
+g = open('result_init_0.4.txt', 'w')
+word_to_idx = load_word_to_idx(data_path='/home/jason6582/sfyc/attention-tensorflow/pascal2007/pascaldata',\
+                            split='train')
 idx_to_word = {i:w for w, i in word_to_idx.iteritems()}
 
 refsNum = 0
 cansNum = 0
 correctNum = 0
-classwise_num = np.zeros((3,80))
+classwise_num = np.zeros((3,20))
 num = 0
 for i in range(len(candidate)):
     refs = reference[i]

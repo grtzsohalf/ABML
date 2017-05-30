@@ -1,9 +1,9 @@
-from core.solver_coco import CaptioningSolver
-from core.model_coco import CaptionGenerator
+from core.solver_only_recursive_overall import CaptioningSolver
+from core.model_only_recursive import CaptionGenerator
 from core.utils_coco import *
 import os
 import sys
-os.environ['CUDA_VISIBLE_DEVICES']='1'
+os.environ['CUDA_VISIBLE_DEVICES']='0'
 
 modelname = sys.argv[1]
 filename = sys.argv[2]

@@ -194,76 +194,43 @@ class CaptioningSolver(object):
             array[i] = 1/(1 + np.exp(-array[i]))
         return array
 
-    def evaluate(self, feature, thres, resultFile):
-        feature = np.array(feature)
-        feature = np.transpose(feature, (1, 0, 2))
-        loaded_reference = load_pickle('/home/jason6582/sfyc/attention-tensorflow/pascal2007/pascaldata/val/val.references.pkl')
-        reference = []
+    def evaluate(self, predict, resultFile):
+        predict = np.array(predict)
+        predict = np.transpose(predict, (1, 0))
+        loaded_reference = load_pickle('/home/jason6582/sfyc/attention-tensorflow/pascal2007/pascaldata/test/test.references.pkl')
+        reference = np.zeros(predict.shape)
         for key, value in loaded_reference.iteritems():
             answer = []
             for label in value[0]:
-                answer.append(label-3)
-            reference.append(answer)
+                reference[label-3][key] = 1
         g = open(resultFile, 'w')
-
         word_to_idx = load_word_to_idx(data_path='/home/jason6582/sfyc/attention-tensorflow/pascal2007/pascaldata',\
                       split='train')
         idx_to_word = {i:w for w, i in word_to_idx.iteritems()}
-        sum_feature = np.reshape(sum(feature)/3, (1, -1, 20))
-        feature = np.concatenate((feature, sum_feature))
-
-        for iter_num, iteration in enumerate(feature):
-            refsNum = 0
-            cansNum = 0
-            correctNum = 0
-            classwise_num = np.zeros((3,20))
-            num = 0
-            for i in range(len(iteration)):
-                cans = []
-                for j, label in enumerate(iteration[i]):
-                    if label > thres:
-                        cans.append(j)
-                if len(cans) == 0:
-                    cans.append(int(np.argmax(iteration[i])))
-                cansNum += len(cans)
-                refs = reference[i]
-                refsNum += len(refs)
-                refsDict = {}
-                correct = 0
-                for c in cans:
-                    refsDict[c] = 0  # follow idx of word_to_idx (keep 0, 1, 2)
-                    classwise_num[0][c] += 1.0 # idx start from 0 for convenience
-                for r in refs:
-                    refsDict[r] = 1
-                    classwise_num[1][r] += 1.0
-                for c in cans:
-                    if refsDict[c] == 1:
-                        correct += 1
-                        classwise_num[2][c] += 1.0
-                correctNum += correct
-            recall = float(correctNum)/float(refsNum)
-            precision = float(correctNum)/float(cansNum)
-            o_f1 = 2.0/((1.0/recall) + (1.0/precision))
-            for i in range(len(classwise_num[0])):
-                if classwise_num[0][i] == 0.0:
-                    classwise_num[0][i] = 1.0
-            for i in range(len(classwise_num[1])):
-                if classwise_num[1][i] == 0.0:
-                    classwise_num[1][i] = 1.0
-            recall_arr = classwise_num[2] / classwise_num[1]
-            precision_arr = classwise_num[2] / classwise_num[0]
-            # precision_arr = np.divide(classwise_num[2], classwise_num[0])
-            c_recall = np.mean(recall_arr)
-            c_precision = np.mean(precision_arr)
-            c_f1 = 2.0/((1.0/c_recall) + (1.0/c_precision))
-            g.write('Iteration: ' + str(iter_num+1) + '\n')
-            g.write('O-R: ' + str(recall) + '\n')
-            g.write('O-P: ' + str(precision) + '\n')
-            g.write('O-F1: ' + str(o_f1) + '\n')
-            g.write('C-R: ' + str(c_recall) + '\n')
-            g.write('C-P: ' + str(c_precision) + '\n')
-            g.write('C-F1: ' + str(c_f1) + '\n')
-            g.write('Average: ' + str((c_f1+o_f1)/2) + '\n\n')
+        # feature = np.concatenate((feature, sum_feature))
+        label_list = ['aeroplane', 'bicycle', 'bird', 'boat', 'bottle', 'bus', 'car', 'cat', \
+                      'chair', 'cow', 'dining_table', 'dog', 'horse', 'motorbike', 'person', \
+                      'plant', 'sheep', 'sofa', 'train', 'tv']
+        all_map = []
+        for i, label in enumerate(label_list):
+            map_dic = {}
+            for j, instance in enumerate(reference[i]):
+                map_dic[predict[i][j]] = reference[i][j]
+            map_list = []
+            total_count = 0.0
+            correct_count = 0.0
+            for key in reversed(sorted(map_dic.iterkeys())):
+                total_count += 1.0
+                if map_dic[key] == 1:
+                    correct_count += 1.0
+                    map_list.append(correct_count/total_count)
+            l = len(map_list)
+            for i in range(l-1):
+                if map_list[l-i-1] > map_list[l-i-2]:
+                    map_list[l-i-2] = map_list[l-i-1]
+            all_map.append(sum(map_list)/len(map_list))
+            g.write(label + '\nmAP: ' + str(sum(map_list)/len(map_list)) + '\n\n')
+        g.write('Average: ' + str(sum(all_map)/len(all_map)))
 
     def test(self, data, split='train', attention_visualization=True, save_sampled_captions=True,\
              filename='', thres=0.0):
@@ -290,11 +257,11 @@ class CaptioningSolver(object):
         with tf.Session(config=config) as sess:
             saver = tf.train.Saver()
             saver.restore(sess, self.test_model)
-            MAX_LEN = 3
+            MAX_LEN = 1
             num_iter = features.shape[0]
             start_t = time.time()
             for thres_iter in range(1):
-                all_prediction = []
+                prediction = []
                 all_alphas = []
                 for i in range(num_iter):
                     if i % 50 == 0:
@@ -302,7 +269,6 @@ class CaptioningSolver(object):
                     features_batch = features[i:i+1]
                     init_pred_batch = init_pred[i:i+1]
                     x_run = None
-                    prediction = []
                     for t in range(MAX_LEN): # time step
                         dic = {}
                         if t == 0:
@@ -345,13 +311,8 @@ class CaptioningSolver(object):
                             newPaths_info.append(dic[key][:])
                             break
                         paths_info = newPaths_info
-                        # print pathProbs
-                    all_prediction.append(prediction)
-                    alphas = paths_info[0][3]
-                    alpha_list = np.transpose(alphas, (1, 0, 2))     # (N, T, L)
-                    all_alphas.append(alpha_list)
-                save_file = 'result__0.3.txt'
-                self.evaluate(all_prediction, 0.3, save_file)
+                save_file = 'result_map.txt'
+                self.evaluate(prediction, save_file)
                 print save_file, "saved."
                 print "Time cost: ", time.time()- start_t
 
