@@ -239,9 +239,7 @@ class CaptioningSolver(object):
 
         features = data['features']
         init_pred = data['init_pred']
-
         # build a graph to sample captions
-
         config = tf.ConfigProto(allow_soft_placement=True)
         config.gpu_options.allow_growth = True
         probabilities_start, c_start, h_start, alpha_start, x_start = self.model.init_sampler()
@@ -334,9 +332,6 @@ class CaptioningSolver(object):
 
             image_file_name = 'visualization/'
             if attention_visualization:
-                # plt.rcParams['figure.figsize'] = (8.0, 6.0)
-                # plt.rcParams['image.interpolation'] = 'nearest'
-                # plt.rcParams['figure.cmap'] = 'gray'
                 num_samples = len(all_decoded)
                 reference = load_pickle('./nusdata/val/val.references81.pkl')
                 sample_file = open('sample.txt', 'w')

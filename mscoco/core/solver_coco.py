@@ -228,17 +228,13 @@ class CaptioningSolver(object):
         with tf.Session(config=config) as sess:
             saver = tf.train.Saver()
             saver.restore(sess, self.test_model)
-            # features_batch, image_files = sample_coco_minibatch(data, self.batch_size)
-            # feed_dict = { self.model.features: features_batch }
             MAX_LEN = 15
             K = 3 # beam search width
-            # all_sam_cap = np.zeros((features.shape[0], MAX_LEN), dtype = int)
             num_iter = features.shape[0]
             start_t = time.time()
             for thres_iter in range(1):
                 all_sam_cap = []
                 all_alphas = []
-                # THRES = 0.05*(thres_iter+1)
                 THRES = thres
                 for i in range(num_iter):
                     if i % 50 == 0:
@@ -256,7 +252,7 @@ class CaptioningSolver(object):
                             if t == 0:
                                 path = []
                                 alphas = []
-                                feed_dict = { self.model.features: features_batch, 
+                                feed_dict = { self.model.features: features_batch,
                                               self.model.init_pred: init_pred_batch}
                                 probsNumpy, c_run, h_run, alpha_run, x_run = \
                                 sess.run([probabilities_start, c_start, h_start, alpha_start, \
@@ -273,7 +269,6 @@ class CaptioningSolver(object):
                                 probsNumpy, c_run, h_run, alpha_run, x_run = \
                                 sess.run([probabilities, c, h, alpha, x], feed_dict)
                                 probsNumpy = probsNumpy.reshape(self.V)
-                            # probsNumpy = self.softmax(probsNumpy)
                             probsNumpy = self.sigmoid(probsNumpy)
                             probs = []
                             alphas.append(alpha_run)
@@ -301,7 +296,6 @@ class CaptioningSolver(object):
                             break
                         paths_info = newPaths_info
                         pathProbs = newPathProbs
-                        # print pathProbs
                     all_sam_cap.append(paths_info[0][0])
                     alphas = paths_info[0][3]
                     alpha_list = np.transpose(alphas, (1, 0, 2))     # (N, T, L)
@@ -313,9 +307,6 @@ class CaptioningSolver(object):
 
             image_file_name = 'visualization/'
             if attention_visualization:
-                # plt.rcParams['figure.figsize'] = (8.0, 6.0)
-                # plt.rcParams['image.interpolation'] = 'nearest'
-                # plt.rcParams['figure.cmap'] = 'gray'
                 num_samples = len(all_decoded)
                 ran_arr = np.random.randint(num_samples, size=10)
                 reference = load_pickle('./cocodata/val/val.references.pkl')
@@ -348,5 +339,3 @@ class CaptioningSolver(object):
                         fname = 'atten_' + str(n+1) + '_' + str(t) +'.png'
                         fname = image_file_name + fname
                         plt.imsave(fname, alp_img, cmap='gray')
-                        # plt.axis('off')
-                    # plt.show()

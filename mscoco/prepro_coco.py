@@ -140,7 +140,6 @@ def main():
     val_data = train_data[:int(len(train_data)/20)]
     train_data = train_data[int(len(train_data)/20):]
     print 'Finished processing caption data'
-    
     train_cutoff = [0]
     part_num = 20
     for i in range(part_num-1):
@@ -181,7 +180,6 @@ def main():
             feature_to_captions[i].append(caption.lower() + ' .')
         save_pickle(feature_to_captions, './cocodata/%s/%s.references_%s.pkl' % (split, split, str(part)))
         print "Finished building %s caption dataset" %split
-    
     for split in ['val', 'test']:
         annotations = load_pickle('./cocodata/%s/%s.annotations.pkl' % (split, split))
         captions = _build_caption_vector(annotations=annotations, word_to_idx=word_to_idx, max_length=max_length)

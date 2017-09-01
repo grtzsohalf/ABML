@@ -156,7 +156,7 @@ class CaptionGenerator(object):
                 h_logits += tf.matmul(context, w_ctx2out)
 
             if self.prev2out:
-                h_logits = tf.concat(1, [h_logits, x])
+                h_logits = tf.concat(1, [x, h_logits])
             h_logits = tf.nn.tanh(h_logits)
 
             if dropout:
@@ -196,7 +196,7 @@ class CaptionGenerator(object):
         alpha_list = []
         lstm_cell = tf.nn.rnn_cell.BasicLSTMCell(num_units=self.H)
 
-        for t in range(5):
+        for t in range(3):
             context, alpha = self._attention_layer(features, features_proj, h, reuse=(t!=0))
             alpha_list.append(alpha)
 

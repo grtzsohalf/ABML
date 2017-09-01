@@ -53,7 +53,7 @@ def load_nus_data(data_path='./data', split='train', part='', load_init_pred=Fal
     data_path = os.path.join(data_path, split)
     start_t = time.time()
     data = {}
-    if split == 'train':
+    if split in ['train', 'test']:
         data['features'] = hickle.load(os.path.join(data_path, '%s.features81_%s.hkl' % (split, part)))
         print 'load_init_pred', load_init_pred
         if load_init_pred == True:

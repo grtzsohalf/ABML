@@ -63,7 +63,7 @@ class CaptionGenerator(object):
         self.c = tf.placeholder(tf.float32, [1,1024])
         self.h = tf.placeholder(tf.float32, [1,1024])
         self.samp = tf.placeholder(tf.int32, [1])
-        self.x = tf.placeholder(tf.float32, [1, len(word_to_idx)-3])
+        self.prev_pred = tf.placeholder(tf.float32, [1, self.V -3])
 
     def set_batch_size(self, batch_size):
         self.batch_size = batch_size
@@ -292,7 +292,7 @@ class CaptionGenerator(object):
         c = self.c
         h = self.h
         sampled_word = self.samp
-        prev_pred = self.x
+        prev_pred = self.prev_pred
         lstm_cell = tf.nn.rnn_cell.BasicLSTMCell(num_units=self.H)
         context, alpha = self._attention_layer(features, features_proj, h, reuse=True)
         # alpha_list.append(alpha)

@@ -1,16 +1,16 @@
 import sys
 import numpy as np
-sys.path.append('/home/jason6582/sfyc/attention-tensorflow')
+sys.path.append('/home/jason6582/sfyc/attention-tensorflow/nus-wide')
 
 candidateFile = sys.argv[1]
 resultFile = sys.argv[2]
 
-from core.utils import *
+from core.utils_nus import *
 reference = load_pickle('test.references81.pkl')
 candidate = load_pickle(candidateFile)
 g = open(resultFile, 'w')
 
-word_to_idx = load_word_to_idx(data_path='/home/jason6582/sfyc/attention-tensorflow/nusdata', split='train')
+word_to_idx = load_word_to_idx(data_path='/home/jason6582/sfyc/attention-tensorflow/nus-wide/nusdata', split='train')
 refsNum = 0
 cansNum = 0
 correctNum = 0

@@ -133,12 +133,6 @@ class CaptioningSolver(object):
                                 groundtruth[n][index] = 1.0
 
                     label_num = np.sum(groundtruth, axis=1)
-                    masks = np.ones((self.n_time_step, n_examples, self.V), dtype=np.float32)
-                    for t in range(self.n_time_step):
-                        for i, n in enumerate(label_num):
-                            if t >= n:
-                                masks[t][i] = np.zeros(self.V, dtype=np.float32)
-
                     image_idxs = self.data['image_idxs']
                     print "Data size: %d" %n_examples
                     print "Iterations per part: %d" %n_iters_per_part
@@ -229,12 +223,6 @@ class CaptioningSolver(object):
                 refsNum += len(refs)
                 refsDict = {}
                 correct = 0
-                can_str = []
-                ref_str = []
-                for c in cans:
-                    can_str.append(idx_to_word[c])
-                for r in refs:
-                    ref_str.append(idx_to_word[r])
                 for c in cans:
                     refsDict[c] = 0  # follow idx of word_to_idx (keep 0, 1, 2)
                     classwise_num[0][c] += 1.0 # idx start from 0 for convenience
@@ -352,7 +340,7 @@ class CaptioningSolver(object):
                     alphas = paths_info[0][3]
                     alpha_list = np.transpose(alphas, (1, 0, 2))     # (N, T, L)
                     all_alphas.append(alpha_list)
-                self.evaluate(all_candidate, 0.3, 'result_recursive.txt')
+                self.evaluate(all_candidate, 0.3, 'cocodata/val/result-%s.txt' % filename)
                 print "Time cost: ", time.time()- start_t
 
             image_file_name = 'visualization/'

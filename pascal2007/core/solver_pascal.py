@@ -93,8 +93,8 @@ class CaptioningSolver(object):
         print "Batch size: %d" %self.batch_size
 
         config = tf.ConfigProto(allow_soft_placement = True)
-        #config.gpu_options.per_process_gpu_memory_fraction=0.9
-        config.gpu_options.allow_growth = True
+        config.gpu_options.per_process_gpu_memory_fraction=0.5
+        # config.gpu_options.allow_growth = True
         with tf.Session(config=config) as sess:
             tf.initialize_all_variables().run()
             summary_writer = tf.train.SummaryWriter(self.log_path, graph=tf.get_default_graph())

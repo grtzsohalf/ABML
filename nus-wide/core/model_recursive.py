@@ -64,26 +64,6 @@ class CaptionGenerator(object):
         self.h = tf.placeholder(tf.float32, [1,1024])
         self.samp = tf.placeholder(tf.int32, [1])
         self.prev_pred = tf.placeholder(tf.float32, [1, self.V -3])
-        '''
-        self.batch_features = tf.contrib.layers.batch_norm(
-                                            inputs = self.features,
-                                            decay=0.95,
-                                            center=True,
-                                            scale=True,
-                                            is_training=False,
-                                            updates_collections=None,
-                                            scope=('conv_features/batch_norm'))
-        with tf.variable_scope('init_project_features'):
-            w = tf.get_variable('w', [self.D, self.D], initializer=self.weight_initializer)
-            features_flat = tf.reshape(self.features, [-1, self.D])
-            features_proj = tf.matmul(features_flat, w)
-            features_proj = tf.reshape(features_proj, [-1, self.L, self.D])
-        self.proj_features = features_proj
-        '''
-    '''
-    def set_end_time(self, end_time):
-        self.end_time = end_time
-    '''
     def set_batch_size(self, batch_size):
         self.batch_size = batch_size
 
@@ -197,7 +177,6 @@ class CaptionGenerator(object):
         lstm_cell = tf.nn.rnn_cell.BasicLSTMCell(num_units=self.H)
 
         for t in range(5):
-
             context, alpha = self._attention_layer(features, features_proj, h, reuse=(t!=0))
             alpha_list.append(alpha)
 
@@ -208,15 +187,12 @@ class CaptionGenerator(object):
                 _, (c, h) = lstm_cell(inputs=tf.concat(1, [prev_pred, context]), state=[c, h])
 
             logits = self._decode_lstm(prev_pred, h, context, dropout=self.dropout, reuse=(t!=0))
+            prev_pred = logits[:, 3:]
             # logits = tf.Print(logits, [logits], message="logits = ", summarize=10)
             loss += tf.reduce_sum(tf.nn.sigmoid_cross_entropy_with_logits(logits, groundtruth))
-            prev_pred = logits[:, 3:]
             # predicted labels and groundtruth_mask
-
             # modify groundtruth
             # groundtruth += tf.to_float(tf.one_hot(next_ind, self.V, on_value=-1))
-
-            # next label
 
         if self.alpha_c > 0:
             alphas = tf.transpose(tf.pack(alpha_list), (1, 0, 2))     # (N, T, L)
@@ -289,9 +265,9 @@ class CaptionGenerator(object):
         #    beta_list.append(beta)
 
         with tf.variable_scope('lstm'):
-            _, (c, h) = lstm_cell(inputs=tf.concat(1, [prev_pred, context]), state=[c, h])
+            _, (c, h) = lstm_cell(inputs=tf.concat(1, [init_pred, context]), state=[c, h])
 
-        logits = self._decode_lstm(prev_pred, h, context)
+        logits = self._decode_lstm(init_pred, h, context)
         prev_pred = logits[:, 3:]
         # sampled_word_list.append(sampled_word)
 
@@ -311,7 +287,6 @@ class CaptionGenerator(object):
         sampled_word = self.samp
         prev_pred = self.prev_pred
         lstm_cell = tf.nn.rnn_cell.BasicLSTMCell(num_units=self.H)
-
         context, alpha = self._attention_layer(features, features_proj, h, reuse=True)
         # alpha_list.append(alpha)
 
@@ -323,7 +298,6 @@ class CaptionGenerator(object):
             _, (c, h) = lstm_cell(inputs=tf.concat(1, [prev_pred, context]), state=[c, h])
 
         logits = self._decode_lstm(prev_pred, h, context, reuse=True)
-        # sampled_word_list.append(sampled_word)
         prev_pred = logits[:, 3:]
         # alphas = tf.transpose(tf.pack(alpha_list), (1, 0, 2))     # (N, T, L)
         # betas = tf.transpose(tf.squeeze(beta_list), (1, 0))    # (N, T)

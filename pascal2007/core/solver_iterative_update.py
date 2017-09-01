@@ -93,8 +93,8 @@ class CaptioningSolver(object):
         print "Batch size: %d" %self.batch_size
 
         config = tf.ConfigProto(allow_soft_placement = True)
-        #config.gpu_options.per_process_gpu_memory_fraction=0.9
-        config.gpu_options.allow_growth = True
+        config.gpu_options.per_process_gpu_memory_fraction=0.3
+        # config.gpu_options.allow_growth = True
         with tf.Session(config=config) as sess:
             tf.initialize_all_variables().run()
             summary_writer = tf.train.SummaryWriter(self.log_path, graph=tf.get_default_graph())
@@ -171,8 +171,8 @@ class CaptioningSolver(object):
                 curr_loss = 0
                 # save model's parameters
                 if (e+1) % self.save_every == 0:
-                    saver.save(sess, os.path.join(self.model_path, 'iterative_update'), global_step=e+1)
-                    print "iterative_update-%s saved." %(e+1)
+                    saver.save(sess, os.path.join(self.model_path, 'pascal_y'), global_step=e+1)
+                    print "pascal_y-%s saved." %(e+1)
 
     def softmax(self, array):
         total = 0.0
@@ -187,10 +187,10 @@ class CaptioningSolver(object):
             array[i] = 1/(1 + np.exp(-array[i]))
         return array
 
-    def evaluate_map(self, predict, resultFile):
+    def evaluate_map(self, predict, split,resultFile):
         predict = np.transpose(predict, (1, 0))
-        # loaded_reference = load_pickle('/home/jason6582/sfyc/attention-tensorflow/pascal2007/pascaldata/val/val.references.pkl')
-        loaded_reference = load_pickle('/home/jason6582/sfyc/attention-tensorflow/pascal2007/pascaldata/test/test.references.pkl')
+        loaded_reference = load_pickle('/home/jason6582/sfyc/attention-tensorflow/pascal2007/pascaldata/%s/%s.references.pkl'\
+                                        % (split, split))
         reference = np.zeros(predict.shape)
         for key, value in loaded_reference.iteritems():
             answer = []
@@ -225,8 +225,9 @@ class CaptioningSolver(object):
             g.write(label + '\nmAP: ' + str(sum(map_list)/len(map_list)) + '\n\n')
         g.write('Average: ' + str(sum(all_map)/len(all_map)))
 
-    def evaluate(self, feature, thres, resultFile):
-        loaded_reference = load_pickle('/home/jason6582/sfyc/attention-tensorflow/pascal2007/pascaldata/val/val.references.pkl')
+    def evaluate(self, feature, thres, split, resultFile):
+        loaded_reference = load_pickle('/home/jason6582/sfyc/attention-tensorflow/pascal2007/pascaldata/%s/%s.references.pkl'\
+                                        % (split,split))
         reference = []
         for key, value in loaded_reference.iteritems():
             answer = []
@@ -238,8 +239,8 @@ class CaptioningSolver(object):
         word_to_idx = load_word_to_idx(data_path='/home/jason6582/sfyc/attention-tensorflow/pascal2007/pascaldata',\
                       split='train')
         idx_to_word = {i:w for w, i in word_to_idx.iteritems()}
-        sum_feature = np.reshape(sum(feature)/5, (1, -1, 20))
-        feature = np.concatenate((feature, sum_feature))
+        # sum_feature = np.reshape(sum(feature)/5, (1, -1, 20))
+        # feature = np.concatenate((feature, sum_feature))
 
         for iter_num, iteration in enumerate(feature):
             refsNum = 0
@@ -319,7 +320,7 @@ class CaptioningSolver(object):
         with tf.Session(config=config) as sess:
             saver = tf.train.Saver()
             saver.restore(sess, self.test_model)
-            MAX_LEN = 5
+            MAX_LEN = 3
             num_iter = features.shape[0]
             start_t = time.time()
             for thres_iter in range(1):
@@ -379,8 +380,9 @@ class CaptioningSolver(object):
                 save_file = self.test_model[11:]
                 all_prediction = np.array(all_prediction)
                 all_prediction = np.transpose(all_prediction, (1, 0, 2))
-                self.evaluate(all_prediction, 0.3, save_file + '.txt')
-                self.evaluate_map(all_prediction[3], save_file + '_map.txt')
+                self.evaluate(all_prediction, 0.3, split, 'pascaldata/%s/'%split + save_file + '.txt')
+                self.evaluate_map(all_prediction[0], split, 'pascaldata/%s/'%split + save_file + '_map.txt')
+                save_pickle(all_prediction[0], './pascaldata/%s/%s_pred.pkl' % (split, filename))
                 print save_file, "saved."
                 print "Time cost: ", time.time()- start_t
 

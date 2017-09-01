@@ -28,7 +28,7 @@ def load_coco_data(data_path='./cocodata', split='train', part='', load_init_pre
     data_path = os.path.join(data_path, split)
     start_t = time.time()
     data = {}
-    if split == 'train':
+    if split in ['train', 'test']:
         data['features'] = hickle.load(os.path.join(data_path, '%s.features_%s.hkl' % (split, part)))
         if load_init_pred == True:
             data['init_pred'] = hickle.load(os.path.join(data_path, '%s.init.pred_%s.hkl' % (split, part)))
@@ -38,8 +38,8 @@ def load_coco_data(data_path='./cocodata', split='train', part='', load_init_pre
             data['captions'] = pickle.load(f)
         with open(os.path.join(data_path, '%s.image.idxs_%s.pkl' % (split, part)), 'rb') as f:
             data['image_idxs'] = pickle.load(f)
-        with open(os.path.join(data_path, 'word_to_idx.pkl'), 'rb') as f:
-            data['word_to_idx'] = pickle.load(f)
+        # with open(os.path.join(data_path, 'word_to_idx.pkl'), 'rb') as f:
+        #     data['word_to_idx'] = pickle.load(f)
     else:
         data['features'] = hickle.load(os.path.join(data_path, '%s.features.hkl' % split))
         if load_init_pred == True:
@@ -50,13 +50,8 @@ def load_coco_data(data_path='./cocodata', split='train', part='', load_init_pre
             data['captions'] = pickle.load(f)
         with open(os.path.join(data_path, '%s.image.idxs.pkl' %split), 'rb') as f:
             data['image_idxs'] = pickle.load(f)
-        for k, v in data.iteritems():
-            if type(v) == np.ndarray:
-                print k, type(v), v.shape, v.dtype
-            else:
-                print k, type(v), len(v)
     end_t = time.time()
-    print "Elapse time: %.2f" %(end_t - start_t)
+    # print "Elapse time: %.2f" %(end_t - start_t)
     return data
 
 def decode_captions(captions, idx_to_word):

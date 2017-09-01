@@ -8,6 +8,7 @@ import os
 import cPickle as pickle
 from scipy import ndimage
 from utils_nus import *
+from tqdm import tqdm
 
 
 class CaptioningSolver(object):
@@ -93,8 +94,8 @@ class CaptioningSolver(object):
         print "Batch size: %d" %self.batch_size
 
         config = tf.ConfigProto(allow_soft_placement = True)
-        #config.gpu_options.per_process_gpu_memory_fraction=0.9
-        config.gpu_options.allow_growth = True
+        config.gpu_options.per_process_gpu_memory_fraction = 0.5
+        # config.gpu_options.allow_growth = True
         with tf.Session(config=config) as sess:
             tf.initialize_all_variables().run()
             summary_writer = tf.train.SummaryWriter(self.log_path, graph=tf.get_default_graph())
@@ -253,7 +254,7 @@ class CaptioningSolver(object):
         g.write('Average: ' + str((c_f1+o_f1)/2) + '\n')
 
 
-    def test(self, data, split='train', attention_visualization=True, save_sampled_captions=True,\
+    def test(self, split='train', attention_visualization=True, save_sampled_captions=True,\
              filename='', thres=0.0):
         '''
         Args:
@@ -267,9 +268,6 @@ class CaptioningSolver(object):
             - attention_visualization: If True, visualize attention weights with images for each sampled word. (ipthon notebook)
             - save_sampled_captions: If True, save sampled captions to pkl file for computing BLEU scores.
         '''
-
-        features = data['features']
-        init_pred = data['init_pred']
         # build a graph to sample captions
         config = tf.ConfigProto(allow_soft_placement=True)
         config.gpu_options.allow_growth = True
@@ -279,83 +277,98 @@ class CaptioningSolver(object):
             saver = tf.train.Saver()
             saver.restore(sess, self.test_model)
             MAX_LEN = 5
-            K = 3 # beam search width
-            num_iter = features.shape[0]
-            start_t = time.time()
-            for thres_iter in range(1):
-                all_sam_cap = []
-                all_alphas = []
-                THRES = thres
-                for i in range(num_iter):
-                    if i % 50 == 0:
-                        print "Iteration: ", i
-                    features_batch = features[i:i+1]
-                    init_pred_batch = init_pred[i:i+1]
-                    pathProbs = []
-                    for k in range(K):
-                        pathProbs.append(1.0)
+            K = 10 # beam search width
+            all_sam_cap = []
+            all_alphas = []
+            if split == 'val':
+                part_num = 1
+            else:
+                part_num = 10
+            for part in range(part_num):
+                print "part: ", part
+                if split == 'val':
+                    part = ''
+                data = load_nus_data(data_path='./nusdata', split=split, load_init_pred=True, part=str(part))
+                features = data['features']
+                init_pred = data['init_pred']
+                num_iter = features.shape[0]
+                start_t = time.time()
+                for thres_iter in range(1):
+                    THRES = thres
+                    for i in tqdm(range(num_iter)):
+                        features_batch = features[i:i+1]
+                        init_pred_batch = init_pred[i:i+1]
+                        pathProbs = []
+                        for k in range(K):
+                            pathProbs.append(1.0)
 
-                    y_run = None
-                    p_run = None
-                    for t in range(MAX_LEN): # time step
-                        dic = {}
-                        for j in range(K):
-                            if t == 0:
-                                path = []
-                                alphas = []
-                                feed_dict = { self.model.features: features_batch,
-                                              self.model.init_pred: init_pred_batch}
-                                probsNumpy, c_run, h_run, alpha_run, y_run, p_run = \
-                                sess.run([probabilities_start, c_start, h_start, alpha_start, \
-                                          y_start, p_start], feed_dict)
-                                probsNumpy = probsNumpy.reshape(self.V)
-                            else:
-                                path, c_run, h_run, alphas, samp_run, y_run, p_run = paths_info[j]
-                                feed_dict = { self.model.features: features_batch,
-                                                self.model.c: c_run,
-                                                self.model.h: h_run,
-                                                self.model.samp: samp_run,
-                                                self.model.y: y_run,
-                                                self.model.p: p_run}
-                                probsNumpy, c_run, h_run, alpha_run, y_run, p_run = \
-                                sess.run([probabilities, c, h, alpha, y, p], feed_dict)
-                                probsNumpy = probsNumpy.reshape(self.V)
-                            probsNumpy = self.sigmoid(probsNumpy)
-                            probs = []
-                            alphas.append(alpha_run)
-                            for prob in probsNumpy:
-                                probs.append(prob)
-                            if len(path) != 0:
-                                for predicted in path:
-                                    probs[predicted] = 0
-                            for k in range(len(probs)):
-                                idx = probs[k] * pathProbs[j]
-                                candidate_path = path[:]
-                                candidate_path.append(k)
-                                samp_run = np.array([k+3])
-                                # candidate_path is a path(list), and h is it's current hidden state
-                                dic[idx] = (candidate_path, c_run , h_run, alphas, samp_run, y_run, p_run)
-                        count = 0
-                        newPaths_info = []
-                        newPathProbs = []
-                        for key in reversed(sorted(dic.iterkeys())):
-                            count += 1
-                            if count > K:
+                        y_run = None
+                        p_run = None
+                        for t in range(MAX_LEN): # time step
+                            dic = {}
+                            for j in range(K):
+                                if t == 0:
+                                    path = []
+                                    alphas = []
+                                    feed_dict = { self.model.features: features_batch,
+                                                self.model.init_pred: init_pred_batch}
+                                    probsNumpy, c_run, h_run, alpha_run, y_run, p_run = \
+                                    sess.run([probabilities_start, c_start, h_start, alpha_start, \
+                                            y_start, p_start], feed_dict)
+                                    probsNumpy = probsNumpy.reshape(self.V)
+                                else:
+                                    path, c_run, h_run, a, samp_run, y_run, p_run = paths_info[j]
+                                    alphas = a[:]
+                                    feed_dict = { self.model.features: features_batch,
+                                                    self.model.c: c_run,
+                                                    self.model.h: h_run,
+                                                    self.model.samp: samp_run,
+                                                    self.model.y: y_run,
+                                                    self.model.p: p_run}
+                                    probsNumpy, c_run, h_run, alpha_run, y_run, p_run = \
+                                    sess.run([probabilities, c, h, alpha, y, p], feed_dict)
+                                    probsNumpy = probsNumpy.reshape(self.V)
+                                probsNumpy = self.sigmoid(probsNumpy)
+                                probs = []
+                                alphas.append(alpha_run)
+                                for prob in probsNumpy:
+                                    probs.append(prob)
+                                if len(path) != 0:
+                                    for predicted in path:
+                                        probs[predicted] = 0
+                                for k in range(len(probs)):
+                                    idx = probs[k] * pathProbs[j]
+                                    candidate_path = path[:]
+                                    candidate_path.append(k)
+                                    samp_run = np.array([k+3])
+                                    # candidate_path is a path(list), and h is it's current hidden state
+                                    dic[idx] = (candidate_path, c_run , h_run, alphas[:], samp_run, y_run, p_run)
+                                if t == 0:
+                                    break
+                            count = 0
+                            newPaths_info = []
+                            newPathProbs = []
+                            # print 't = ', t
+                            for key in reversed(sorted(dic.iterkeys())):
+                                count += 1
+                                if count > K:
+                                    break
+                                # print key
+                                # print dic[key][0]
+                                newPaths_info.append(dic[key][:])
+                                newPathProbs.append(key)
+                            if t != 0 and newPathProbs[0] < THRES:
                                 break
-                            newPaths_info.append(dic[key][:])
-                            newPathProbs.append(key)
-                        if t != 0 and newPathProbs[0] < THRES:
-                            break
-                        paths_info = newPaths_info
-                        pathProbs = newPathProbs
-                    all_sam_cap.append(paths_info[0][0])
-                    alphas = paths_info[0][3]
-                    alpha_list = np.transpose(alphas, (1, 0, 2))     # (N, T, L)
-                    all_alphas.append(alpha_list)
-                all_decoded = decode_py_captions(all_sam_cap, self.model.idx_to_word)
-                save_pickle(all_decoded, "./nusdata/%s/%s.candidate.captions81_%s_%s.pkl" % \
-                            (split, split, filename, THRES))
-                print "Time cost: ", time.time()- start_t
+                            paths_info = newPaths_info
+                            pathProbs = newPathProbs
+                        all_sam_cap.append(paths_info[0][0])
+                        alphas = paths_info[0][3]
+                        alpha_list = np.transpose(alphas, (1, 0, 2))     # (N, T, L)
+                        all_alphas.append(alpha_list)
+            all_decoded = decode_py_captions(all_sam_cap, self.model.idx_to_word)
+            save_pickle(all_decoded, "./nusdata/%s/%s.candidate.captions81_%s_%s.pkl" % \
+                        (split, split, filename, THRES))
+            print "Time cost: ", time.time()- start_t
 
             image_file_name = 'visualization/'
             if attention_visualization:
@@ -364,11 +377,14 @@ class CaptioningSolver(object):
                 sample_file = open('sample.txt', 'w')
                 sample_file.write('Grountruth:          Sample:\n')
                 groundtruth = []
-                for idx in range(900, 1000):
+                for idx in range(num_samples):
                     groundtruth.append(str(reference[idx][0][:-2]))
-                count = 900
-                for n in range(900, 1000):
-                    sample_file.write(str(count+1)+' '+groundtruth[n-900]+' | ')
+                count = 0
+                for n in range(num_samples):
+                    img_folder_name = 'visualization/%s/' % str(count+1)
+                    if not os.path.exists(img_folder_name):
+                        os.makedirs(img_folder_name)
+                    sample_file.write(str(count+1)+' '+groundtruth[n-0]+' | ')
                     sample_file.write(str(all_decoded[n]+'\n'))
                     # Plot original image
                     img = ndimage.imread(data['file_names'][n])
@@ -376,17 +392,17 @@ class CaptioningSolver(object):
                     # plt.imshow(img)
                     # plt.axis('off')
                     fname = 'origin' + str(count+1) + '.png'
-                    fname = image_file_name + fname
+                    fname = img_folder_name + fname
                     plt.imsave(fname, img)
                     # Plot images with attention weights
                     words = all_decoded[n].split(" ")
-                    for t in range(len(words)):
+                    for t in range(len(all_alphas[n][0])):
                         # plt.subplot(4, 5, t+2)
                         # plt.text(0, 1, '%s(%.2f)'%(words[t], bts[n,t]) , color='black', backgroundcolor='white', fontsize=8)
                         alp_curr = np.asarray(all_alphas[n][0][t][:]).reshape(14,14)
                         alp_img = skimage.transform.pyramid_expand(alp_curr, upscale=16, sigma=20)
                         fname = 'atten_' + str(count+1) + '_' + str(t) +'.png'
-                        fname = image_file_name + fname
+                        fname = img_folder_name + fname
                         plt.imsave(fname, alp_img, cmap='gray')
                         # plt.axis('off')
                     count += 1

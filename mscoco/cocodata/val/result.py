@@ -3,14 +3,14 @@ sys.path.append('/home/jason6582/sfyc/attention-tensorflow/mscoco/cocodata/val')
 
 result = []
 
-model_type = 'only_recursive'
-epoch_num = 11
+model_type = 'recursive_concat'
+epoch_num = 20
 
 for e in range(epoch_num):
     epoch = []
-    e_str = e*3 + 20
-    for t in range(5):
-        th = float(t) * 0.1 + 0.1
+    e_str = e*1 + 1
+    for t in range(1):
+        th = float(t) * 0.1 + 0.3
         thres = []
         file_name = 'result_%s-%s_%s.txt' % (model_type, str(e_str), str(th))
         with open(file_name, 'r') as f:
@@ -23,10 +23,10 @@ for e in range(epoch_num):
 file_name = 'result_%s.txt' % model_type
 with open(file_name, 'w') as f:
     for e in range(epoch_num):
-        e_str = e*3 + 20
+        e_str = e*1 + 1
         f.write('epoch = %s:\n' % str(e_str))
-        for t in range(5):
-            th = float(t) * 0.1 + 0.1
+        for t in range(1):
+            th = float(t) * 0.1 + 0.3
             f.write('  thres = %s: ' % str(th))
             for i in range(7):
                 f.write(str(result[e][t][i]) + ' ')

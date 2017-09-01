@@ -89,7 +89,7 @@ for epoch in range(training_epoch):
             target_var = Variable(groundtruth_batch, requires_grad=False).cuda()
 
             output = resnet152(input_var)
-            loss = criterion(output, target_var)
+            loss = criterion(output, target_var) 
             curr_loss[part] += loss.data.cpu().numpy()[0]
             optimizer.zero_grad()
             loss.backward()

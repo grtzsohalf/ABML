@@ -194,62 +194,66 @@ class CaptioningSolver(object):
         return array
     
     def evaluate(self, candidate, thres, result_file):
+        candidate = np.array(candidate)
+        candidate = np.transpose(candidate, (1, 0, 2))
         reference = load_pickle('/home/jason6582/sfyc/attention-tensorflow/nus-wide/nusdata/val/val.references81.pkl')
-        g = open(resultFile, 'w')
+        g = open(result_file, 'w')
         word_to_idx = load_word_to_idx(data_path='/home/jason6582/sfyc/attention-tensorflow/nus-wide/nusdata',\
                                     split='train')
         idx_to_word = {i:w for w, i in word_to_idx.iteritems()}
-        refsNum = 0
-        cansNum = 0
-        correctNum = 0
-        classwise_num = np.zeros((3,81))
-        for i in range(len(candidate)):
-            refs = str(reference[i][0][:-2]).split()
-            refsNum += len(refs)
-            cans = str(candidate[i][:]).split()
-            cansNum += len(cans)
-            refsDict = {}
-            correct = 0
-            for c in cans:
-                refsDict[c] = 0
-                idx = word_to_idx[c]
-                classwise_num[0][idx-3] += 1.0
-            for r in refs:
-                refsDict[r] = 1
-                idx = word_to_idx[r]
-                classwise_num[1][idx-3] += 1.0
-            for c in cans:
-                if refsDict[c] == 1:
-                    correct += 1
-                    idx = word_to_idx[c]
-                    classwise_num[2][idx-3] += 1.0
-            correctNum += correct
-        recall = float(correctNum)/float(refsNum)
-        precision = float(correctNum)/float(cansNum)
-        o_f1 = 2.0/((1.0/recall) + (1.0/precision))
-        for i in range(len(classwise_num[0])):
-            if classwise_num[0][i] == 0.0:
-                classwise_num[0][i] = 1.0
-        for i in range(len(classwise_num[1])):
-            if classwise_num[1][i] == 0.0:
-                classwise_num[1][i] = 1.0
+        for iter_num, iteration in enumerate(candidate):
+            refsNum = 0
+            cansNum = 0
+            correctNum = 0
+            classwise_num = np.zeros((3,81))
+            for i in range(len(iteration)):
+                refs = str(reference[i][0][:-2]).split()
+                refsNum += len(refs)
+                cans = []
+                for j, label in enumerate(iteration[i]):
+                    if label > thres:
+                        cans.append(j)
+                if len(cans) == 0:
+                    cans.append(int(np.argmax(iteration[i])))
+                cansNum += len(cans)
+                refsDict = {}
+                correct = 0
+                for c in cans:
+                    refsDict[c] = 0
+                    classwise_num[0][c] += 1.0
+                for r in refs:
+                    idx = word_to_idx[r]
+                    refsDict[idx-3] = 1
+                    classwise_num[1][idx-3] += 1.0
+                for c in cans:
+                    if refsDict[c] == 1:
+                        correct += 1
+                        classwise_num[2][c] += 1.0
+                correctNum += correct
+            recall = float(correctNum)/float(refsNum)
+            precision = float(correctNum)/float(cansNum)
+            o_f1 = 2.0/((1.0/recall) + (1.0/precision))
+            for i in range(len(classwise_num[0])):
+                if classwise_num[0][i] == 0.0:
+                    classwise_num[0][i] = 1.0
+            for i in range(len(classwise_num[1])):
+                if classwise_num[1][i] == 0.0:
+                    classwise_num[1][i] = 1.0
 
-        recall_arr = classwise_num[2] / classwise_num[1]
-        precision_arr = classwise_num[2] / classwise_num[0]
-        c_recall = np.mean(recall_arr)
-        c_precision = np.mean(precision_arr)
-        c_f1 = 2.0/((1.0/c_recall) + (1.0/c_precision))
+            recall_arr = classwise_num[2] / classwise_num[1]
+            precision_arr = classwise_num[2] / classwise_num[0]
+            c_recall = np.mean(recall_arr)
+            c_precision = np.mean(precision_arr)
+            c_f1 = 2.0/((1.0/c_recall) + (1.0/c_precision))
 
-        g.write('Total number of true label: ' + str(refsNum) + '\n')
-        g.write('Total number of predict label: ' + str(cansNum) + '\n')
-        g.write('Number of correct prediction: ' + str(correctNum) + '\n\n')
-        g.write('O-R: ' + str(recall) + '\n')
-        g.write('O-P: ' + str(precision) + '\n')
-        g.write('O-F1: ' + str(o_f1) + '\n')
-        g.write('C-R: ' + str(c_recall) + '\n')
-        g.write('C-P: ' + str(c_precision) + '\n')
-        g.write('C-F1: ' + str(c_f1) + '\n')
-        g.write('Average: ' + str((c_f1+o_f1)/2) + '\n')
+            g.write('Iteration: ' + str(iter_num+1) + '\n')
+            g.write('O-R: ' + str(recall) + '\n')
+            g.write('O-P: ' + str(precision) + '\n')
+            g.write('O-F1: ' + str(o_f1) + '\n')
+            g.write('C-R: ' + str(c_recall) + '\n')
+            g.write('C-P: ' + str(c_precision) + '\n')
+            g.write('C-F1: ' + str(c_f1) + '\n')
+            g.write('Average: ' + str((c_f1+o_f1)/2) + '\n\n')
 
 
     def test(self, data, split='train', attention_visualization=True, save_sampled_captions=True,\
@@ -350,7 +354,7 @@ class CaptioningSolver(object):
                     alphas = paths_info[0][3]
                     alpha_list = np.transpose(alphas, (1, 0, 2))     # (N, T, L)
                     all_alphas.append(alpha_list)
-                self.evaluate(all_candidate, 0.3, 'result_recursive.txt')
+                self.evaluate(all_candidate, 0.3, 'nusdata/%s/result_recursive-.txt'%split)
                 print "Time cost: ", time.time()- start_t
 
             image_file_name = 'visualization/'

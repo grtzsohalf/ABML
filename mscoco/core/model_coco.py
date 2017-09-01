@@ -65,26 +65,6 @@ class CaptionGenerator(object):
         self.h = tf.placeholder(tf.float32, [1,1024])
         self.samp = tf.placeholder(tf.int32, [1])
         self.x = tf.placeholder(tf.float32, [1, len(word_to_idx)])
-        '''
-        self.batch_features = tf.contrib.layers.batch_norm(
-                                            inputs = self.features,
-                                            decay=0.95,
-                                            center=True,
-                                            scale=True,
-                                            is_training=False,
-                                            updates_collections=None,
-                                            scope=('conv_features/batch_norm'))
-        with tf.variable_scope('init_project_features'):
-            w = tf.get_variable('w', [self.D, self.D], initializer=self.weight_initializer)
-            features_flat = tf.reshape(self.features, [-1, self.D])
-            features_proj = tf.matmul(features_flat, w)
-            features_proj = tf.reshape(features_proj, [-1, self.L, self.D])
-        self.proj_features = features_proj
-        '''
-    '''
-    def set_end_time(self, end_time):
-        self.end_time = end_time
-    '''
     def set_batch_size(self, batch_size):
         self.batch_size = batch_size
 
@@ -217,7 +197,6 @@ class CaptionGenerator(object):
             # predicted labels and groundtruth_mask
             logits += (groundtruth_mask - all_ones * 100)
             next_ind = tf.argmax(logits, 1)
-            # next_ind = tf.Print(next_ind, [next_ind], message="next_ind is: ", summarize=200)
             groundtruth_mask += tf.to_float(tf.one_hot(next_ind, self.V, on_value=-100))
 
             # modify groundtruth
